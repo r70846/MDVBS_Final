@@ -24,6 +24,14 @@
     // Dispose of any resources that can be recreated.
 }
 
+//Respond to click event
+-(IBAction)onClick:(UIButton *)button
+{
+    //[self performSegueWithIdentifier:@"segueToTabController" sender:self];
+    
+    
+}
+
 /*
 #pragma mark - Navigation
 

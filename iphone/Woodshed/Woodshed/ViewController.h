@@ -9,7 +9,16 @@
 #import <UIKit/UIKit.h>
 
 @interface ViewController : UIViewController
+{
+    
+}
 
+
+//Respond to click event
+-(IBAction)onClick:(UIButton *)button;
+
+
+-(IBAction)logout:(UIStoryboardSegue *)segue;
 
 @end
 

@@ -9,5 +9,13 @@
 #import <UIKit/UIKit.h>
 
 @interface TopicViewController : UIViewController
+{
+    
+}
+
+
+//Respond to click event
+-(IBAction)onClick:(UIButton *)button;
+
 
 @end

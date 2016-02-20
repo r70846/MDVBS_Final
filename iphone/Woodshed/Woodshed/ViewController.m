@@ -24,4 +24,16 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+//Respond to click event
+-(IBAction)onClick:(UIButton *)button
+{
+    [self performSegueWithIdentifier:@"segueToTabController" sender:self];
+}
+
+-(IBAction)logout:(UIStoryboardSegue *)segue
+{
+
+}
+
 @end
