@@ -46,7 +46,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="History" id="QIh-uO-WkE"/>
+                    <tabBarItem key="tabBarItem" title="History" image="second" id="QIh-uO-WkE">
+                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-5"/>
+                    </tabBarItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xnu-fB-sTW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -78,7 +80,9 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Settings" id="IlA-Le-7Hj"/>
+                    <tabBarItem key="tabBarItem" title="Settings" image="settings_24" id="IlA-Le-7Hj">
+                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-5"/>
+                    </tabBarItem>
                     <connections>
                         <outlet property="scrollView" destination="hG3-Mz-OcJ" id="LeO-M1-bJs"/>
                     </connections>
@@ -100,7 +104,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Practice" id="Jo5-ED-54b"/>
+                    <tabBarItem key="tabBarItem" title="Practice" image="first" id="Jo5-ED-54b">
+                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-5"/>
+                    </tabBarItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zmm-L2-2Tw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -166,4 +172,9 @@
             <point key="canvasLocation" x="2024" y="419"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="first" width="30" height="30"/>
+        <image name="second" width="30" height="30"/>
+        <image name="settings_24" width="24" height="24"/>
+    </resources>
 </document>

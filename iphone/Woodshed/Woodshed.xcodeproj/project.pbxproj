@@ -11,13 +11,13 @@
 		608C02071C79077200159E53 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 608C02061C79077200159E53 /* AppDelegate.m */; };
 		608C020A1C79077200159E53 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 608C02091C79077200159E53 /* ViewController.m */; };
 		608C020D1C79077200159E53 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 608C020B1C79077200159E53 /* Main.storyboard */; };
-		608C020F1C79077200159E53 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 608C020E1C79077200159E53 /* Images.xcassets */; };
 		608C02121C79077200159E53 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 608C02101C79077200159E53 /* LaunchScreen.xib */; };
 		608C021E1C79077200159E53 /* WoodshedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 608C021D1C79077200159E53 /* WoodshedTests.m */; };
 		608C02291C79092300159E53 /* TopicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 608C02281C79092300159E53 /* TopicViewController.m */; };
 		608C022C1C79093A00159E53 /* HistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 608C022B1C79093A00159E53 /* HistoryViewController.m */; };
 		608C022F1C79094900159E53 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 608C022E1C79094900159E53 /* SettingsViewController.m */; };
 		608C02321C790C8F00159E53 /* SettingsContentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 608C02311C790C8F00159E53 /* SettingsContentController.m */; };
+		608C023C1C7911A800159E53 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 608C023B1C7911A800159E53 /* Images.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,7 +39,6 @@
 		608C02081C79077200159E53 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		608C02091C79077200159E53 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		608C020C1C79077200159E53 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		608C020E1C79077200159E53 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		608C02111C79077200159E53 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		608C02171C79077200159E53 /* WoodshedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WoodshedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		608C021C1C79077200159E53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -52,6 +51,7 @@
 		608C022E1C79094900159E53 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		608C02301C790C8F00159E53 /* SettingsContentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsContentController.h; sourceTree = "<group>"; };
 		608C02311C790C8F00159E53 /* SettingsContentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsContentController.m; sourceTree = "<group>"; };
+		608C023B1C7911A800159E53 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,11 +103,11 @@
 				608C022B1C79093A00159E53 /* HistoryViewController.m */,
 				608C022D1C79094900159E53 /* SettingsViewController.h */,
 				608C022E1C79094900159E53 /* SettingsViewController.m */,
-				608C020B1C79077200159E53 /* Main.storyboard */,
 				608C02301C790C8F00159E53 /* SettingsContentController.h */,
 				608C02311C790C8F00159E53 /* SettingsContentController.m */,
-				608C020E1C79077200159E53 /* Images.xcassets */,
 				608C02101C79077200159E53 /* LaunchScreen.xib */,
+				608C020B1C79077200159E53 /* Main.storyboard */,
+				608C023B1C7911A800159E53 /* Images.xcassets */,
 				608C02011C79077200159E53 /* Supporting Files */,
 			);
 			path = Woodshed;
@@ -219,9 +219,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				608C023C1C7911A800159E53 /* Images.xcassets in Resources */,
 				608C020D1C79077200159E53 /* Main.storyboard in Resources */,
 				608C02121C79077200159E53 /* LaunchScreen.xib in Resources */,
-				608C020F1C79077200159E53 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
