@@ -17,6 +17,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
+    int iWidth = [[UIScreen mainScreen] bounds].size.width;
+    int iHeight = [[UIScreen mainScreen] bounds].size.height;
+    
+    NSLog(@"w=%d, h=%d", iWidth, iHeight);
 }
 
 - (void)didReceiveMemoryWarning {
