@@ -1,5 +1,5 @@
 //
-//  TagViewController.h
+//  PracticeViewController.h
 //  Woodshed
 //
 //  Created by Russell Gaspard on 2/20/16.
@@ -8,14 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TagViewController : UIViewController
+@interface PracticeViewController : UIViewController
 {
-    IBOutlet UILabel *topicDisplayLabel;
+    IBOutlet UIScrollView  *scrollView;
     
+    //int iDisplayMode;
 }
 
-
 //Property to hold user topic choice
-@property (nonatomic, strong) NSString *topicString;
+@property int iDisplayMode;
+
+
+-(void)setScrollView;
+
+
 
 @end

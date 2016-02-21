@@ -13,12 +13,12 @@
 		608C020D1C79077200159E53 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 608C020B1C79077200159E53 /* Main.storyboard */; };
 		608C02121C79077200159E53 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 608C02101C79077200159E53 /* LaunchScreen.xib */; };
 		608C021E1C79077200159E53 /* WoodshedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 608C021D1C79077200159E53 /* WoodshedTests.m */; };
-		608C02291C79092300159E53 /* TopicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 608C02281C79092300159E53 /* TopicViewController.m */; };
 		608C022C1C79093A00159E53 /* HistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 608C022B1C79093A00159E53 /* HistoryViewController.m */; };
 		608C022F1C79094900159E53 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 608C022E1C79094900159E53 /* SettingsViewController.m */; };
 		608C02321C790C8F00159E53 /* SettingsContentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 608C02311C790C8F00159E53 /* SettingsContentController.m */; };
 		608C023C1C7911A800159E53 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 608C023B1C7911A800159E53 /* Images.xcassets */; };
-		608C023F1C79387500159E53 /* TagViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 608C023E1C79387500159E53 /* TagViewController.m */; };
+		608C02421C79550F00159E53 /* PracticeContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 608C02411C79550F00159E53 /* PracticeContentViewController.m */; };
+		608C02451C7955A300159E53 /* PracticeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 608C02441C7955A300159E53 /* PracticeViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,8 +44,6 @@
 		608C02171C79077200159E53 /* WoodshedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WoodshedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		608C021C1C79077200159E53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		608C021D1C79077200159E53 /* WoodshedTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WoodshedTests.m; sourceTree = "<group>"; };
-		608C02271C79092300159E53 /* TopicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopicViewController.h; sourceTree = "<group>"; };
-		608C02281C79092300159E53 /* TopicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TopicViewController.m; sourceTree = "<group>"; };
 		608C022A1C79093A00159E53 /* HistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryViewController.h; sourceTree = "<group>"; };
 		608C022B1C79093A00159E53 /* HistoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryViewController.m; sourceTree = "<group>"; };
 		608C022D1C79094900159E53 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
@@ -53,8 +51,10 @@
 		608C02301C790C8F00159E53 /* SettingsContentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsContentController.h; sourceTree = "<group>"; };
 		608C02311C790C8F00159E53 /* SettingsContentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsContentController.m; sourceTree = "<group>"; };
 		608C023B1C7911A800159E53 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		608C023D1C79387500159E53 /* TagViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagViewController.h; sourceTree = "<group>"; };
-		608C023E1C79387500159E53 /* TagViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagViewController.m; sourceTree = "<group>"; };
+		608C02401C79550F00159E53 /* PracticeContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PracticeContentViewController.h; sourceTree = "<group>"; };
+		608C02411C79550F00159E53 /* PracticeContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PracticeContentViewController.m; sourceTree = "<group>"; };
+		608C02431C7955A300159E53 /* PracticeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PracticeViewController.h; sourceTree = "<group>"; };
+		608C02441C7955A300159E53 /* PracticeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PracticeViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,8 +100,6 @@
 				608C02061C79077200159E53 /* AppDelegate.m */,
 				608C02081C79077200159E53 /* ViewController.h */,
 				608C02091C79077200159E53 /* ViewController.m */,
-				608C02271C79092300159E53 /* TopicViewController.h */,
-				608C02281C79092300159E53 /* TopicViewController.m */,
 				608C022A1C79093A00159E53 /* HistoryViewController.h */,
 				608C022B1C79093A00159E53 /* HistoryViewController.m */,
 				608C022D1C79094900159E53 /* SettingsViewController.h */,
@@ -112,8 +110,10 @@
 				608C020B1C79077200159E53 /* Main.storyboard */,
 				608C023B1C7911A800159E53 /* Images.xcassets */,
 				608C02011C79077200159E53 /* Supporting Files */,
-				608C023D1C79387500159E53 /* TagViewController.h */,
-				608C023E1C79387500159E53 /* TagViewController.m */,
+				608C02401C79550F00159E53 /* PracticeContentViewController.h */,
+				608C02411C79550F00159E53 /* PracticeContentViewController.m */,
+				608C02431C7955A300159E53 /* PracticeViewController.h */,
+				608C02441C7955A300159E53 /* PracticeViewController.m */,
 			);
 			path = Woodshed;
 			sourceTree = "<group>";
@@ -245,9 +245,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				608C020A1C79077200159E53 /* ViewController.m in Sources */,
-				608C023F1C79387500159E53 /* TagViewController.m in Sources */,
 				608C02071C79077200159E53 /* AppDelegate.m in Sources */,
-				608C02291C79092300159E53 /* TopicViewController.m in Sources */,
+				608C02451C7955A300159E53 /* PracticeViewController.m in Sources */,
+				608C02421C79550F00159E53 /* PracticeContentViewController.m in Sources */,
 				608C022F1C79094900159E53 /* SettingsViewController.m in Sources */,
 				608C022C1C79093A00159E53 /* HistoryViewController.m in Sources */,
 				608C02041C79077200159E53 /* main.m in Sources */,
@@ -446,6 +446,7 @@
 				608C02231C79077200159E53 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		608C02241C79077200159E53 /* Build configuration list for PBXNativeTarget "WoodshedTests" */ = {
 			isa = XCConfigurationList;
@@ -454,6 +455,7 @@
 				608C02261C79077200159E53 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
