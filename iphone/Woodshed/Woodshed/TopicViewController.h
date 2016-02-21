@@ -8,8 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TopicViewController : UIViewController
+@interface TopicViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 {
+    
+    //Reference to topic table
+    IBOutlet  UITableView *topicTableView;
+    
+    //Static Data
+    NSMutableArray *topicArray;
     
 }
 
