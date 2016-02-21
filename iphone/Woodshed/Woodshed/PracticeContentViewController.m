@@ -19,6 +19,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    //Setup shared instance of data storage in RAM
+    dataStore = [DataStore sharedInstance];
+    
     //Static Data
     topicArray = [[NSMutableArray alloc] init];
     [topicArray addObject:@"Major Scale"];
@@ -30,10 +33,12 @@
     [topicArray addObject:@"Dorian Mode"];
     [topicArray addObject:@"Phrygian Mode"];
     
-    tagArray = [[NSMutableArray alloc] init];
-    [tagArray addObject:@"Key Center"];
-    [tagArray addObject:@"Practice Tempo"];
-    [tagArray addObject:@"Bowing Pattern"];
+    
+    tagArray = [[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
+    valueArray = (NSMutableArray*)tagArray;
+    
+    currentTag = [[NSString alloc] init];
+    
     
     //Establishing Screen Size
     /*
@@ -47,14 +52,25 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    
+    NSUInteger iCnt;
     if (tableView==topicTableView)
     {
-        return [topicArray count];
+        iCnt = [topicArray count];
+    }
+    else if (tableView==tagTableView)
+    {
+        iCnt = [tagArray count];
+    }
+    else if (tableView==valueTableView)
+    {
+        iCnt = [valueArray count];
     }
     else
     {
-        return [tagArray count];
+        iCnt = 0;
     }
+        return iCnt;
 }
 
 
@@ -71,16 +87,35 @@
             cell.textLabel.text = (NSString*)[topicArray objectAtIndex:indexPath.row];
         }
     }
-    else
+    else if (tableView==tagTableView)
     {
         //Get the cell..
         cell = [tableView dequeueReusableCellWithIdentifier:@"TagCell"];
         if(cell != nil)
         {
-            cell.textLabel.text =(NSString*)[tagArray objectAtIndex:indexPath.row];
-            cell.detailTextLabel.text = @"[ None ]";
+            NSString *tag = [tagArray objectAtIndex:indexPath.row];
+            cell.textLabel.text = tag;
+            
+            if ([[dataStore.currentSession allKeys] containsObject:tag]) {
+                cell.detailTextLabel.text = dataStore.currentSession[tag];
+            }
+            else
+            {
+                cell.detailTextLabel.text = @"[ None ]";
+            }
         }
     }
+    else if (tableView==valueTableView)
+    {
+        //Get the cell..
+        cell = [tableView dequeueReusableCellWithIdentifier:@"ValueCell"];
+        if(cell != nil)
+        {
+            cell.textLabel.text =(NSString*)[valueArray objectAtIndex:indexPath.row];
+        }
+    }
+    
+    
     return cell;
 }
 
@@ -90,24 +125,65 @@
     
     if (tableView==topicTableView)
     {
-            topicDisplayLabel.text = [topicArray objectAtIndex:indexPath.row];
-            PracticeViewController *practiceViewController = (PracticeViewController*) self.parentViewController;
-            practiceViewController.iDisplayMode = 600;
-            [practiceViewController setScrollView];
-    }
-    else
-    {
+        //Get user topic choice
+        NSString  *topic = [topicArray objectAtIndex:indexPath.row];
+        topicDisplayLabel.text = topic;
+        topicDisplayLabelTwo.text = topic;
+        dataStore.currentSession[@"Topic"] = topic;
         
+        //Scroll to next screen
+        PracticeViewController *practiceViewController = (PracticeViewController*) self.parentViewController;
+        practiceViewController.iDisplayMode = 600;
+        [practiceViewController setScrollView];
     }
-    
+    else if (tableView==tagTableView)
+    {
+        //Get user tag choice, display and save to session
+        currentTag = [tagArray objectAtIndex:indexPath.row];
+        tagDisplayLabel.text = currentTag;
+        
+        //Display values in value table
+        valueArray = (NSMutableArray*)[dataStore.tagData[currentTag] mutableCopy];
+        [valueTableView reloadData];
+        
+        //Scroll to next screen
+        PracticeViewController *practiceViewController = (PracticeViewController*) self.parentViewController;
+        practiceViewController.iDisplayMode = 1200;
+        [practiceViewController setScrollView];
+    }
+    else if (tableView==valueTableView)
+    {
+        //Get user value choice, save to current session
+        NSString  *value = [valueArray objectAtIndex:indexPath.row];
+        dataStore.currentSession[[currentTag copy]] = [value copy];
+        
+        
+        //Display amended values in tag table
+        [tagTableView reloadData];
+        
+        //Scroll to next screen
+        PracticeViewController *practiceViewController = (PracticeViewController*) self.parentViewController;
+        practiceViewController.iDisplayMode = 600;
+        [practiceViewController setScrollView];
+    }
 }
 
 
 -(IBAction)onClick:(UIButton *)button
 {
     PracticeViewController *practiceViewController = (PracticeViewController*) self.parentViewController;
-    practiceViewController.iDisplayMode = 0;
-    [practiceViewController setScrollView];
+    
+    int tag = (int)button.tag;
+    
+    if(tag == 1) //Back to stage-1
+    {
+        practiceViewController.iDisplayMode = 0;
+    }
+    else if(tag == 2) //Back to stage-1
+    {
+        practiceViewController.iDisplayMode = 600;
+    }
+        [practiceViewController setScrollView];
 }
 
 

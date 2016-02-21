@@ -7,9 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "DataStore.h"
+#import "DataStore.h"
 @interface SettingsViewController : UIViewController
 {
+    // Global Data Storage
+    DataStore *dataStore;    //shared instance of my DataStore object
+    
     IBOutlet UIScrollView  *scrollView;
 }
 

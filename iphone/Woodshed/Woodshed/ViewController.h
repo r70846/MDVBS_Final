@@ -7,10 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "DataStore.h"
+#import "DataStore.h"
 @interface ViewController : UIViewController
 {
-    
+    // Global Data Storage
+    DataStore *dataStore;    //shared instance of my DataStore object
 }
 
 

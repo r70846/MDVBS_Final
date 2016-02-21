@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "DataStore.h"
+#import "DataStore.h"
 @interface HistoryViewController : UIViewController
-
+{
+    // Global Data Storage
+    DataStore *dataStore;    //shared instance of my DataStore object
+}
 @end

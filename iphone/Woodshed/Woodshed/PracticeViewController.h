@@ -7,12 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DataStore.h"
 
 @interface PracticeViewController : UIViewController
 {
-    IBOutlet UIScrollView  *scrollView;
+    // Global Data Storage
+    DataStore *dataStore;    //shared instance of my DataStore object
     
-    //int iDisplayMode;
+    IBOutlet UIScrollView  *scrollView;
 }
 
 //Property to hold user topic choice

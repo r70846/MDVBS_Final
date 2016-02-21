@@ -17,6 +17,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    //setup shared instance of data storage in RAM
+    dataStore = [DataStore sharedInstance];
 }
 
 - (void)didReceiveMemoryWarning {

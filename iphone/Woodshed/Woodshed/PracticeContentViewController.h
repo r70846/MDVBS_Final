@@ -7,23 +7,29 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DataStore.h"
 
 @interface PracticeContentViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 {
+    // Global Data Storage
+    DataStore *dataStore;    //shared instance of my DataStore object
     
-    //Reference to topic table
+    //Reference to data tables
     IBOutlet  UITableView *topicTableView;
+    IBOutlet  UITableView *tagTableView;
+    IBOutlet  UITableView *valueTableView;
+    
     
     IBOutlet UILabel *topicDisplayLabel;
+    IBOutlet UILabel *topicDisplayLabelTwo;
+    IBOutlet UILabel *tagDisplayLabel;
     
-    IBOutlet  UITableView *tagTableView;
     
-    
-    //Static Data
+    //Data Holders
     NSMutableArray *topicArray;
-    
-    //Static Data
-    NSMutableArray *tagArray;
+    NSArray *tagArray;
+    NSMutableArray *valueArray;
+    NSString *currentTag;
     
 }
 

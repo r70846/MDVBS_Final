@@ -18,6 +18,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    //Setup shared instance of data storage in RAM
+    dataStore = [DataStore sharedInstance];
 }
 
 - (void)viewDidAppear:(BOOL)animated{
