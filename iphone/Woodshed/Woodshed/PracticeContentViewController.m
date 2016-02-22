@@ -129,6 +129,7 @@
         NSString  *topic = [topicArray objectAtIndex:indexPath.row];
         topicDisplayLabel.text = topic;
         topicDisplayLabelTwo.text = topic;
+        topicDisplayLabelThree.text = topic;
         dataStore.currentSession[@"Topic"] = topic;
         
         //Scroll to next screen
@@ -175,13 +176,24 @@
     
     int tag = (int)button.tag;
     
-    if(tag == 1) //Back to stage-1
+    if(tag == 1) //Cancel from tag, Back to topic stage
     {
+        [topicTableView reloadData];
         practiceViewController.iDisplayMode = 0;
     }
-    else if(tag == 2) //Back to stage-1
+    else if(tag == 2) //Cancel from value, Back value to tag stage
     {
+        [tagTableView reloadData];
         practiceViewController.iDisplayMode = 600;
+    }
+    else if(tag == 3) // Begin prqctice stage
+    {
+        practiceViewController.iDisplayMode = 1800;
+    }
+    else if(tag == 4) //Complete practice, back to top
+    {
+        [topicTableView reloadData];
+        practiceViewController.iDisplayMode = 0;
     }
         [practiceViewController setScrollView];
 }

@@ -22,6 +22,7 @@
     
     IBOutlet UILabel *topicDisplayLabel;
     IBOutlet UILabel *topicDisplayLabelTwo;
+    IBOutlet UILabel *topicDisplayLabelThree;
     IBOutlet UILabel *tagDisplayLabel;
     
     

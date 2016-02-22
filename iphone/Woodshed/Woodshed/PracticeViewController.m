@@ -18,6 +18,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    //Run this first load only, not on each new diplay
+    _iDisplayMode = 0;
+    
     //Setup shared instance of data storage in RAM
     dataStore = [DataStore sharedInstance];
 }
@@ -29,7 +32,7 @@
     //int iHeight = [[UIScreen mainScreen] bounds].size.height;
     scrollView.contentSize=CGSizeMake(iWidth,1200);
     
-    _iDisplayMode = 0;
+
     
     [scrollView setContentOffset:CGPointMake(0, _iDisplayMode) animated:NO];
 }
