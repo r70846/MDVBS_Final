@@ -18,8 +18,22 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    //setup shared instance of data storage in RAM
+    //Run this first load only, not on each new diplay
+    _iDisplayMode = 0;
+    
+    //Setup shared instance of data storage in RAM
     dataStore = [DataStore sharedInstance];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)aScrollView
+{
+    
+    //Keep the scoll where we want it. No user scroll !
+    [aScrollView setContentOffset: CGPointMake(0, _iDisplayMode)];
+}
+
+-(void)setScrollView{
+    [scrollView setContentOffset:CGPointMake(0, _iDisplayMode) animated:YES];
 }
 
 - (void)didReceiveMemoryWarning {

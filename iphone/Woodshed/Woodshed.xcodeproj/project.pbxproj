@@ -20,6 +20,7 @@
 		608C02421C79550F00159E53 /* PracticeContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 608C02411C79550F00159E53 /* PracticeContentViewController.m */; };
 		608C02451C7955A300159E53 /* PracticeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 608C02441C7955A300159E53 /* PracticeViewController.m */; };
 		608C02481C7A230800159E53 /* DataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 608C02471C7A230800159E53 /* DataStore.m */; };
+		608C024B1C7AD2CC00159E53 /* HistoryContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 608C024A1C7AD2CC00159E53 /* HistoryContentViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +59,8 @@
 		608C02441C7955A300159E53 /* PracticeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PracticeViewController.m; sourceTree = "<group>"; };
 		608C02461C7A230800159E53 /* DataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataStore.h; sourceTree = "<group>"; };
 		608C02471C7A230800159E53 /* DataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataStore.m; sourceTree = "<group>"; };
+		608C02491C7AD2CC00159E53 /* HistoryContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryContentViewController.h; sourceTree = "<group>"; };
+		608C024A1C7AD2CC00159E53 /* HistoryContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryContentViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +122,8 @@
 				608C02441C7955A300159E53 /* PracticeViewController.m */,
 				608C02461C7A230800159E53 /* DataStore.h */,
 				608C02471C7A230800159E53 /* DataStore.m */,
+				608C02491C7AD2CC00159E53 /* HistoryContentViewController.h */,
+				608C024A1C7AD2CC00159E53 /* HistoryContentViewController.m */,
 			);
 			path = Woodshed;
 			sourceTree = "<group>";
@@ -254,6 +259,7 @@
 				608C02451C7955A300159E53 /* PracticeViewController.m in Sources */,
 				608C02421C79550F00159E53 /* PracticeContentViewController.m in Sources */,
 				608C022F1C79094900159E53 /* SettingsViewController.m in Sources */,
+				608C024B1C7AD2CC00159E53 /* HistoryContentViewController.m in Sources */,
 				608C022C1C79093A00159E53 /* HistoryViewController.m in Sources */,
 				608C02041C79077200159E53 /* main.m in Sources */,
 				608C02321C790C8F00159E53 /* SettingsContentController.m in Sources */,

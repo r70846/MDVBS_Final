@@ -28,9 +28,9 @@
 - (void)viewDidAppear:(BOOL)animated{
     
     [super viewDidAppear:animated];
-    int iWidth = [[UIScreen mainScreen] bounds].size.width;
+    //int iWidth = [[UIScreen mainScreen] bounds].size.width;
     //int iHeight = [[UIScreen mainScreen] bounds].size.height;
-    scrollView.contentSize=CGSizeMake(iWidth,1200);
+    //scrollView.contentSize=CGSizeMake(iWidth,1200);
     
 
     

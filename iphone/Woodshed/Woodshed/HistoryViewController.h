@@ -13,5 +13,17 @@
 {
     // Global Data Storage
     DataStore *dataStore;    //shared instance of my DataStore object
+    
+    
+    IBOutlet UIScrollView  *scrollView;
 }
+
+//Property to hold user topic choice
+@property int iDisplayMode;
+
+
+-(void)setScrollView;
+
+
+
 @end
