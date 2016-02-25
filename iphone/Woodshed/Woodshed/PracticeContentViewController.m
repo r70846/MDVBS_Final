@@ -130,7 +130,9 @@
         topicDisplayLabel.text = topic;
         topicDisplayLabelTwo.text = topic;
         topicDisplayLabelThree.text = topic;
-        dataStore.currentSession[@"Topic"] = topic;
+        
+        //Store in seesion object (dict)
+        dataStore.currentSession[@"topic"] = topic;
         
         //Scroll to next screen
         PracticeViewController *practiceViewController = (PracticeViewController*) self.parentViewController;
@@ -186,14 +188,71 @@
         [tagTableView reloadData];
         practiceViewController.iDisplayMode = 600;
     }
-    else if(tag == 3) // Begin prqctice stage
+    else if(tag == 3) // Begin practice stage
     {
+        
+        //Set the current date and time
+        //NSDate *currentDate = [NSDate date];
+        dataStore.startDateTime  = [NSDate date];
+        
+        //Create format for date
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        if (dateFormatter != nil)
+        {
+            [dateFormatter setDateFormat:@"M/dd/YY"];
+        }
+        
+        //Build the date into a string based on my day format
+        NSString *dateString = [[NSString alloc] initWithFormat:@"%@", [dateFormatter stringFromDate: dataStore.startDateTime]];
+        
+        //Create format for times
+        NSDateFormatter *timeFormatter = [[NSDateFormatter alloc] init];
+        [timeFormatter setDateFormat:@"h:mm a"];
+        
+        //Build the start time into a string based on my time format
+        NSString *timeString = [[NSString alloc] initWithFormat:@"%@", [timeFormatter stringFromDate: dataStore.startDateTime]];
+        
+        //Save date/time tage in current session object
+        [dataStore.currentSession setValue:dateString forKey:@"date"];
+        [dataStore.currentSession setValue:timeString forKey:@"time"];
+        
+        //Scroll to practice screen
         practiceViewController.iDisplayMode = 1800;
     }
     else if(tag == 4) //Complete practice, back to top
     {
+        
+        //Caluculate & store duration in session
+        NSDate *endDateTime = [NSDate date];
+        int iMinutes = 0;
+        int iSeconds = 0;
+        int iTotalSeconds = [endDateTime timeIntervalSinceDate:dataStore.startDateTime];
+        if(iTotalSeconds > 59)
+        {
+            iMinutes = iTotalSeconds/60;
+            iSeconds = 60 % iTotalSeconds;
+        }else
+        {
+            iMinutes = 0;
+            iSeconds = iTotalSeconds;
+        }
+        NSString *sDuration = [[NSString alloc] initWithFormat:@"%d: min %d sec",iMinutes, iSeconds];
+        [dataStore.currentSession setValue:sDuration forKey:@"duration"];
+
+        //Store current session in sessions, & clear for next round..
+        [dataStore.sessions addObject:[dataStore.currentSession mutableCopy]];
+        
+        
+        //Clean up for next round
+        [dataStore.currentSession removeAllObjects];
+
+        
+        //Scroll back to topic, then flip to History tab
         [topicTableView reloadData];
+        [tagTableView reloadData];
+        
         practiceViewController.iDisplayMode = 0;
+        [self.tabBarController setSelectedIndex:1];
     }
         [practiceViewController setScrollView];
 }

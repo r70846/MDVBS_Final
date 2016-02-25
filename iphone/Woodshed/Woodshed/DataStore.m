@@ -18,13 +18,28 @@ static DataStore *_sharedInstance;
     if (self = [super init])
     {
         //Create Array to hold Sessions Data
-        //_sessions = [[NSMutableArray alloc] init];
+        _sessions = [[NSMutableArray alloc] init];
         
         //Create Dictionary Object to hold tag data
         _tagData = [[NSMutableDictionary alloc]init];
 
         //Create Dictionary Object to hold tag data
         _currentSession = [[NSMutableDictionary alloc]init];
+        
+        
+        //Create "Session" Dictionary Object to hold session data
+        _currentSession = [[NSMutableDictionary alloc]init];
+        
+        [_currentSession setValue:@"" forKey:@"topic"];
+        [_currentSession setValue:@"" forKey:@"date"];
+        [_currentSession setValue:@"" forKey:@"time"];
+        [_currentSession setValue:@"" forKey:@"duration"];
+
+        
+        
+        
+        
+    ///////// LOAD MENUS: TOPICS, TAGS, AND VALUES
         
     //Create temp array to load dictionary
     NSMutableArray *valueArray = [[NSMutableArray alloc] init];

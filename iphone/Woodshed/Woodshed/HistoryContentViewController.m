@@ -23,13 +23,20 @@
     dataStore = [DataStore sharedInstance];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+
+    [historyTableView reloadData ];
+}
+
+
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     
     NSUInteger iCnt;
     if (tableView==historyTableView)
     {
-        iCnt = 0;
+        iCnt = [dataStore.sessions count];
     }
     else if (tableView==detailTableView)
     {
@@ -39,24 +46,36 @@
     {
         iCnt = 0;
     }
-    return 0;
+    return iCnt;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //UITableViewCell *cell;
+    UITableViewCell *cell;
     
     if (tableView==historyTableView)
     {
-
+        //Get the cell..
+        cell = [tableView dequeueReusableCellWithIdentifier:@"HistoryCell"];
+        if(cell != nil)
+        {
+            //Get data
+            NSMutableDictionary *session = [dataStore.sessions objectAtIndex:indexPath.row];
+           NSString *dateTime = [NSString stringWithFormat:@"%@ %@",[session objectForKey:@"date"], [session objectForKey:@"time"]];
+            
+            //Load cell
+            cell.textLabel.text = [session objectForKey:@"topic"];
+            cell.detailTextLabel.text = dateTime;
+           
+        }
     }
     else if (tableView==detailTableView)
     {
-
+        cell = nil;
     }
 
-    return nil;
+    return cell;
 }
 
 
