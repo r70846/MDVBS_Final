@@ -64,6 +64,24 @@ static DataStore *_sharedInstance;
         [valueArray addObject:@"Ab"];
         _tagData[@"Key Center"] = [valueArray mutableCopy];
     
+        //Tempo
+        [valueArray removeAllObjects];
+        [valueArray addObject:@"Grave"];
+        [valueArray addObject:@"Largo"];
+        [valueArray addObject:@"Larghetto"];
+        [valueArray addObject:@"Lentando"];
+        [valueArray addObject:@"Lento"];
+        [valueArray addObject:@"Tardo"];
+        [valueArray addObject:@"Adagio"];
+        [valueArray addObject:@"Adagietto"];
+        [valueArray addObject:@"Andante"];
+        [valueArray addObject:@"andantino"];
+        [valueArray addObject:@"Moderato"];
+        [valueArray addObject:@"Allegretto"];
+        [valueArray addObject:@"Largamente"];
+        [valueArray addObject:@"Allegro"];
+        _tagData[@"Tempo"] = [valueArray mutableCopy];
+        
         //Bowing Pattern
         [valueArray removeAllObjects];
         [valueArray addObject:@"Staright Bowing"];
@@ -73,6 +91,38 @@ static DataStore *_sharedInstance;
         [valueArray addObject:@"Long Bow"];
         [valueArray addObject:@"Three Notes Per Bow"];
         _tagData[@"Bowing Pattern"] = [valueArray mutableCopy];
+        
+        
+        //Tonguing Technique
+        [valueArray removeAllObjects];
+        [valueArray addObject:@"Single Tongue"];
+        [valueArray addObject:@"Double Tongue"];
+        [valueArray addObject:@"Triple Tongue"];
+        _tagData[@"Tonguing Technique"] = [valueArray mutableCopy];
+        
+        //Lip Slurs
+        [valueArray removeAllObjects];
+        [valueArray addObject:@"Two Note Slurs"];
+        [valueArray addObject:@"Three Note Slurs"];
+        [valueArray addObject:@"Four Note Slurs"];
+        _tagData[@"Lip Slurs"] = [valueArray mutableCopy];
+        
+        //Drum Stick Grip
+        [valueArray removeAllObjects];
+        [valueArray addObject:@"Traditional Grip"];
+        [valueArray addObject:@"Reverse Traditional Grip"];
+        [valueArray addObject:@"German Grip"];
+        [valueArray addObject:@"French Grip"];
+        [valueArray addObject:@"American Grip"];
+        _tagData[@"Drum Stick Grip"] = [valueArray mutableCopy];
+        
+        //Picking Technique
+        [valueArray removeAllObjects];
+        [valueArray addObject:@"Down Picking"];
+        [valueArray addObject:@"Alternate Picking"];
+        [valueArray addObject:@"Sweep Picking"];
+        [valueArray addObject:@"Finger Picking"];
+        _tagData[@"Picking Technique"] = [valueArray mutableCopy];
         
         NSLog(@"%@", _tagData);
         

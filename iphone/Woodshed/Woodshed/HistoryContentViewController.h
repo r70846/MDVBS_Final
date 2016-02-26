@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "DataStore.h"
 
-@interface HistoryContentViewController : UIViewController
+@interface HistoryContentViewController : UIViewController <UIActionSheetDelegate, UITextViewDelegate, UITextFieldDelegate>
+
 {
     // Global Data Storage
     DataStore *dataStore;    //shared instance of my DataStore object
@@ -17,6 +18,20 @@
     //Reference to data tables
     IBOutlet  UITableView *historyTableView;
     IBOutlet  UITableView *detailTableView;
+    
+    IBOutlet UILabel *topicDisplayLabel;
+    IBOutlet UILabel *dateTimeDisplayLabel;
+    
+    
+    NSMutableArray *filterArray;
+    NSMutableArray *sortArray;
+    UIActionSheet *filterActionSheet;
+    UIActionSheet *sortActionSheet;
+    
+    
+    
+    NSMutableArray *tagArray;
+    NSMutableArray *valueArray;
     
 }
 

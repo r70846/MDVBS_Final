@@ -21,6 +21,18 @@
     
     //Setup shared instance of data storage in RAM
     dataStore = [DataStore sharedInstance];
+    
+    tagArray = [[NSMutableArray alloc] init];
+    [tagArray addObject:@"Bowing Pattern"];
+    [tagArray addObject:@"Key Center"];
+    
+    valueArray = [[NSMutableArray alloc] init];
+    [valueArray addObject:@"Shuffle Bowing"];
+    [valueArray addObject:@"A"];
+    
+    
+    //Setup Interface Items
+    [self setUpSortSheet];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -40,7 +52,7 @@
     }
     else if (tableView==detailTableView)
     {
-        iCnt = 0;
+        iCnt = [tagArray count];
     }
     else
     {
@@ -72,25 +84,98 @@
     }
     else if (tableView==detailTableView)
     {
-        cell = nil;
+        //Get the cell..
+        cell = [tableView dequeueReusableCellWithIdentifier:@"DetailCell"];
+        if(cell != nil)
+        {
+            cell.textLabel.text = (NSString*)[tagArray objectAtIndex:indexPath.row];
+            cell.detailTextLabel.text = (NSString*)[valueArray objectAtIndex:indexPath.row];
+        }
     }
 
     return cell;
 }
 
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    //where indexPath.row is the selected cell
+    
+    if (tableView==historyTableView)
+    {
+        //Get data
+        NSMutableDictionary *session = [dataStore.sessions objectAtIndex:indexPath.row];
+           NSString *dateTime = [NSString stringWithFormat:@"%@ %@",[session objectForKey:@"date"], [session objectForKey:@"time"]];
+        
+        topicDisplayLabel.text = [session objectForKey:@"topic"];
+        dateTimeDisplayLabel.text = dateTime;
 
+        
+        //Scroll to next screen
+        HistoryViewController *historyViewController = (HistoryViewController*) self.parentViewController;
+        historyViewController.iDisplayMode = 600;
+        [historyViewController setScrollView];
+    }
+    else if (tableView==detailTableView)
+    {
+        //Scroll to next screen
+        //PracticeViewController *practiceViewController = (PracticeViewController*) self.parentViewController;
+        //practiceViewController.iDisplayMode = 600;
+        //[practiceViewController setScrollView];
+    }
+    
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
+-(void)setUpSortSheet
+{
+    
+    //Create Array to hold all possible topics
+    sortArray = [[NSMutableArray alloc] init];
+    [sortArray addObject:@"Sort by Topic"];
+    [sortArray addObject:@"Sort by Date"];
+    
+    //Build "actionsheet" as a drop down menu
+    sortActionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                   delegate:self
+                                          cancelButtonTitle:nil
+                                     destructiveButtonTitle:nil
+                                          otherButtonTitles:nil];
+    //Tag it so I can add more later...
+    sortActionSheet.tag = 100;
+    
+    //Add button for each topic in array
+    for (NSString *sort in sortArray) {
+        [sortActionSheet addButtonWithTitle:sort];
+    }
+    
+    //Add cancel button on the end
+    sortActionSheet.cancelButtonIndex = [sortActionSheet addButtonWithTitle:@"Cancel"];
+    
+    //To handle keyboard
+    //[topicDisplay setDelegate:self];
+    
+}
+
+
+
 -(IBAction)onClick:(UIButton *)button
 {
-    HistoryViewController *historyViewController = (HistoryViewController*) self.parentViewController;
+    int tag = (int)button.tag;
+    
+    if(tag == 0) //Cancel from tag, Back to topic stage
+    {
 
-    [historyViewController setScrollView];
+    
+    HistoryViewController *historyViewController = (HistoryViewController*) self.parentViewController;
+        historyViewController.iDisplayMode = 0;
+        [historyViewController setScrollView];
+    }else{
+            [sortActionSheet showInView:self.view];
+    }
 }
 
 /*

@@ -38,5 +38,6 @@
 //Respond to click event
 -(IBAction)onClick:(UIButton *)button;
 
+-(IBAction)done:(UIStoryboardSegue *)segue;
 
 @end

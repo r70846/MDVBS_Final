@@ -24,6 +24,15 @@
     
     //Static Data
     topicArray = [[NSMutableArray alloc] init];
+    [topicArray addObject:@"All of Me"];
+    [topicArray addObject:@"How High the Moon"];
+    [topicArray addObject:@"Autumn Leaves"];
+    [topicArray addObject:@"Bach Minuet in D"];
+    [topicArray addObject:@"Malaguena"];
+    [topicArray addObject:@"Minor 7th Arpeggio"];
+    [topicArray addObject:@"Major 7th Arpeggio"];
+    [topicArray addObject:@"Diminished 7th Arpeggios"];
+    [topicArray addObject:@"Augmented 7th Arpeggios"];
     [topicArray addObject:@"Major Scale"];
     [topicArray addObject:@"Natural Minor Scale"];
     [topicArray addObject:@"Harmonic Minor Scale"];
@@ -32,7 +41,6 @@
     [topicArray addObject:@"Whole Tone Scale"];
     [topicArray addObject:@"Dorian Mode"];
     [topicArray addObject:@"Phrygian Mode"];
-    
     
     tagArray = [[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
     valueArray = (NSMutableArray*)tagArray;
@@ -182,11 +190,13 @@
     {
         [topicTableView reloadData];
         practiceViewController.iDisplayMode = 0;
+        [practiceViewController setScrollView];
     }
     else if(tag == 2) //Cancel from value, Back value to tag stage
     {
         [tagTableView reloadData];
         practiceViewController.iDisplayMode = 600;
+        [practiceViewController setScrollView];
     }
     else if(tag == 3) // Begin practice stage
     {
@@ -218,6 +228,7 @@
         
         //Scroll to practice screen
         practiceViewController.iDisplayMode = 1800;
+        [practiceViewController setScrollView];
     }
     else if(tag == 4) //Complete practice, back to top
     {
@@ -252,10 +263,30 @@
         [tagTableView reloadData];
         
         practiceViewController.iDisplayMode = 0;
-        [self.tabBarController setSelectedIndex:1];
-    }
         [practiceViewController setScrollView];
+        [self.tabBarController setSelectedIndex:1];
+        
+    }else if(tag == 10){
+        
+        NSLog(@"%@", @"tag 10");
+        
+        [self performSegueWithIdentifier:@"segueToNewItem" sender:self];
+    }else if(tag == 11){
+        [self performSegueWithIdentifier:@"segueToNewItem" sender:self];
+    }else if(tag == 12){
+        [self performSegueWithIdentifier:@"segueToNewItem" sender:self];
+    }else if(tag == 13){
+        [self performSegueWithIdentifier:@"segueToNewItem" sender:self];
+    }
 }
+
+
+
+-(IBAction)done:(UIStoryboardSegue *)segue
+{
+    
+}
+
 
 
 - (void)didReceiveMemoryWarning {

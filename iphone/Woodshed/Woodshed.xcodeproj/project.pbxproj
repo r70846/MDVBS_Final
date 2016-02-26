@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		605EBC951C7FF4F200892640 /* NewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 605EBC941C7FF4F200892640 /* NewViewController.m */; };
 		608C02041C79077200159E53 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 608C02031C79077200159E53 /* main.m */; };
 		608C02071C79077200159E53 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 608C02061C79077200159E53 /* AppDelegate.m */; };
 		608C020A1C79077200159E53 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 608C02091C79077200159E53 /* ViewController.m */; };
@@ -34,6 +35,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		605EBC931C7FF4F200892640 /* NewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewViewController.h; sourceTree = "<group>"; };
+		605EBC941C7FF4F200892640 /* NewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewViewController.m; sourceTree = "<group>"; };
 		608C01FE1C79077200159E53 /* Woodshed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Woodshed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		608C02021C79077200159E53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		608C02031C79077200159E53 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -124,6 +127,8 @@
 				608C02471C7A230800159E53 /* DataStore.m */,
 				608C02491C7AD2CC00159E53 /* HistoryContentViewController.h */,
 				608C024A1C7AD2CC00159E53 /* HistoryContentViewController.m */,
+				605EBC931C7FF4F200892640 /* NewViewController.h */,
+				605EBC941C7FF4F200892640 /* NewViewController.m */,
 			);
 			path = Woodshed;
 			sourceTree = "<group>";
@@ -260,6 +265,7 @@
 				608C02421C79550F00159E53 /* PracticeContentViewController.m in Sources */,
 				608C022F1C79094900159E53 /* SettingsViewController.m in Sources */,
 				608C024B1C7AD2CC00159E53 /* HistoryContentViewController.m in Sources */,
+				605EBC951C7FF4F200892640 /* NewViewController.m in Sources */,
 				608C022C1C79093A00159E53 /* HistoryViewController.m in Sources */,
 				608C02041C79077200159E53 /* main.m in Sources */,
 				608C02321C790C8F00159E53 /* SettingsContentController.m in Sources */,
