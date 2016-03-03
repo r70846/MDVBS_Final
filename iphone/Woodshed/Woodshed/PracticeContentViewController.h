@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "DataStore.h"
+#import "NewViewController.h"
 
 @interface PracticeContentViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 {
@@ -32,7 +33,14 @@
     NSMutableArray *valueArray;
     NSString *currentTag;
     
+    //currentScreen
+    NSString *currentScreen;
+    
+
+    
 }
+
+
 
 
 //Respond to click event

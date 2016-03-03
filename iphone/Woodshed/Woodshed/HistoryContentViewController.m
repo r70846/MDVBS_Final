@@ -22,21 +22,16 @@
     //Setup shared instance of data storage in RAM
     dataStore = [DataStore sharedInstance];
     
+    //Local RAM storage for table displays
     tagArray = [[NSMutableArray alloc] init];
-    //[tagArray addObject:@"Bowing Pattern"];
-    //[tagArray addObject:@"Key Center"];
-    
     valueArray = [[NSMutableArray alloc] init];
-    //[valueArray addObject:@"Shuffle Bowing"];
-    //[valueArray addObject:@"A"];
-    
-    
+
     //Setup Interface Items
     [self setUpSortSheet];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
 
+- (void)viewWillAppear:(BOOL)animated {
     [historyTableView reloadData ];
 }
 
@@ -79,7 +74,6 @@
             //Load cell
             cell.textLabel.text = [session objectForKey:@"topic"];
             cell.detailTextLabel.text = dateTime;
-           
         }
     }
     else if (tableView==detailTableView)
@@ -116,17 +110,27 @@
         //Pull data from session dict object
         NSArray *keys = [detailSession allKeys];
         //NSArray *values = [detailSession allValues];
-
+        int i;
         for(NSString *key in keys){
             
             if ([[key lowercaseString] isEqualToString:@"topic"]){
             }else if ([[key lowercaseString] isEqualToString:@"date"]){
             }else if ([[key lowercaseString] isEqualToString:@"time"]){
+            }else if ([[key lowercaseString] isEqualToString:@"notes"]){
             }else{
                 [tagArray addObject:[key lowercaseString]];
                 [valueArray addObject:[[detailSession objectForKey:key] lowercaseString]];
             }
         }
+        
+        NSMutableArray *notes = [detailSession objectForKey:@"notes"];
+        
+        
+        for(i = 0; i < [notes count]; i++){
+            [tagArray addObject:@"note"];
+            [valueArray addObject:[notes objectAtIndex:i]];
+        }
+        
         
         [detailTableView reloadData];
         
@@ -137,10 +141,7 @@
     }
     else if (tableView==detailTableView)
     {
-        //Scroll to next screen
-        //PracticeViewController *practiceViewController = (PracticeViewController*) self.parentViewController;
-        //practiceViewController.iDisplayMode = 600;
-        //[practiceViewController setScrollView];
+        //Do nothing
     }
     
 }
@@ -188,8 +189,6 @@
     
     if(tag == 0) //Cancel from tag, Back to topic stage
     {
-
-    
     HistoryViewController *historyViewController = (HistoryViewController*) self.parentViewController;
         historyViewController.iDisplayMode = 0;
         [historyViewController setScrollView];
@@ -197,6 +196,7 @@
             [sortActionSheet showInView:self.view];
     }
 }
+
 
 /*
 #pragma mark - Navigation

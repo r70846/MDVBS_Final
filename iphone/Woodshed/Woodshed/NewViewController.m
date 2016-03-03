@@ -17,7 +17,28 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    NSString *newItem = [NSString stringWithFormat:@"New %@", _source];
+    labelSource.text = newItem;
+        
+    [txtInput becomeFirstResponder];
 }
+
+
+
+
+-(IBAction)onClick:(UIButton *)button
+{
+    
+    //int tag = (int)button.tag;
+    
+    _input = txtInput.text;
+    NSLog(@"%@", _input);
+    [self performSegueWithIdentifier:@"unwindFromNewInput" sender:self];
+    
+    
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -5,6 +5,7 @@
 //  Created by Russell Gaspard on 2/20/16.
 //  Copyright (c) 2016 Russell Gaspard. All rights reserved.
 //
+////////////////////////////////////////////////////////////////
 
 #import "PracticeViewController.h"
 
@@ -24,8 +25,6 @@
     //Setup shared instance of data storage in RAM
     dataStore = [DataStore sharedInstance];
     
-    
-    
     scrollView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
 }
 
@@ -42,16 +41,11 @@
     
 }
 
-/*
-
 - (void)scrollViewDidScroll:(UIScrollView *)aScrollView
 {
-    
     //Keep the scoll where we want it. No user scroll !
     [aScrollView setContentOffset: CGPointMake(0, _iDisplayMode)];
 }
-
-*/
 
 
 -(void)setScrollView{

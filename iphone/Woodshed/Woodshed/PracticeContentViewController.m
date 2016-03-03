@@ -9,8 +9,6 @@
 #import "PracticeContentViewController.h"
 #import "PracticeViewController.h"
 
-
-
 @interface PracticeContentViewController ()
 
 @end
@@ -45,10 +43,12 @@
     [topicArray addObject:@"Phrygian Mode"];
     
     tagArray = [[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
-    valueArray = (NSMutableArray*)tagArray;
+    //valueArray = (NSMutableArray*)tagArray;
+    valueArray = [[NSMutableArray alloc] init];
     
     currentTag = [[NSString alloc] init];
-    
+    currentScreen = [[NSString alloc] init];
+    currentScreen = @"Topic";
     
     //Establishing Screen Size
     /*
@@ -118,7 +118,6 @@
                 
                 //color my cell !
                 cell.backgroundColor = [UIColor lightGrayColor];
-                
             }
             else
             {
@@ -136,12 +135,8 @@
             cell.textLabel.text =(NSString*)[valueArray objectAtIndex:indexPath.row];
         }
     }
-    
-    
     return cell;
 }
-
-
 
 
 
@@ -162,7 +157,7 @@
         //Make sure next screen is current
         [tagTableView reloadData];
         
-        //Scroll to next screen
+        //Scroll to tag screen
         PracticeViewController *practiceViewController = (PracticeViewController*) self.parentViewController;
         practiceViewController.iDisplayMode = 600;
         [practiceViewController setScrollView];
@@ -186,7 +181,9 @@
     {
         //Get user value choice, save to current session
         NSString  *value = [valueArray objectAtIndex:indexPath.row];
-        dataStore.currentSession[[currentTag copy]] = [value copy];
+        //dataStore.currentSession[[currentTag copy]] = [value copy];
+        dataStore.currentSession[currentTag] = [value copy];
+        
         
         
         //Display amended values in tag table
@@ -209,7 +206,7 @@
     if(tag == 1) //Cancel from tag, Back to topic stage
     {
         //Clean up and start over
-        [dataStore.currentSession removeAllObjects];
+        [dataStore resetCurrentSession];
         
         [topicTableView reloadData];
         practiceViewController.iDisplayMode = 0;
@@ -276,11 +273,9 @@
         //Store current session in sessions, & clear for next round..
         [dataStore.sessions addObject:[dataStore.currentSession mutableCopy]];
         
-        
         //Clean up for next round
         [dataStore.currentSession removeAllObjects];
 
-        
         //Scroll back to topic, then flip to History tab
         [topicTableView reloadData];
         [tagTableView reloadData];
@@ -290,32 +285,68 @@
         [self.tabBarController setSelectedIndex:1];
         
     }else if(tag == 10){
-        
-        NSLog(@"%@", @"tag 10");
-        
+                currentScreen = @"Topic";
         [self performSegueWithIdentifier:@"segueToNewItem" sender:self];
     }else if(tag == 11){
+                currentScreen = @"Tag";
         [self performSegueWithIdentifier:@"segueToNewItem" sender:self];
     }else if(tag == 12){
+                currentScreen = @"Value";
         [self performSegueWithIdentifier:@"segueToNewItem" sender:self];
     }else if(tag == 13){
+                currentScreen = @"Note";
         [self performSegueWithIdentifier:@"segueToNewItem" sender:self];
     }
 }
 
-
-
 -(IBAction)done:(UIStoryboardSegue *)segue
 {
     
+    if ([[segue identifier] isEqualToString:@"unwindFromNewInput"])
+    {
+        NewViewController *newViewController = segue.sourceViewController;
+        NSString *source = newViewController.source;
+        NSString *newItem = newViewController.input;
+        
+        if([source isEqualToString:@"Topic"]){
+            [topicArray addObject:newItem];
+            [topicTableView reloadData];
+        }else if([source isEqualToString:@"Tag"]){
+            //Create temp array to load dictionary
+            NSMutableArray *tmpArray = [[NSMutableArray alloc] init];
+            dataStore.tagData[newItem] = [tmpArray mutableCopy];
+            tagArray = [[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
+            [tagTableView reloadData];
+        }else if([source isEqualToString:@"Value"]){
+            [valueArray addObject:newItem];
+             dataStore.tagData[currentTag] = [valueArray mutableCopy];
+            [valueTableView reloadData];
+        }else if([source isEqualToString:@"Note"]){
+            
+            [dataStore.currentSession[@"notes"] addObject:newItem];
+            
+            //[valueArray addObject:newItem];
+           // dataStore.tagData[currentTag] = [valueArray mutableCopy];
+            //[valueTableView reloadData];
+        }
+    }
 }
 
-
+//This is called when we want to go to a new view
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([[segue identifier] isEqualToString:@"segueToNewItem"])
+    {
+        NewViewController *newViewController = segue.destinationViewController;
+        newViewController.source = currentScreen;
+    }
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 
 /*
 #pragma mark - Navigation
@@ -328,3 +359,6 @@
 */
 
 @end
+
+
+

@@ -892,10 +892,10 @@
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <segue destination="hmy-jh-Jkq" kind="unwind" unwindAction="done:" id="cFq-ag-JwV"/>
+                                            <segue destination="hmy-jh-Jkq" kind="unwind" identifier="unwindFromNewInput" unwindAction="done:" id="cFq-ag-JwV"/>
                                         </connections>
                                     </button>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6Nm-un-Pak">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6Nm-un-Pak">
                                         <rect key="frame" x="51" y="80" width="220" height="30"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
@@ -914,7 +914,7 @@
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <segue destination="hmy-jh-Jkq" kind="unwind" unwindAction="done:" id="7Z7-ya-8Lu"/>
+                                            <action selector="onClick:" destination="z71-4O-o4f" eventType="touchUpInside" id="edW-jK-3l3"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -924,6 +924,10 @@
                         <color key="backgroundColor" red="1" green="0.97254902119999997" blue="0.89411765340000005" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
+                    <connections>
+                        <outlet property="labelSource" destination="dV7-lJ-hje" id="rB5-rS-csj"/>
+                        <outlet property="txtInput" destination="6Nm-un-Pak" id="Atd-P5-BtT"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7ld-iL-oZ2" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="hmy-jh-Jkq" userLabel="Exit" sceneMemberID="exit"/>

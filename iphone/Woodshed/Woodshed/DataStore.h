@@ -10,6 +10,7 @@
 
 @interface DataStore : NSObject
 {
+    
 
 }
 
@@ -26,5 +27,8 @@
 
 @property (nonatomic, strong)NSString *jsonPath;
 @property (nonatomic, strong)NSString *csvPath;
+
+
+-(void)resetCurrentSession;
 
 @end

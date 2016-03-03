@@ -33,7 +33,7 @@
 }
 
 -(void)setScrollView{
-    [scrollView setContentOffset:CGPointMake(0, _iDisplayMode) animated:YES];
+    [scrollView setContentOffset:CGPointMake(0, _iDisplayMode) animated:NO];
 }
 
 - (void)didReceiveMemoryWarning {
