@@ -28,7 +28,8 @@
     UIActionSheet *filterActionSheet;
     UIActionSheet *sortActionSheet;
     
-    
+    //Session chosen by user to display from history
+    NSMutableDictionary *detailSession;
     
     NSMutableArray *tagArray;
     NSMutableArray *valueArray;

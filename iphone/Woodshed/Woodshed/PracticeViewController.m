@@ -23,6 +23,10 @@
     
     //Setup shared instance of data storage in RAM
     dataStore = [DataStore sharedInstance];
+    
+    
+    
+    scrollView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -31,11 +35,14 @@
     //int iWidth = [[UIScreen mainScreen] bounds].size.width;
     //int iHeight = [[UIScreen mainScreen] bounds].size.height;
     //scrollView.contentSize=CGSizeMake(iWidth,1200);
-    
+    //scrollView.contentSize=CGSizeMake(iWidth,iHeight);
 
     
     [scrollView setContentOffset:CGPointMake(0, _iDisplayMode) animated:NO];
+    
 }
+
+/*
 
 - (void)scrollViewDidScroll:(UIScrollView *)aScrollView
 {
@@ -44,10 +51,12 @@
     [aScrollView setContentOffset: CGPointMake(0, _iDisplayMode)];
 }
 
+*/
+
 
 -(void)setScrollView{
 
-    [scrollView setContentOffset:CGPointMake(0, _iDisplayMode) animated:YES];
+    [scrollView setContentOffset:CGPointMake(0, _iDisplayMode) animated:NO];
 }
 
 

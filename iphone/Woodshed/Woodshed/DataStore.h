@@ -20,7 +20,7 @@
 
 @property (nonatomic, strong)NSMutableDictionary *tagData;
 @property (nonatomic, strong)NSMutableDictionary *currentSession;
-@property (nonatomic, strong) NSDate *startDateTime;
+@property (nonatomic, strong)NSDate *startDateTime;
 @property (nonatomic, strong)NSMutableArray *sessions;
 
 

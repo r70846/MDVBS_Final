@@ -9,6 +9,8 @@
 #import "PracticeContentViewController.h"
 #import "PracticeViewController.h"
 
+
+
 @interface PracticeContentViewController ()
 
 @end
@@ -57,7 +59,14 @@
      */
 }
 
-
+- (void)viewWillAppear:(BOOL)animated{
+    [topicTableView reloadData];
+    [tagTableView reloadData];
+    [valueTableView reloadData];
+}
+    
+    
+    
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     
@@ -106,10 +115,15 @@
             
             if ([[dataStore.currentSession allKeys] containsObject:tag]) {
                 cell.detailTextLabel.text = dataStore.currentSession[tag];
+                
+                //color my cell !
+                cell.backgroundColor = [UIColor lightGrayColor];
+                
             }
             else
             {
                 cell.detailTextLabel.text = @"[ None ]";
+                cell.backgroundColor = [UIColor whiteColor];
             }
         }
     }
@@ -128,6 +142,9 @@
 }
 
 
+
+
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     //where indexPath.row is the selected cell
     
@@ -141,6 +158,9 @@
         
         //Store in seesion object (dict)
         dataStore.currentSession[@"topic"] = topic;
+        
+        //Make sure next screen is current
+        [tagTableView reloadData];
         
         //Scroll to next screen
         PracticeViewController *practiceViewController = (PracticeViewController*) self.parentViewController;
@@ -188,6 +208,9 @@
     
     if(tag == 1) //Cancel from tag, Back to topic stage
     {
+        //Clean up and start over
+        [dataStore.currentSession removeAllObjects];
+        
         [topicTableView reloadData];
         practiceViewController.iDisplayMode = 0;
         [practiceViewController setScrollView];

@@ -23,12 +23,12 @@
     dataStore = [DataStore sharedInstance];
     
     tagArray = [[NSMutableArray alloc] init];
-    [tagArray addObject:@"Bowing Pattern"];
-    [tagArray addObject:@"Key Center"];
+    //[tagArray addObject:@"Bowing Pattern"];
+    //[tagArray addObject:@"Key Center"];
     
     valueArray = [[NSMutableArray alloc] init];
-    [valueArray addObject:@"Shuffle Bowing"];
-    [valueArray addObject:@"A"];
+    //[valueArray addObject:@"Shuffle Bowing"];
+    //[valueArray addObject:@"A"];
     
     
     //Setup Interface Items
@@ -103,12 +103,32 @@
     if (tableView==historyTableView)
     {
         //Get data
-        NSMutableDictionary *session = [dataStore.sessions objectAtIndex:indexPath.row];
-           NSString *dateTime = [NSString stringWithFormat:@"%@ %@",[session objectForKey:@"date"], [session objectForKey:@"time"]];
+        detailSession = [dataStore.sessions objectAtIndex:indexPath.row];
+           NSString *dateTime = [NSString stringWithFormat:@"%@ %@",[detailSession objectForKey:@"date"], [detailSession objectForKey:@"time"]];
         
-        topicDisplayLabel.text = [session objectForKey:@"topic"];
+        topicDisplayLabel.text = [detailSession objectForKey:@"topic"];
         dateTimeDisplayLabel.text = dateTime;
 
+        //Clear my arrays
+        [tagArray removeAllObjects];
+        [valueArray removeAllObjects];
+        
+        //Pull data from session dict object
+        NSArray *keys = [detailSession allKeys];
+        //NSArray *values = [detailSession allValues];
+
+        for(NSString *key in keys){
+            
+            if ([[key lowercaseString] isEqualToString:@"topic"]){
+            }else if ([[key lowercaseString] isEqualToString:@"date"]){
+            }else if ([[key lowercaseString] isEqualToString:@"time"]){
+            }else{
+                [tagArray addObject:[key lowercaseString]];
+                [valueArray addObject:[[detailSession objectForKey:key] lowercaseString]];
+            }
+        }
+        
+        [detailTableView reloadData];
         
         //Scroll to next screen
         HistoryViewController *historyViewController = (HistoryViewController*) self.parentViewController;
