@@ -636,13 +636,16 @@
                                             <action selector="onClick:" destination="mIc-aL-v4T" eventType="touchUpInside" id="VOj-sl-Cc5"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xVo-i5-zdg">
+                                    <button opaque="NO" tag="6" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xVo-i5-zdg">
                                         <rect key="frame" x="20" y="45" width="60" height="30"/>
                                         <color key="backgroundColor" red="0.1176470588" green="0.14117647059999999" blue="0.41960784309999999" alpha="1" colorSpace="calibratedRGB"/>
                                         <state key="normal" title="-" image="pause-w-long">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="onClick:" destination="mIc-aL-v4T" eventType="touchUpInside" id="LGP-bB-IOH"/>
+                                        </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="000" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lr3-f9-NDl">
                                         <rect key="frame" x="100" y="45" width="130" height="30"/>

@@ -277,10 +277,9 @@
         [practiceViewController setScrollView];
         [self.tabBarController setSelectedIndex:1];
     }else if(tag == 5){
-        
         [self displayTimer];
-        
-        
+    }else if(tag == 6){
+        [self pauseMode];
     }else if(tag == 10){
                 currentScreen = @"Topic";
         [self performSegueWithIdentifier:@"segueToNewItem" sender:self];
@@ -439,6 +438,32 @@
         newViewController.source = currentScreen;
     }
 }
+
+
+-(IBAction)pauseMode
+{
+    NSString *sMessage = @"";
+    
+    //Create alert view
+    UIAlertView *paused = [[UIAlertView alloc] initWithTitle:@"Practice Session Paused" message:sMessage delegate:self cancelButtonTitle:@"RESUME" otherButtonTitles:nil];
+
+    
+    //Display alert view
+    [paused show];
+    
+}
+
+//User response
+- (void)alertView:(UIAlertView *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    if (buttonIndex == 0)  //[ RESUME ]
+    {
+
+
+    }
+}
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
