@@ -117,7 +117,11 @@
             }else if ([[key lowercaseString] isEqualToString:@"date"]){
             }else if ([[key lowercaseString] isEqualToString:@"time"]){
             }else if ([[key lowercaseString] isEqualToString:@"notes"]){
+            }else if ([key rangeOfString:@"<<INTERNAL>>"].location == NSNotFound){
+                [tagArray addObject:[key lowercaseString]];
+                [valueArray addObject:[[detailSession objectForKey:key] lowercaseString]];
             }else{
+                //Internal records. not for user display
                 [tagArray addObject:[key lowercaseString]];
                 [valueArray addObject:[[detailSession objectForKey:key] lowercaseString]];
             }

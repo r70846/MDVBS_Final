@@ -27,6 +27,13 @@
     IBOutlet UILabel *tagDisplayLabel;
     
     
+    IBOutlet UILabel *timerDisplay;
+    
+    
+    IBOutlet UIButton *pauseButton;
+    IBOutlet UIButton *viewButton;
+    
+    
     //Data Holders
     NSMutableArray *topicArray;
     NSArray *tagArray;
@@ -36,7 +43,11 @@
     //currentScreen
     NSString *currentScreen;
     
-
+    int iTotalTime;
+    NSString *sDuration;
+    NSTimer *durationTimer;
+    Boolean bDisplayTimer;
+    Boolean bPractice;
     
 }
 

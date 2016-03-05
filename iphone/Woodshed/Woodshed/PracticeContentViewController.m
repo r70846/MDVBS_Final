@@ -221,6 +221,8 @@
     else if(tag == 3) // Begin practice stage
     {
         
+        [self initializeTimer];
+        
         //Set the current date and time
         //NSDate *currentDate = [NSDate date];
         dataStore.startDateTime  = [NSDate date];
@@ -249,40 +251,35 @@
         //Scroll to practice screen
         practiceViewController.iDisplayMode = 1800;
         [practiceViewController setScrollView];
+        
+        //Inititlaize time tracker on "begin"
+        iTotalTime = 0;
+        sDuration = [NSString stringWithFormat:@"%i min",iTotalTime];
+        if(bDisplayTimer)
+        {
+            timerDisplay.text = sDuration;
+        }
+        
+        //Launch repeating timer to run "Tick"
+        durationTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(oneRound) userInfo:nil repeats:YES];
+        
+        //State Change
+        bPractice = TRUE;
+        
     }
     else if(tag == 4) //Complete practice, back to top
     {
         
-        //Caluculate & store duration in session
-        NSDate *endDateTime = [NSDate date];
-        int iMinutes = 0;
-        int iSeconds = 0;
-        int iTotalSeconds = [endDateTime timeIntervalSinceDate:dataStore.startDateTime];
-        if(iTotalSeconds > 59)
-        {
-            iMinutes = iTotalSeconds/60;
-            iSeconds = 60 % iTotalSeconds;
-        }else
-        {
-            iMinutes = 0;
-            iSeconds = iTotalSeconds;
-        }
-        NSString *sDuration = [[NSString alloc] initWithFormat:@"%d: min %d sec",iMinutes, iSeconds];
-        [dataStore.currentSession setValue:sDuration forKey:@"duration"];
-
-        //Store current session in sessions, & clear for next round..
-        [dataStore.sessions addObject:[dataStore.currentSession mutableCopy]];
+        [self sessionComplete];
         
-        //Clean up for next round
-        [dataStore.currentSession removeAllObjects];
-
         //Scroll back to topic, then flip to History tab
-        [topicTableView reloadData];
-        [tagTableView reloadData];
-        
         practiceViewController.iDisplayMode = 0;
         [practiceViewController setScrollView];
         [self.tabBarController setSelectedIndex:1];
+    }else if(tag == 5){
+        
+        [self displayTimer];
+        
         
     }else if(tag == 10){
                 currentScreen = @"Topic";
@@ -298,6 +295,107 @@
         [self performSegueWithIdentifier:@"segueToNewItem" sender:self];
     }
 }
+
+-(void)sessionComplete{
+    
+    //kill timer
+    [durationTimer invalidate];
+    
+    //State Change
+    bPractice = FALSE;
+    
+    //Caluculate total duration 'begin to complete'
+    NSDate *endDateTime = [NSDate date];
+    int iMinutes = 0;
+    int iSeconds = 0;
+    int iTotalSeconds = [endDateTime timeIntervalSinceDate:dataStore.startDateTime];
+    if(iTotalSeconds > 59)
+    {
+        iMinutes = iTotalSeconds/60;
+        iSeconds = iTotalSeconds % 60;
+    }else
+    {
+        iMinutes = 0;
+        iSeconds = iTotalSeconds;
+    }
+    
+    //Save Data
+    
+    //Save total elapsed time included 'paused' time (Internal not for user dispaly)
+    NSString *sTotalDuration = [[NSString alloc] initWithFormat:@"%d: min %d sec",iMinutes, iSeconds];
+    [dataStore.currentSession setValue:sTotalDuration forKey:@"<<INTERNAL>>totalduration"];
+    
+    
+    //Save final duration as text for user display
+    [dataStore.currentSession setValue:sDuration forKey:@"duration"];
+    
+    //Store current session in sessions, & clear for next round..
+    [dataStore.sessions addObject:[dataStore.currentSession mutableCopy]];
+    
+    //Clean up for next round
+    [dataStore.currentSession removeAllObjects];
+    
+    //Reload tables
+    [topicTableView reloadData];
+    [tagTableView reloadData];
+    
+    //Initialize Duration Timer
+    [self initializeTimer];
+}
+
+-(void)initializeTimer{
+    //Initialize Duration Timer
+    iTotalTime = 0;
+    timerDisplay.text = @"-";
+    bDisplayTimer = TRUE;
+}
+
+//////// Timer Functions
+
+-(void)oneRound //Add one minute to timer
+{
+    iTotalTime++;
+    sDuration = [NSString stringWithFormat:@"%i min",iTotalTime];
+    
+    if(bDisplayTimer)
+    {
+        timerDisplay.text = sDuration;
+    }
+}
+
+//Support function fpr Practice Timer
+-(IBAction)displayTimer
+{
+    
+        UIImage *closed = [UIImage imageNamed:@"eye-c-w-long.png"];
+        UIImage *open = [UIImage imageNamed:@"eye-o-w-long.png"];
+    if(bDisplayTimer)
+    {
+        
+        [viewButton setImage:open forState: UIControlStateNormal];
+        [viewButton setImage:open forState: UIControlStateApplication];
+        [viewButton setImage:open forState: UIControlStateHighlighted];
+        [viewButton setImage:open forState: UIControlStateReserved];
+        [viewButton setImage:open forState: UIControlStateSelected];
+        [viewButton setImage:open forState: UIControlStateDisabled];
+        
+        timerDisplay.text = @"-";
+        bDisplayTimer = FALSE;
+    }
+    else
+    {
+        [viewButton setImage:closed forState: UIControlStateNormal];
+        [viewButton setImage:closed forState: UIControlStateApplication];
+        [viewButton setImage:closed forState: UIControlStateHighlighted];
+        [viewButton setImage:closed forState: UIControlStateReserved];
+        [viewButton setImage:closed forState: UIControlStateSelected];
+        [viewButton setImage:closed forState: UIControlStateDisabled];
+        
+        timerDisplay.text = [NSString stringWithFormat:@"%i min",iTotalTime];
+        bDisplayTimer = TRUE;
+    }
+}
+
 
 -(IBAction)done:(UIStoryboardSegue *)segue
 {

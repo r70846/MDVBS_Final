@@ -72,7 +72,7 @@ static DataStore *_sharedInstance;
         
         //Bowing Pattern
         [valueArray removeAllObjects];
-        [valueArray addObject:@"Staright Bowing"];
+        [valueArray addObject:@"Straight Bowing"];
         [valueArray addObject:@"Shuffle Bowing"];
         [valueArray addObject:@"Swing Bowing"];
         [valueArray addObject:@"Chain Bowing"];
