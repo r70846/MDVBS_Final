@@ -19,6 +19,13 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    
+    PFObject *testObject = [PFObject objectWithClassName:@"TestObject"];
+    testObject[@"final"] = @"countdown";
+    [testObject saveInBackground];
+    
+    
+    
     //Setup shared instance of data storage in RAM
     dataStore = [DataStore sharedInstance];
     
