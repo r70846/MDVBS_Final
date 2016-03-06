@@ -62,6 +62,9 @@
     IBOutlet UIStepper *stepperOne;
     IBOutlet UIStepper *stepperTen;
     IBOutlet UIButton *nomeButton;
+    
+    
+    UITabBarController *tabBarController;
 }
 
 

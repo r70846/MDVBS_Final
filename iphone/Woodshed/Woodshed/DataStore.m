@@ -121,6 +121,9 @@ static DataStore *_sharedInstance;
 }
 
 -(void)loadTags{
+    
+    [_tagData removeAllObjects];
+    
     //Create temp array to load dictionary
     NSMutableArray *valueArray = [[NSMutableArray alloc] init];
     
