@@ -20,7 +20,60 @@
     
     //setup shared instance of data storage in RAM
     dataStore = [DataStore sharedInstance];
+    
+    //Setup tag templatea
+    [self setUpTemplateSheet];
+    templateTextDisplay.text = dataStore.templateChoice;
+    
 }
+
+
+-(void)setUpTemplateSheet
+{
+
+    
+    //Build "actionsheet" as a drop down menu
+    templateSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                  delegate:self
+                                         cancelButtonTitle:nil
+                                    destructiveButtonTitle:nil
+                                         otherButtonTitles:nil];
+    //Tag it so I can add more later...
+    templateSheet.tag = 100;
+    
+    //Add button for each topic in array
+    for (NSString *template in dataStore.templateArray) {
+        [    templateSheet addButtonWithTitle:template];
+    }
+    
+    //Add cancel button on the end
+    templateSheet.cancelButtonIndex = [templateSheet addButtonWithTitle:@"Cancel"];
+    
+    //To handle keyboard
+    //[topicDisplay setDelegate:self];
+    
+    
+}
+
+-(IBAction)chooseTemplate
+{
+        [templateSheet showInView:self.view];
+}
+
+
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (actionSheet.tag == 100) {
+        if(buttonIndex < [dataStore.templateArray count]){
+            NSString *choice = [dataStore.templateArray objectAtIndex:buttonIndex];
+            templateTextDisplay.text = choice;
+            dataStore.templateChoice = choice;
+            [dataStore loadTags];
+        }
+    }
+}
+
+
+////////////////////////////////////////////////////////
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

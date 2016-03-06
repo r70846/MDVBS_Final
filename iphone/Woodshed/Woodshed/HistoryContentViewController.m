@@ -182,7 +182,6 @@
     
     //To handle keyboard
     //[topicDisplay setDelegate:self];
-    
 }
 
 

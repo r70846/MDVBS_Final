@@ -9,9 +9,20 @@
 #import <UIKit/UIKit.h>
 #import "DataStore.h"
 #import "DataStore.h"
-@interface SettingsContentController : UIViewController
+@interface SettingsContentController : UIViewController <UIActionSheetDelegate, UITextViewDelegate, UITextFieldDelegate>
 {
     // Global Data Storage
     DataStore *dataStore;    //shared instance of my DataStore object
+    
+    
+    
+    IBOutlet UIButton *templateButton;
+    IBOutlet UITextField *templateTextDisplay;
+    
+    UIActionSheet *templateSheet;
 }
+
+
+-(IBAction)chooseTemplate;
+
 @end

@@ -45,6 +45,10 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated{
+    
+    //valueArray must be loaded dynamically with each tag choice
+    tagArray = [[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
+    
     //Reload data tables
     [topicTableView reloadData];
     [tagTableView reloadData];
@@ -260,6 +264,7 @@
         practiceViewController.iDisplayMode = 0;
         [practiceViewController setScrollView];
         [self.tabBarController setSelectedIndex:1];
+        
     }else if(tag == 5){
         [self displayTimer];
     }else if(tag == 6){
