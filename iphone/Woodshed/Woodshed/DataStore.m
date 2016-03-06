@@ -27,6 +27,26 @@ static DataStore *_sharedInstance;
         _currentSession = [[NSMutableDictionary alloc]init];
         [self resetCurrentSession];
         
+        //Static Data
+        _topicArray = [[NSMutableArray alloc] init];
+        [_topicArray addObject:@"All of Me"];
+        [_topicArray addObject:@"How High the Moon"];
+        [_topicArray addObject:@"Autumn Leaves"];
+        [_topicArray addObject:@"Bach Minuet in D"];
+        [_topicArray addObject:@"Malaguena"];
+        [_topicArray addObject:@"Minor 7th Arpeggio"];
+        [_topicArray addObject:@"Major 7th Arpeggio"];
+        [_topicArray addObject:@"Diminished 7th Arpeggios"];
+        [_topicArray addObject:@"Augmented 7th Arpeggios"];
+        [_topicArray addObject:@"Major Scale"];
+        [_topicArray addObject:@"Natural Minor Scale"];
+        [_topicArray addObject:@"Harmonic Minor Scale"];
+        [_topicArray addObject:@"Melodic Minor Scale"];
+        [_topicArray addObject:@"Diminished Scale"];
+        [_topicArray addObject:@"Whole Tone Scale"];
+        [_topicArray addObject:@"Dorian Mode"];
+        [_topicArray addObject:@"Phrygian Mode"];
+        
     ///////// LOAD MENUS: TOPICS, TAGS, AND VALUES
         
     //Create temp array to load dictionary

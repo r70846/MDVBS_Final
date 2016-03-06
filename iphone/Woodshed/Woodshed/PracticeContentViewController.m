@@ -22,30 +22,12 @@
     //Setup shared instance of data storage in RAM
     dataStore = [DataStore sharedInstance];
     
-    //Static Data
-    topicArray = [[NSMutableArray alloc] init];
-    [topicArray addObject:@"All of Me"];
-    [topicArray addObject:@"How High the Moon"];
-    [topicArray addObject:@"Autumn Leaves"];
-    [topicArray addObject:@"Bach Minuet in D"];
-    [topicArray addObject:@"Malaguena"];
-    [topicArray addObject:@"Minor 7th Arpeggio"];
-    [topicArray addObject:@"Major 7th Arpeggio"];
-    [topicArray addObject:@"Diminished 7th Arpeggios"];
-    [topicArray addObject:@"Augmented 7th Arpeggios"];
-    [topicArray addObject:@"Major Scale"];
-    [topicArray addObject:@"Natural Minor Scale"];
-    [topicArray addObject:@"Harmonic Minor Scale"];
-    [topicArray addObject:@"Melodic Minor Scale"];
-    [topicArray addObject:@"Diminished Scale"];
-    [topicArray addObject:@"Whole Tone Scale"];
-    [topicArray addObject:@"Dorian Mode"];
-    [topicArray addObject:@"Phrygian Mode"];
-    
+    //Pull tag array from dataStore dictionary
+    //valueArray must be loaded dynamically with each tag choice
     tagArray = [[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
-    //valueArray = (NSMutableArray*)tagArray;
     valueArray = [[NSMutableArray alloc] init];
     
+    // Vars for tracking state
     currentTag = [[NSString alloc] init];
     currentScreen = [[NSString alloc] init];
     currentScreen = @"Topic";
@@ -63,6 +45,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated{
+    //Reload data tables
     [topicTableView reloadData];
     [tagTableView reloadData];
     [valueTableView reloadData];
@@ -76,7 +59,7 @@
     NSUInteger iCnt;
     if (tableView==topicTableView)
     {
-        iCnt = [topicArray count];
+        iCnt = [dataStore.topicArray count];
     }
     else if (tableView==tagTableView)
     {
@@ -104,7 +87,7 @@
         cell = [tableView dequeueReusableCellWithIdentifier:@"TopicCell"];
         if(cell != nil)
         {
-            cell.textLabel.text = (NSString*)[topicArray objectAtIndex:indexPath.row];
+            cell.textLabel.text = (NSString*)[dataStore.topicArray objectAtIndex:indexPath.row];
         }
     }
     else if (tableView==tagTableView)
@@ -149,7 +132,7 @@
     if (tableView==topicTableView)
     {
         //Get user topic choice
-        NSString  *topic = [topicArray objectAtIndex:indexPath.row];
+        NSString  *topic = [dataStore.topicArray objectAtIndex:indexPath.row];
         topicDisplayLabel.text = topic;
         topicDisplayLabelTwo.text = topic;
         topicDisplayLabelThree.text = topic;

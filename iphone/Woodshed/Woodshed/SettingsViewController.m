@@ -29,8 +29,6 @@
     int iHeight = [[UIScreen mainScreen] bounds].size.height;
     scrollView.contentSize=CGSizeMake(iWidth,iHeight);
     scrollView.contentSize=CGSizeMake(iWidth,1000);
-    
-    
 }
 
 - (void)didReceiveMemoryWarning {

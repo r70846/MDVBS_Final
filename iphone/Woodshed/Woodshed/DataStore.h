@@ -18,7 +18,7 @@
 
 @property (nonatomic)BOOL isOnline;
 
-
+@property (nonatomic, strong)NSMutableArray *topicArray;
 @property (nonatomic, strong)NSMutableDictionary *tagData;
 @property (nonatomic, strong)NSMutableDictionary *currentSession;
 @property (nonatomic, strong)NSDate *startDateTime;
