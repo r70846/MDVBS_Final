@@ -27,11 +27,12 @@
     IBOutlet UILabel *tagDisplayLabel;
     
     
+    
+    // TIMER TOOL
     IBOutlet UILabel *timerDisplay;
-    
-    
     IBOutlet UIButton *pauseButton;
     IBOutlet UIButton *viewButton;
+
     
     
     //Data Holders
@@ -49,6 +50,16 @@
     Boolean bDisplayTimer;
     Boolean bPractice;
     
+    // METRONOME TOOL
+    //SystemSoundID Click;
+    NSTimer *nomeTimer;
+    int BPM;
+    Boolean bNome;
+    
+    IBOutlet UILabel *nomeDisplay;
+    IBOutlet UIStepper *stepperOne;
+    IBOutlet UIStepper *stepperTen;
+    IBOutlet UIButton *nomeButton;
 }
 
 

@@ -680,7 +680,7 @@
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="txP-tb-DdI">
+                                    <button opaque="NO" tag="7" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="txP-tb-DdI">
                                         <rect key="frame" x="20" y="40" width="90" height="40"/>
                                         <color key="backgroundColor" red="0.1176470588" green="0.14117647059999999" blue="0.41960784309999999" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
@@ -862,6 +862,10 @@
                     </view>
                     <toolbarItems/>
                     <connections>
+                        <outlet property="nomeButton" destination="txP-tb-DdI" id="kEQ-HE-4A7"/>
+                        <outlet property="nomeDisplay" destination="X93-VU-0Jo" id="JRj-pg-Grr"/>
+                        <outlet property="stepperOne" destination="zh6-3Z-w5e" id="IGX-eG-eCX"/>
+                        <outlet property="stepperTen" destination="eXT-i1-ekW" id="h7d-0z-feq"/>
                         <outlet property="tagDisplayLabel" destination="PM6-Ru-iTo" id="ucU-Ia-GM4"/>
                         <outlet property="tagTableView" destination="mBy-c4-Ss8" id="u9j-1Z-Sgn"/>
                         <outlet property="timerDisplay" destination="lr3-f9-NDl" id="fwg-rI-bwi"/>

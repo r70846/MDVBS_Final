@@ -280,6 +280,9 @@
         [self displayTimer];
     }else if(tag == 6){
         [self pauseMode];
+    }else if(tag == 7){
+        //nome
+        
     }else if(tag == 10){
                 currentScreen = @"Topic";
         [self performSegueWithIdentifier:@"segueToNewItem" sender:self];
@@ -342,6 +345,9 @@
     [self initializeTimer];
 }
 
+
+//////// Timer Functions
+
 -(void)initializeTimer{
     //Initialize Duration Timer
     iTotalTime = 0;
@@ -349,16 +355,16 @@
     bDisplayTimer = TRUE;
 }
 
-//////// Timer Functions
-
 -(void)oneRound //Add one minute to timer
 {
-    iTotalTime++;
-    sDuration = [NSString stringWithFormat:@"%i min",iTotalTime];
+    if(bPractice){
+        iTotalTime++;
+        sDuration = [NSString stringWithFormat:@"%i min",iTotalTime];
     
-    if(bDisplayTimer)
-    {
-        timerDisplay.text = sDuration;
+        if(bDisplayTimer)
+        {
+            timerDisplay.text = sDuration;
+        }
     }
 }
 
@@ -440,9 +446,14 @@
 }
 
 
+
+
 -(IBAction)pauseMode
 {
     NSString *sMessage = @"";
+    
+    //Set varaiable to suspend practice
+    bPractice = FALSE;
     
     //Create alert view
     UIAlertView *paused = [[UIAlertView alloc] initWithTitle:@"Practice Session Paused" message:sMessage delegate:self cancelButtonTitle:@"RESUME" otherButtonTitles:nil];
@@ -458,12 +469,10 @@
     
     if (buttonIndex == 0)  //[ RESUME ]
     {
-
-
+        //Set varaiable to resume practice
+        bPractice = TRUE;
     }
 }
-
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -471,6 +480,91 @@
 }
 
 
+
+//Start or Stop Metronome
+-(IBAction)Metronome
+{
+    
+    if(!bNome)
+    {
+        //Set "Beats Per Minute" to user's choice
+        BPM = [nomeDisplay.text intValue];
+        
+        //Set time interval to BPM
+        float interval = (float)60.00/(float)BPM;
+        
+        //Launch repeating timer to run "Tick"
+        nomeTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(Beat) userInfo:nil repeats:YES];
+        
+        //Produce first click on button tap
+        AudioServicesPlaySystemSound(Click);
+        
+        //Change state
+        [nomeButton setTitle: @"Stop" forState: UIControlStateNormal];
+        [nomeButton setTitle: @"Stop" forState: UIControlStateApplication];
+        [nomeButton setTitle: @"Stop" forState: UIControlStateHighlighted];
+        [nomeButton setTitle: @"Stop" forState: UIControlStateReserved];
+        [nomeButton setTitle: @"Stop" forState: UIControlStateSelected];
+        [nomeButton setTitle: @"Stop" forState: UIControlStateDisabled];
+        bNome = TRUE;
+    }
+    else
+    {
+        //Stop timer
+        [nomeTimer invalidate];
+        
+        //Change state
+        [nomeButton setTitle: @"Start" forState: UIControlStateNormal];
+        [nomeButton setTitle: @"Start" forState: UIControlStateApplication];
+        [nomeButton setTitle: @"Start" forState: UIControlStateHighlighted];
+        [nomeButton setTitle: @"Start" forState: UIControlStateReserved];
+        [nomeButton setTitle: @"Start" forState: UIControlStateSelected];
+        [nomeButton setTitle: @"Start" forState: UIControlStateDisabled];
+        bNome = FALSE;
+    }
+}
+
+//Support function for metronome
+-(void)Beat  //Runs on each click
+{
+    AudioServicesPlaySystemSound(Click);
+}
+
+//Support function for metronome
+- (IBAction)stepperChange:(UIStepper *)sender //Change BPM on metronome
+{
+    
+    NSUInteger stepOne = stepperOne.value;
+    NSUInteger stepTen = stepperTen.value;
+    
+    if(stepOne == 10)
+    {
+        stepperOne.value = 0;
+        stepperTen.value = stepTen + 10;
+    }
+    if(stepOne == -1)
+    {
+        stepperOne.value = 9;
+        stepperTen.value = stepTen - 10;
+    }
+    
+    stepOne = stepperOne.value;
+    stepTen = stepperTen.value;
+    NSUInteger setting = stepOne + stepTen;
+    nomeDisplay.text = [NSString stringWithFormat:@"%03lu",(unsigned long)setting];
+    
+    if(bNome)
+    {
+        //Kill active metronome
+        [nomeTimer invalidate];
+        
+        //Change state
+        bNome = FALSE;
+        
+        //Restart
+        [self Metronome];
+    }
+}
 /*
 #pragma mark - Navigation
 
