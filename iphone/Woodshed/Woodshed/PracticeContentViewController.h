@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AudioToolbox/AudioToolbox.h>
+#import <AVFoundation/AVFoundation.h>
 #import "DataStore.h"
 #import "NewViewController.h"
 
@@ -51,7 +53,7 @@
     Boolean bPractice;
     
     // METRONOME TOOL
-    //SystemSoundID Click;
+    SystemSoundID Click;
     NSTimer *nomeTimer;
     int BPM;
     Boolean bNome;

@@ -50,6 +50,9 @@
     currentScreen = [[NSString alloc] init];
     currentScreen = @"Topic";
     
+    //Set up Metronome
+    [self setUpMetronome];
+    
     //Establishing Screen Size
     /*
      int iWidth = [[UIScreen mainScreen] bounds].size.width;
@@ -183,8 +186,6 @@
         NSString  *value = [valueArray objectAtIndex:indexPath.row];
         //dataStore.currentSession[[currentTag copy]] = [value copy];
         dataStore.currentSession[currentTag] = [value copy];
-        
-        
         
         //Display amended values in tag table
         [tagTableView reloadData];
@@ -346,7 +347,7 @@
 }
 
 
-//////// Timer Functions
+//////// TIMER FUNCTIONS //////////////////
 
 -(void)initializeTimer{
     //Initialize Duration Timer
@@ -401,53 +402,6 @@
     }
 }
 
-
--(IBAction)done:(UIStoryboardSegue *)segue
-{
-    
-    if ([[segue identifier] isEqualToString:@"unwindFromNewInput"])
-    {
-        NewViewController *newViewController = segue.sourceViewController;
-        NSString *source = newViewController.source;
-        NSString *newItem = newViewController.input;
-        
-        if([source isEqualToString:@"Topic"]){
-            [topicArray addObject:newItem];
-            [topicTableView reloadData];
-        }else if([source isEqualToString:@"Tag"]){
-            //Create temp array to load dictionary
-            NSMutableArray *tmpArray = [[NSMutableArray alloc] init];
-            dataStore.tagData[newItem] = [tmpArray mutableCopy];
-            tagArray = [[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
-            [tagTableView reloadData];
-        }else if([source isEqualToString:@"Value"]){
-            [valueArray addObject:newItem];
-             dataStore.tagData[currentTag] = [valueArray mutableCopy];
-            [valueTableView reloadData];
-        }else if([source isEqualToString:@"Note"]){
-            
-            [dataStore.currentSession[@"notes"] addObject:newItem];
-            
-            //[valueArray addObject:newItem];
-           // dataStore.tagData[currentTag] = [valueArray mutableCopy];
-            //[valueTableView reloadData];
-        }
-    }
-}
-
-//This is called when we want to go to a new view
--(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([[segue identifier] isEqualToString:@"segueToNewItem"])
-    {
-        NewViewController *newViewController = segue.destinationViewController;
-        newViewController.source = currentScreen;
-    }
-}
-
-
-
-
 -(IBAction)pauseMode
 {
     NSString *sMessage = @"";
@@ -479,9 +433,28 @@
     // Dispose of any resources that can be recreated.
 }
 
-
+//////////// METRONOME FUNCTIONS ////////////////////////
 
 //Start or Stop Metronome
+
+-(void)setUpMetronome
+{
+    //Initialize Metronome UI
+    [self stepperChange:nil];
+    
+    //Create string to represent "click" resource path. Apparently must be done in this way (?)
+    NSString *clickPath = [[NSBundle mainBundle] pathForResource:@"click" ofType:@"wav"];
+    
+    //Create File URL based on string representation of "click" path
+    NSURL *SoundURL = [NSURL fileURLWithPath:clickPath];
+    
+    //Create SoundID for "click" sound
+    AudioServicesCreateSystemSoundID((__bridge CFURLRef)SoundURL, &Click);
+    
+    //Initialize metronome state variable
+    bNome = FALSE;
+}
+
 -(IBAction)Metronome
 {
     
@@ -527,7 +500,10 @@
 //Support function for metronome
 -(void)Beat  //Runs on each click
 {
-    AudioServicesPlaySystemSound(Click);
+    if(bPractice){
+        AudioServicesPlaySystemSound(Click);
+    }
+
 }
 
 //Support function for metronome
@@ -563,6 +539,51 @@
         
         //Restart
         [self Metronome];
+    }
+}
+
+///////// SEGUE FUNCTIONS ///////////////////
+
+-(IBAction)done:(UIStoryboardSegue *)segue
+{
+    
+    if ([[segue identifier] isEqualToString:@"unwindFromNewInput"])
+    {
+        NewViewController *newViewController = segue.sourceViewController;
+        NSString *source = newViewController.source;
+        NSString *newItem = newViewController.input;
+        
+        if([source isEqualToString:@"Topic"]){
+            [topicArray addObject:newItem];
+            [topicTableView reloadData];
+        }else if([source isEqualToString:@"Tag"]){
+            //Create temp array to load dictionary
+            NSMutableArray *tmpArray = [[NSMutableArray alloc] init];
+            dataStore.tagData[newItem] = [tmpArray mutableCopy];
+            tagArray = [[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
+            [tagTableView reloadData];
+        }else if([source isEqualToString:@"Value"]){
+            [valueArray addObject:newItem];
+            dataStore.tagData[currentTag] = [valueArray mutableCopy];
+            [valueTableView reloadData];
+        }else if([source isEqualToString:@"Note"]){
+            
+            [dataStore.currentSession[@"notes"] addObject:newItem];
+            
+            //[valueArray addObject:newItem];
+            // dataStore.tagData[currentTag] = [valueArray mutableCopy];
+            //[valueTableView reloadData];
+        }
+    }
+}
+
+//This is called when we want to go to a new view
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([[segue identifier] isEqualToString:@"segueToNewItem"])
+    {
+        NewViewController *newViewController = segue.destinationViewController;
+        newViewController.source = currentScreen;
     }
 }
 /*

@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		6059BEEE1C87DD87000B0819 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6059BEED1C87DD87000B0819 /* UIKit.framework */; };
+		6059BEF01C8BE15B000B0819 /* click.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6059BEEF1C8BE15B000B0819 /* click.wav */; };
+		6059BEF21C8BE1DB000B0819 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6059BEF11C8BE1DB000B0819 /* AVFoundation.framework */; };
+		6059BEF41C8BE1E2000B0819 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6059BEF31C8BE1E2000B0819 /* AudioToolbox.framework */; };
 		605EBC951C7FF4F200892640 /* NewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 605EBC941C7FF4F200892640 /* NewViewController.m */; };
 		608C02041C79077200159E53 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 608C02031C79077200159E53 /* main.m */; };
 		608C02071C79077200159E53 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 608C02061C79077200159E53 /* AppDelegate.m */; };
@@ -37,6 +40,9 @@
 
 /* Begin PBXFileReference section */
 		6059BEED1C87DD87000B0819 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		6059BEEF1C8BE15B000B0819 /* click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = click.wav; path = "../../../../IPY/Final Sounds/click.wav"; sourceTree = "<group>"; };
+		6059BEF11C8BE1DB000B0819 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		6059BEF31C8BE1E2000B0819 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		605EBC931C7FF4F200892640 /* NewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewViewController.h; sourceTree = "<group>"; };
 		605EBC941C7FF4F200892640 /* NewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewViewController.m; sourceTree = "<group>"; };
 		608C01FE1C79077200159E53 /* Woodshed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Woodshed.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -73,6 +79,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6059BEF41C8BE1E2000B0819 /* AudioToolbox.framework in Frameworks */,
+				6059BEF21C8BE1DB000B0819 /* AVFoundation.framework in Frameworks */,
 				6059BEEE1C87DD87000B0819 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -90,6 +98,8 @@
 		608C01F51C79077200159E53 = {
 			isa = PBXGroup;
 			children = (
+				6059BEF31C8BE1E2000B0819 /* AudioToolbox.framework */,
+				6059BEF11C8BE1DB000B0819 /* AVFoundation.framework */,
 				6059BEED1C87DD87000B0819 /* UIKit.framework */,
 				608C02001C79077200159E53 /* Woodshed */,
 				608C021A1C79077200159E53 /* WoodshedTests */,
@@ -140,6 +150,7 @@
 		608C02011C79077200159E53 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				6059BEEF1C8BE15B000B0819 /* click.wav */,
 				608C02021C79077200159E53 /* Info.plist */,
 				608C02031C79077200159E53 /* main.m */,
 			);
@@ -246,6 +257,7 @@
 				608C023C1C7911A800159E53 /* Images.xcassets in Resources */,
 				608C020D1C79077200159E53 /* Main.storyboard in Resources */,
 				608C02121C79077200159E53 /* LaunchScreen.xib in Resources */,
+				6059BEF01C8BE15B000B0819 /* click.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
