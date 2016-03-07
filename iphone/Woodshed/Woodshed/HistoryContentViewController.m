@@ -33,8 +33,6 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     
-    NSLog(@"Will View Appear?");
-    
     [dataStore loadSessions];
     [historyTableView reloadData ];
 }
