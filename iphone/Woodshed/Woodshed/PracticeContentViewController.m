@@ -19,10 +19,19 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    [self.view setBackgroundColor:[UIColor colorWithRed:1 green:0.89 blue:0.631 alpha:1]]; ; /*#ffe3a1*/
+    [self.view setBackgroundColor:[UIColor colorWithRed:0.561 green:0.635 blue:0.655 alpha:1]];  /*#8fa2a7*/
     
     PFObject *testObject = [PFObject objectWithClassName:@"TestObject"];
     testObject[@"final"] = @"countdown";
     [testObject saveInBackground];
+    
+    //[[UITabBar appearance] setTintColor:[UIColor colorWithRed:0.984 green:0.957 blue:0.875 alpha:1]]; /*#fbf4df*/
+    //[[UITabBar appearance] setTintColor:[UIColor colorWithRed:1 green:0.89 blue:0.631 alpha:1]]; /*#ffe3a1*/
+    
+    [[UITabBar appearance] setTintColor:[UIColor darkTextColor]];
+    
+    //[[UITabBar appearance] setBarTintColor:[UIColor yellowColor]];
     
     
     
@@ -114,7 +123,9 @@
                 cell.detailTextLabel.text = dataStore.currentSession[tag];
                 
                 //color my cell !
-                cell.backgroundColor = [UIColor lightGrayColor];
+                //cell.backgroundColor = [UIColor lightGrayColor];
+                //cell.backgroundColor = [UIColor colorWithRed:1 green:0.89 blue:0.631 alpha:1]; /*#ffe3a1*/
+                cell.backgroundColor =[UIColor colorWithRed:0.984 green:0.957 blue:0.875 alpha:1]; /*#fbf4df*/
             }
             else
             {
@@ -553,8 +564,8 @@
             [dataStore.topicArray addObject:newItem];
             [dataStore saveTopics];
             [topicTableView reloadData];
-            
-            
+        }else if([source isEqualToString:@"Cancel"]){
+            //Do nothing
         }else if([source isEqualToString:@"Tag"]){
             //Create temp array to load dictionary
             NSMutableArray *tmpArray = [[NSMutableArray alloc] init];

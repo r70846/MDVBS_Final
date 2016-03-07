@@ -118,6 +118,9 @@ static DataStore *_sharedInstance;
 ////////// TOPICS //////////////////////
 
 -(void)loadTopics{
+    
+    [_topicArray removeAllObjects];
+    
     //If file exists load data
     if([[NSFileManager defaultManager] fileExistsAtPath:_jsonTopicsPath])
     {

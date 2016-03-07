@@ -18,6 +18,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    [self.view setBackgroundColor:[UIColor colorWithRed:1 green:0.89 blue:0.631 alpha:1]]; ; /*#ffe3a1*/
+    [self.view setBackgroundColor:[UIColor colorWithRed:0.561 green:0.635 blue:0.655 alpha:1]];  /*#8fa2a7*/
+    
     NSString *newItem = [NSString stringWithFormat:@"New %@", _source];
     labelSource.text = newItem;
         
@@ -29,14 +32,15 @@
 
 -(IBAction)onClick:(UIButton *)button
 {
-    
-    //int tag = (int)button.tag;
-    
-    _input = txtInput.text;
-    NSLog(@"%@", _input);
-    [self performSegueWithIdentifier:@"unwindFromNewInput" sender:self];
-    
-    
+    int tag = (int)button.tag;
+    if(tag == 2){
+        _input = txtInput.text;
+        NSLog(@"%@", _input);
+    }else if (tag == 1){
+        _input = @"Cancel";
+        _source = @"Cancel";
+    }
+        [self performSegueWithIdentifier:@"unwindFromNewInput" sender:self];
 }
 
 
