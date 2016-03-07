@@ -12,7 +12,8 @@
 @interface DataStore : NSObject
 {
     
-
+    NSString *dataVersion;
+    
 }
 
 + (DataStore *) sharedInstance;
@@ -36,12 +37,20 @@
 @property (nonatomic, strong)NSMutableArray *sessions;
 
 //Harddrive storage
-@property (nonatomic, strong)NSString *jsonPath;
+@property (nonatomic, strong)NSString *jsonTopicsPath;
+@property (nonatomic, strong)NSString *jsonTagsPath;
+@property (nonatomic, strong)NSString *jsonSessionsPath;
 @property (nonatomic, strong)NSString *csvPath;
 
 
 -(void)resetCurrentSession;
 -(void)loadTags;
 
+-(void)saveTopics;
+-(void)saveSessions;
+-(void)clearTopics;
+-(void)clearSessions;
+-(void)loadTopics;
+-(void)loadSessions;
 
 @end

@@ -39,7 +39,7 @@
     
     
     //Data Holders
-    NSMutableArray *topicArray;
+    //NSMutableArray *topicArray;
     NSArray *tagArray;
     NSMutableArray *valueArray;
     NSString *currentTag;

@@ -24,5 +24,6 @@
 
 
 -(IBAction)chooseTemplate;
+-(IBAction)clearSavedData;
 
 @end

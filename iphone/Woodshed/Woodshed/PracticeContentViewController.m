@@ -329,6 +329,7 @@
     
     //Store current session in sessions, & clear for next round..
     [dataStore.sessions addObject:[dataStore.currentSession mutableCopy]];
+    [dataStore saveSessions];
     
     //Clean up for next round
     [dataStore.currentSession removeAllObjects];
@@ -549,8 +550,11 @@
         NSString *newItem = newViewController.input;
         
         if([source isEqualToString:@"Topic"]){
-            [topicArray addObject:newItem];
+            [dataStore.topicArray addObject:newItem];
+            [dataStore saveTopics];
             [topicTableView reloadData];
+            
+            
         }else if([source isEqualToString:@"Tag"]){
             //Create temp array to load dictionary
             NSMutableArray *tmpArray = [[NSMutableArray alloc] init];

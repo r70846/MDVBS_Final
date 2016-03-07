@@ -32,6 +32,10 @@
 
 
 - (void)viewWillAppear:(BOOL)animated {
+    
+    NSLog(@"Will View Appear?");
+    
+    [dataStore loadSessions];
     [historyTableView reloadData ];
 }
 
@@ -122,8 +126,8 @@
                 [valueArray addObject:[[detailSession objectForKey:key] lowercaseString]];
             }else{
                 //Internal records. not for user display
-                [tagArray addObject:[key lowercaseString]];
-                [valueArray addObject:[[detailSession objectForKey:key] lowercaseString]];
+                //[tagArray addObject:[key lowercaseString]];
+                //[valueArray addObject:[[detailSession objectForKey:key] lowercaseString]];
             }
         }
         

@@ -17,6 +17,9 @@ static DataStore *_sharedInstance;
 {
     if (self = [super init])
     {
+        //Keep track of datastructure versioning
+        dataVersion = @"alpha10";
+        
         //Create Array to hold Sessions Data
         _sessions = [[NSMutableArray alloc] init];
         
@@ -36,39 +39,29 @@ static DataStore *_sharedInstance;
         //Create Array to hold tag/value templates
         _templateArray= [[NSMutableArray alloc]init];
         
-        
-        typedef enum {
-            kCircle,
-            kRectangle,
-            kOblateSpheroid
-        } TagTemplate;
-        
-        
-        
-        
-        
         [self resetCurrentSession];
         
+///////// LOCAL DATA STORAGE ////////////////////////////
+        
+        //find document directory, get the path to the document directory
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, true);
+        NSString *path = (NSString*)[paths objectAtIndex:0];
+        
+        //Log documents path
+        //NSLog(@"%@", path);
+        
+        //get path to my local json data files
+        _jsonTopicsPath = [path stringByAppendingPathComponent:@"topics.json"];
+        _jsonTopicsPath = [path stringByAppendingPathComponent:@"tags.json"];
+        _jsonSessionsPath = [path stringByAppendingPathComponent:@"session.json"];
+        
+        
 ///////// LOAD TOPICS ////////////////////////////
+        [self loadSessions];
         
-        [_topicArray addObject:@"All of Me"];
-        [_topicArray addObject:@"How High the Moon"];
-        [_topicArray addObject:@"Autumn Leaves"];
-        [_topicArray addObject:@"Bach Minuet in D"];
-        [_topicArray addObject:@"Malaguena"];
-        [_topicArray addObject:@"Minor 7th Arpeggio"];
-        [_topicArray addObject:@"Major 7th Arpeggio"];
-        [_topicArray addObject:@"Diminished 7th Arpeggios"];
-        [_topicArray addObject:@"Augmented 7th Arpeggios"];
-        [_topicArray addObject:@"Major Scale"];
-        [_topicArray addObject:@"Natural Minor Scale"];
-        [_topicArray addObject:@"Harmonic Minor Scale"];
-        [_topicArray addObject:@"Melodic Minor Scale"];
-        [_topicArray addObject:@"Diminished Scale"];
-        [_topicArray addObject:@"Whole Tone Scale"];
-        [_topicArray addObject:@"Dorian Mode"];
-        [_topicArray addObject:@"Phrygian Mode"];
+        //[self clearTopics];
         
+        [self loadTopics];
         
 ///////// LOAD TEMPLATES //////////////////////////////////
 ///////// LOAD TAGS, AND VALUES ////////////////////////////
@@ -84,6 +77,7 @@ static DataStore *_sharedInstance;
         
         _templateChoice = [_templateArray objectAtIndex:0];
 
+        // function to load tag data
         [self loadTags];
         
 ///////// TRACK STATE ////////////////////////////
@@ -119,6 +113,105 @@ static DataStore *_sharedInstance;
     
     return _sharedInstance;
 }
+
+
+////////// TOPICS //////////////////////
+
+-(void)loadTopics{
+    //If file exists load data
+    if([[NSFileManager defaultManager] fileExistsAtPath:_jsonTopicsPath])
+    {
+        //Read content of file as data object
+        NSData* oData = [NSData dataWithContentsOfFile:_jsonTopicsPath];
+        
+        //Serialize data object to JSON data (Mutable Array)
+        _topicArray = [NSJSONSerialization JSONObjectWithData:oData options:NSJSONReadingMutableContainers | NSJSONReadingMutableLeaves error:nil];
+        
+        NSLog(@"retrieved topics");
+    }else{
+        
+        NSLog(@"default topics");
+        
+        //No stored data use, defaults
+        [_topicArray addObject:@"All of Me"];
+        [_topicArray addObject:@"How High the Moon"];
+        [_topicArray addObject:@"Autumn Leaves"];
+        [_topicArray addObject:@"Bach Minuet in D"];
+        [_topicArray addObject:@"Malaguena"];
+        [_topicArray addObject:@"Minor 7th Arpeggio"];
+        [_topicArray addObject:@"Major 7th Arpeggio"];
+        [_topicArray addObject:@"Diminished 7th Arpeggios"];
+        [_topicArray addObject:@"Augmented 7th Arpeggios"];
+        [_topicArray addObject:@"Major Scale"];
+        [_topicArray addObject:@"Natural Minor Scale"];
+        [_topicArray addObject:@"Harmonic Minor Scale"];
+        [_topicArray addObject:@"Melodic Minor Scale"];
+        [_topicArray addObject:@"Diminished Scale"];
+        [_topicArray addObject:@"Whole Tone Scale"];
+        [_topicArray addObject:@"Dorian Mode"];
+        [_topicArray addObject:@"Phrygian Mode"];
+    }
+}
+
+-(void)saveTopics{
+    //Save as a JSON file
+    if ([NSJSONSerialization isValidJSONObject: _topicArray]) {
+        
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject: _topicArray options: NSJSONWritingPrettyPrinted error: NULL];
+        [jsonData writeToFile:_jsonTopicsPath atomically:YES];
+    }else
+    {
+        NSLog (@"can't save as JSON");
+        NSLog(@"%@", [_topicArray description]);
+    }
+}
+
+-(void)clearTopics{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSError *error;
+    [fileManager removeItemAtPath:_jsonTopicsPath error:&error];
+}
+
+////////// SESSIONS //////////////////////
+
+-(void)saveSessions{
+    //Save as a JSON file
+    if ([NSJSONSerialization isValidJSONObject: _sessions]) {
+        
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject: _sessions options: NSJSONWritingPrettyPrinted error: NULL];
+        [jsonData writeToFile:_jsonSessionsPath atomically:YES];
+        NSLog (@"sessions saved");
+    }else
+    {
+        NSLog (@"can't save as JSON");
+        NSLog(@"%@", [_sessions description]);
+    }
+}
+
+-(void)clearSessions{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSError *error;
+    [fileManager removeItemAtPath:_jsonSessionsPath error:&error];
+}
+
+-(void)loadSessions{
+    
+    [_sessions removeAllObjects];
+    
+    //If file exists load data
+    if([[NSFileManager defaultManager] fileExistsAtPath:_jsonSessionsPath])
+    {
+        //Read content of file as data object
+        NSData* oData = [NSData dataWithContentsOfFile:_jsonSessionsPath];
+        
+        //Serialize data object to JSON data (Mutable Array)
+        _sessions = [NSJSONSerialization JSONObjectWithData:oData options:NSJSONReadingMutableContainers | NSJSONReadingMutableLeaves error:nil];
+    }
+}
+
+
+
+////////// TAGS //////////////////////
 
 -(void)loadTags{
     
@@ -237,5 +330,7 @@ static DataStore *_sharedInstance;
     
     //NSLog(@"%@", _tagData);
 }
+
+
 
 @end

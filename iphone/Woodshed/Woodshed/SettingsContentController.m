@@ -72,7 +72,13 @@
     }
 }
 
-
+-(IBAction)clearSavedData{
+    [dataStore clearTopics];
+    [dataStore clearSessions];
+    [dataStore loadTopics];
+    [dataStore loadSessions];
+    
+}
 ////////////////////////////////////////////////////////
 
 - (void)didReceiveMemoryWarning {
