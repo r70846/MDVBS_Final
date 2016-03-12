@@ -26,6 +26,10 @@
 		6059BF111C8CCEB7000B0819 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6059BF101C8CCEB7000B0819 /* libsqlite3.dylib */; };
 		6059BF131C8CCECD000B0819 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6059BF121C8CCECD000B0819 /* libz.dylib */; };
 		6059BF181C8CCF69000B0819 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 6059BF171C8CCF69000B0819 /* Reachability.m */; };
+		6059BF1B1C937522000B0819 /* TagCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6059BF1A1C937522000B0819 /* TagCell.m */; };
+		6059BF1E1C9381C3000B0819 /* DelButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 6059BF1D1C9381C3000B0819 /* DelButton.m */; };
+		6059BF211C93B0D2000B0819 /* SimpleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6059BF201C93B0D2000B0819 /* SimpleCell.m */; };
+		6059BF241C93B316000B0819 /* HistoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6059BF231C93B316000B0819 /* HistoryCell.m */; };
 		605EBC951C7FF4F200892640 /* NewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 605EBC941C7FF4F200892640 /* NewViewController.m */; };
 		608C02041C79077200159E53 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 608C02031C79077200159E53 /* main.m */; };
 		608C02071C79077200159E53 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 608C02061C79077200159E53 /* AppDelegate.m */; };
@@ -87,6 +91,14 @@
 		6059BF121C8CCECD000B0819 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		6059BF161C8CCF34000B0819 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		6059BF171C8CCF69000B0819 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		6059BF191C937522000B0819 /* TagCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagCell.h; sourceTree = "<group>"; };
+		6059BF1A1C937522000B0819 /* TagCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagCell.m; sourceTree = "<group>"; };
+		6059BF1C1C9381C3000B0819 /* DelButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DelButton.h; sourceTree = "<group>"; };
+		6059BF1D1C9381C3000B0819 /* DelButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DelButton.m; sourceTree = "<group>"; };
+		6059BF1F1C93B0D2000B0819 /* SimpleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleCell.h; sourceTree = "<group>"; };
+		6059BF201C93B0D2000B0819 /* SimpleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleCell.m; sourceTree = "<group>"; };
+		6059BF221C93B316000B0819 /* HistoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryCell.h; sourceTree = "<group>"; };
+		6059BF231C93B316000B0819 /* HistoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryCell.m; sourceTree = "<group>"; };
 		605EBC931C7FF4F200892640 /* NewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewViewController.h; sourceTree = "<group>"; };
 		605EBC941C7FF4F200892640 /* NewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewViewController.m; sourceTree = "<group>"; };
 		608C01FE1C79077200159E53 /* Woodshed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Woodshed.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -221,6 +233,14 @@
 				608C024A1C7AD2CC00159E53 /* HistoryContentViewController.m */,
 				605EBC931C7FF4F200892640 /* NewViewController.h */,
 				605EBC941C7FF4F200892640 /* NewViewController.m */,
+				6059BF191C937522000B0819 /* TagCell.h */,
+				6059BF1A1C937522000B0819 /* TagCell.m */,
+				6059BF1C1C9381C3000B0819 /* DelButton.h */,
+				6059BF1D1C9381C3000B0819 /* DelButton.m */,
+				6059BF1F1C93B0D2000B0819 /* SimpleCell.h */,
+				6059BF201C93B0D2000B0819 /* SimpleCell.m */,
+				6059BF221C93B316000B0819 /* HistoryCell.h */,
+				6059BF231C93B316000B0819 /* HistoryCell.m */,
 			);
 			path = Woodshed;
 			sourceTree = "<group>";
@@ -361,10 +381,14 @@
 				608C022F1C79094900159E53 /* SettingsViewController.m in Sources */,
 				608C024B1C7AD2CC00159E53 /* HistoryContentViewController.m in Sources */,
 				605EBC951C7FF4F200892640 /* NewViewController.m in Sources */,
+				6059BF1E1C9381C3000B0819 /* DelButton.m in Sources */,
 				608C022C1C79093A00159E53 /* HistoryViewController.m in Sources */,
 				608C02041C79077200159E53 /* main.m in Sources */,
+				6059BF241C93B316000B0819 /* HistoryCell.m in Sources */,
 				608C02321C790C8F00159E53 /* SettingsContentController.m in Sources */,
+				6059BF211C93B0D2000B0819 /* SimpleCell.m in Sources */,
 				6059BF181C8CCF69000B0819 /* Reachability.m in Sources */,
+				6059BF1B1C937522000B0819 /* TagCell.m in Sources */,
 				608C02481C7A230800159E53 /* DataStore.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

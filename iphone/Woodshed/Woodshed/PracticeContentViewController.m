@@ -19,24 +19,31 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    //Appearance
     [self.view setBackgroundColor:[UIColor colorWithRed:1 green:0.89 blue:0.631 alpha:1]]; ; /*#ffe3a1*/
     [self.view setBackgroundColor:[UIColor colorWithRed:0.561 green:0.635 blue:0.655 alpha:1]];  /*#8fa2a7*/
     
-    PFObject *testObject = [PFObject objectWithClassName:@"TestObject"];
-    testObject[@"final"] = @"countdown";
-    [testObject saveInBackground];
-    
-    //[[UITabBar appearance] setTintColor:[UIColor colorWithRed:0.984 green:0.957 blue:0.875 alpha:1]]; /*#fbf4df*/
-    //[[UITabBar appearance] setTintColor:[UIColor colorWithRed:1 green:0.89 blue:0.631 alpha:1]]; /*#ffe3a1*/
-    
-    [[UITabBar appearance] setTintColor:[UIColor darkTextColor]];
-    
+    [[UITabBar appearance] setTintColor:[UIColor darkGrayColor]];
     //[[UITabBar appearance] setBarTintColor:[UIColor yellowColor]];
-    
-    
+
     
     //Setup shared instance of data storage in RAM
     dataStore = [DataStore sharedInstance];
+    
+    //Settings
+    dataStore.directDelete = FALSE;
+    
+    //Show or hide edit mode
+    topicEditButton.hidden = dataStore.directDelete;
+    tagEditButton.hidden = dataStore.directDelete;
+
+    
+    //Data
+    //PFObject *testObject = [PFObject objectWithClassName:@"TestObject"];
+    //testObject[@"final"] = @"countdown";
+    //[testObject saveInBackground];
+    
+
     
     //Pull tag array from dataStore dictionary
     //valueArray must be loaded dynamically with each tag choice
@@ -99,51 +106,76 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell;
+
     
     if (tableView==topicTableView)
     {
+        SimpleCell *cell;
+        
         //Get the cell..
         cell = [tableView dequeueReusableCellWithIdentifier:@"TopicCell"];
         if(cell != nil)
         {
-            cell.textLabel.text = (NSString*)[dataStore.topicArray objectAtIndex:indexPath.row];
+            NSString *topic = (NSString*)[dataStore.topicArray objectAtIndex:indexPath.row];
+            cell.displayText.text = topic;
+            //[cell refreshCellWithInfo:@"WTF"];
         }
+        cell.delButton.tag=indexPath.row;
+        cell.delButton.type = @"TopicCell";
+        cell.delButton.hidden = !dataStore.directDelete;
+        return cell;
     }
     else if (tableView==tagTableView)
     {
+        TagCell *cell;
+        
         //Get the cell..
         cell = [tableView dequeueReusableCellWithIdentifier:@"TagCell"];
         if(cell != nil)
         {
             NSString *tag = [tagArray objectAtIndex:indexPath.row];
-            cell.textLabel.text = tag;
+            //cell.textLabel.text = tag;
             
             if ([[dataStore.currentSession allKeys] containsObject:tag]) {
-                cell.detailTextLabel.text = dataStore.currentSession[tag];
                 
-                //color my cell !
-                //cell.backgroundColor = [UIColor lightGrayColor];
-                //cell.backgroundColor = [UIColor colorWithRed:1 green:0.89 blue:0.631 alpha:1]; /*#ffe3a1*/
+                //Cell Contents
+                //cell.detailTextLabel.text = dataStore.currentSession[tag];
+                NSString *val = dataStore.currentSession[tag];
+                
+                //Cell color
                 cell.backgroundColor =[UIColor colorWithRed:0.984 green:0.957 blue:0.875 alpha:1]; /*#fbf4df*/
+                [cell refreshCellWithInfo:tag valtext:val];
             }
             else
             {
-                cell.detailTextLabel.text = @"[ None ]";
+                //Cell Contents
+                [cell refreshCellWithInfo:tag valtext:@"[ none ]"];
+                //cell.detailTextLabel.text = @"[ None ]";
+                
+                //Cell color
                 cell.backgroundColor = [UIColor whiteColor];
             }
         }
+            cell.delButton.tag=indexPath.row;
+            cell.delButton.type = @"TagCell";
+            cell.delButton.hidden = !dataStore.directDelete;
+            return cell;
     }
     else if (tableView==valueTableView)
     {
+            UITableViewCell *cell;
+        
         //Get the cell..
         cell = [tableView dequeueReusableCellWithIdentifier:@"ValueCell"];
         if(cell != nil)
         {
             cell.textLabel.text =(NSString*)[valueArray objectAtIndex:indexPath.row];
         }
+            return cell;
+    }else{
+            return nil;
     }
-    return cell;
+
 }
 
 
@@ -207,7 +239,7 @@
 {
     PracticeViewController *practiceViewController = (PracticeViewController*) self.parentViewController;
     
-    int tag = (int)button.tag;
+        int tag = (int)button.tag;
     
     if(tag == 1) //Cancel from tag, Back to topic stage
     {
@@ -302,8 +334,78 @@
     }else if(tag == 13){
                 currentScreen = @"Note";
         [self performSegueWithIdentifier:@"segueToNewItem" sender:self];
+    }else if(tag == 100){
+        NSLog(@"TagCell triggered...");
+    }
+    
+}
+
+-(IBAction)editMode:(UIButton *)button{
+    int tag = (int)button.tag;
+    
+    [self editButtonSwitch:button];
+    
+    if(tag == 10) //Topic view
+    {
+        [self editModeSwitch:topicTableView];
+    }else if(tag == 11) //Tag view
+    {
+        [self editModeSwitch:tagTableView];
+    }
+    
+    /*
+    if(tagTableView.isEditing){
+        tagTableView.editing = false;
+    }else{
+        tagTableView.editing = true;
+    }*/
+    
+}
+
+-(void)editModeSwitch:(UITableView *)table{
+    if(table.isEditing){
+        table.editing = false;
+    }else{
+        table.editing = true;
     }
 }
+
+-(void)editButtonSwitch:(UIButton *)button{
+    if(button.backgroundColor == [UIColor redColor]){
+        button.backgroundColor = [UIColor darkGrayColor];
+    }else{
+        button.backgroundColor = [UIColor redColor];
+    }
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
+        NSUInteger index = indexPath.row;
+    
+    if (tableView==topicTableView && editingStyle == UITableViewCellEditingStyleDelete){
+        [dataStore.topicArray removeObjectAtIndex:index];
+        [topicTableView reloadData];
+    }else if (tableView==tagTableView && editingStyle == UITableViewCellEditingStyleDelete){
+        //remove from my local array
+        [dataStore.tagData removeObjectForKey:[tagArray objectAtIndex:index]];
+        tagArray = [[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
+        [tagTableView reloadData];
+    }
+}
+
+
+-(IBAction)onDel:(DelButton *)button{
+    NSUInteger index = button.tag;
+    if([button.type isEqualToString:@"TagCell"]){
+        [dataStore.tagData removeObjectForKey:[tagArray objectAtIndex:index]];
+        tagArray = [[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
+        [tagTableView reloadData];
+        //NSLog(@"From View:%ld", (long)tag);
+    }else if([button.type isEqualToString:@"TopicCell"]){
+        [dataStore.topicArray removeObjectAtIndex:index];
+         [topicTableView reloadData];
+    }
+}
+
 
 -(void)sessionComplete{
     
@@ -343,7 +445,7 @@
     [dataStore saveSessions];
     
     //Clean up for next round
-    [dataStore.currentSession removeAllObjects];
+    [dataStore resetCurrentSession];
     
     //Reload tables
     [topicTableView reloadData];

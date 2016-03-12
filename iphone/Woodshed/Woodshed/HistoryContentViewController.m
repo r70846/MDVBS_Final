@@ -122,6 +122,7 @@
             }else if ([[key lowercaseString] isEqualToString:@"date"]){
             }else if ([[key lowercaseString] isEqualToString:@"time"]){
             }else if ([[key lowercaseString] isEqualToString:@"notes"]){
+                    NSLog(@"notes detected...");
             }else if ([key rangeOfString:@"<<INTERNAL>>"].location == NSNotFound){
                 [tagArray addObject:[key lowercaseString]];
                 [valueArray addObject:[[detailSession objectForKey:key] lowercaseString]];
@@ -132,8 +133,9 @@
             }
         }
         
-        NSMutableArray *notes = [detailSession objectForKey:@"notes"];
+        NSMutableArray *notes = (NSMutableArray*)[detailSession objectForKey:@"notes"];
         
+        NSLog(@"About to load notes...");
         
         for(i = 0; i < [notes count]; i++){
             [tagArray addObject:@"note"];

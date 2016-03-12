@@ -11,7 +11,9 @@
 #import <AVFoundation/AVFoundation.h>
 #import "DataStore.h"
 #import "NewViewController.h"
-
+#import "TagCell.h"
+#import "SimpleCell.h"
+#import "DelButton.h"
 
 @interface PracticeContentViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 {
@@ -28,6 +30,10 @@
     IBOutlet UILabel *topicDisplayLabelTwo;
     IBOutlet UILabel *topicDisplayLabelThree;
     IBOutlet UILabel *tagDisplayLabel;
+    
+    //Edit mode buttons
+    IBOutlet UIButton *topicEditButton;
+    IBOutlet UIButton *tagEditButton;
     
     
     
@@ -69,11 +75,12 @@
 }
 
 
-
-
 //Respond to click event
 -(IBAction)onClick:(UIButton *)button;
 
+-(IBAction)editMode:(UIButton *)button;
+
+-(IBAction)onDel:(DelButton *)button;
 -(IBAction)done:(UIStoryboardSegue *)segue;
 
 @end

@@ -80,6 +80,7 @@
     [dataStore clearSessions];
     [dataStore loadTopics];
     [dataStore loadSessions];
+    [dataStore resetCurrentSession];
     
 }
 ////////////////////////////////////////////////////////

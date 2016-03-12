@@ -21,7 +21,7 @@
 
 //App Status
 @property (nonatomic)BOOL isOnline;
-
+@property (nonatomic)BOOL directDelete;
 
 //Topics, Tags, values, data storage...
 @property (nonatomic, strong)NSMutableArray *topicArray;
