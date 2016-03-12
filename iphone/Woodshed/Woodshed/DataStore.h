@@ -1,3 +1,9 @@
+///////////////////////////////////////////////////
+//
+// Russ Gaspard
+// Full Sail Mobile Development
+// Final Project
+//
 //
 //  DataStore.h
 //  Woodshed
@@ -5,6 +11,7 @@
 //  Created by Russell Gaspard on 2/21/16.
 //  Copyright (c) 2016 Russell Gaspard. All rights reserved.
 //
+///////////////////////////////////////////////////
 
 #import <Foundation/Foundation.h>
 #import <Parse/Parse.h>
