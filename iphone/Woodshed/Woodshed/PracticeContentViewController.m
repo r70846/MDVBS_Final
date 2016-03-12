@@ -32,11 +32,12 @@
     
     //Settings
     dataStore.directDelete = FALSE;
+    dataStore.directDelete = TRUE;
     
     //Show or hide edit mode
     topicEditButton.hidden = dataStore.directDelete;
     tagEditButton.hidden = dataStore.directDelete;
-
+    valueEditButton.hidden = dataStore.directDelete;
     
     //Data
     //PFObject *testObject = [PFObject objectWithClassName:@"TestObject"];
@@ -163,15 +164,18 @@
     }
     else if (tableView==valueTableView)
     {
-            UITableViewCell *cell;
+            SimpleCell *cell;
         
         //Get the cell..
         cell = [tableView dequeueReusableCellWithIdentifier:@"ValueCell"];
         if(cell != nil)
         {
-            cell.textLabel.text =(NSString*)[valueArray objectAtIndex:indexPath.row];
+            cell.displayText.text =(NSString*)[valueArray objectAtIndex:indexPath.row];
         }
-            return cell;
+        cell.delButton.tag=indexPath.row;
+        cell.delButton.type = @"ValueCell";
+        cell.delButton.hidden = !dataStore.directDelete;
+        return cell;
     }else{
             return nil;
     }
@@ -351,6 +355,9 @@
     }else if(tag == 11) //Tag view
     {
         [self editModeSwitch:tagTableView];
+    }else if(tag == 12) //Value view
+    {
+        [self editModeSwitch:valueTableView];
     }
     
     /*
@@ -389,6 +396,11 @@
         [dataStore.tagData removeObjectForKey:[tagArray objectAtIndex:index]];
         tagArray = [[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
         [tagTableView reloadData];
+    }else if (tableView==valueTableView && editingStyle == UITableViewCellEditingStyleDelete){
+        //remove from my local array
+        [valueArray removeObjectAtIndex:index];
+        dataStore.tagData[currentTag] = [valueArray mutableCopy];
+        [valueTableView reloadData];
     }
 }
 
@@ -403,6 +415,10 @@
     }else if([button.type isEqualToString:@"TopicCell"]){
         [dataStore.topicArray removeObjectAtIndex:index];
          [topicTableView reloadData];
+    }else if([button.type isEqualToString:@"ValueCell"]){
+        [valueArray removeObjectAtIndex:index];
+        dataStore.tagData[currentTag] = [valueArray mutableCopy];
+        [valueTableView reloadData];
     }
 }
 

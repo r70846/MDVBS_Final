@@ -34,7 +34,7 @@
     //Edit mode buttons
     IBOutlet UIButton *topicEditButton;
     IBOutlet UIButton *tagEditButton;
-    
+    IBOutlet UIButton *valueEditButton;
     
     
     // TIMER TOOL
