@@ -1,3 +1,8 @@
+///////////////////////////////////////////////////
+//
+// Russ Gaspard
+// Full Sail Mobile Development
+// Final Project
 //
 //  PracticeContentViewController.m
 //  Woodshed
@@ -5,6 +10,7 @@
 //  Created by Russell Gaspard on 2/20/16.
 //  Copyright (c) 2016 Russell Gaspard. All rights reserved.
 //
+///////////////////////////////////////////////////
 
 #import "PracticeContentViewController.h"
 #import "PracticeViewController.h"
@@ -14,6 +20,8 @@
 @end
 
 @implementation PracticeContentViewController
+
+#pragma mark - ViewController Setup 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -79,7 +87,7 @@
     [valueTableView reloadData];
 }
     
-    
+#pragma mark - Data Cells Display 
     
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -182,7 +190,7 @@
 
 }
 
-
+#pragma mark - Data Cells Select
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     //where indexPath.row is the selected cell
@@ -238,6 +246,128 @@
     }
 }
 
+#pragma mark - Data Cells Add
+
+///////// SEGUE FUNCTIONS ///////////////////
+
+//This is called when we want to go to a new view
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([[segue identifier] isEqualToString:@"segueToNewItem"])
+    {
+        NewViewController *newViewController = segue.destinationViewController;
+        newViewController.source = currentScreen;
+    }
+}
+
+-(IBAction)done:(UIStoryboardSegue *)segue
+{
+    
+    if ([[segue identifier] isEqualToString:@"unwindFromNewInput"])
+    {
+        NewViewController *newViewController = segue.sourceViewController;
+        NSString *source = newViewController.source;
+        NSString *newItem = newViewController.input;
+        
+        if([source isEqualToString:@"Topic"]){
+            [dataStore.topicArray addObject:newItem];
+            [dataStore saveTopics];
+            [topicTableView reloadData];
+        }else if([source isEqualToString:@"Cancel"]){
+            //Do nothing
+        }else if([source isEqualToString:@"Tag"]){
+            //Create temp array to load dictionary
+            NSMutableArray *tmpArray = [[NSMutableArray alloc] init];
+            dataStore.tagData[newItem] = [tmpArray mutableCopy];
+            tagArray = [[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
+            [tagTableView reloadData];
+        }else if([source isEqualToString:@"Value"]){
+            [valueArray addObject:newItem];
+            dataStore.tagData[currentTag] = [valueArray mutableCopy];
+            [valueTableView reloadData];
+        }else if([source isEqualToString:@"Note"]){
+            
+            [dataStore.currentSession[@"notes"] addObject:newItem];
+            
+            //[valueArray addObject:newItem];
+            // dataStore.tagData[currentTag] = [valueArray mutableCopy];
+            //[valueTableView reloadData];
+        }
+    }
+}
+
+#pragma mark - Data Cells Delete
+
+-(IBAction)editMode:(UIButton *)button{
+    int tag = (int)button.tag;
+    
+    [self editButtonSwitch:button];
+    
+    if(tag == 10) //Topic view
+    {
+        [self editModeSwitch:topicTableView];
+    }else if(tag == 11) //Tag view
+    {
+        [self editModeSwitch:tagTableView];
+    }else if(tag == 12) //Value view
+    {
+        [self editModeSwitch:valueTableView];
+    }
+}
+
+-(void)editModeSwitch:(UITableView *)table{
+    if(table.isEditing){
+        table.editing = false;
+    }else{
+        table.editing = true;
+    }
+}
+
+-(void)editButtonSwitch:(UIButton *)button{
+    if(button.backgroundColor == [UIColor redColor]){
+        button.backgroundColor = [UIColor darkGrayColor];
+    }else{
+        button.backgroundColor = [UIColor redColor];
+    }
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
+        NSUInteger index = indexPath.row;
+    
+    if (tableView==topicTableView && editingStyle == UITableViewCellEditingStyleDelete){
+        [dataStore.topicArray removeObjectAtIndex:index];
+        [topicTableView reloadData];
+    }else if (tableView==tagTableView && editingStyle == UITableViewCellEditingStyleDelete){
+        //remove from my local array
+        [dataStore.tagData removeObjectForKey:[tagArray objectAtIndex:index]];
+        tagArray = [[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
+        [tagTableView reloadData];
+    }else if (tableView==valueTableView && editingStyle == UITableViewCellEditingStyleDelete){
+        //remove from my local array
+        [valueArray removeObjectAtIndex:index];
+        dataStore.tagData[currentTag] = [valueArray mutableCopy];
+        [valueTableView reloadData];
+    }
+}
+
+-(IBAction)onDel:(DelButton *)button{
+    NSUInteger index = button.tag;
+    if([button.type isEqualToString:@"TagCell"]){
+        [dataStore.tagData removeObjectForKey:[tagArray objectAtIndex:index]];
+        tagArray = [[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
+        [tagTableView reloadData];
+        //NSLog(@"From View:%ld", (long)tag);
+    }else if([button.type isEqualToString:@"TopicCell"]){
+        [dataStore.topicArray removeObjectAtIndex:index];
+         [topicTableView reloadData];
+    }else if([button.type isEqualToString:@"ValueCell"]){
+        [valueArray removeObjectAtIndex:index];
+        dataStore.tagData[currentTag] = [valueArray mutableCopy];
+        [valueTableView reloadData];
+    }
+}
+
+#pragma mark - Scroll Navigation
 
 -(IBAction)onClick:(UIButton *)button
 {
@@ -344,84 +474,7 @@
     
 }
 
--(IBAction)editMode:(UIButton *)button{
-    int tag = (int)button.tag;
-    
-    [self editButtonSwitch:button];
-    
-    if(tag == 10) //Topic view
-    {
-        [self editModeSwitch:topicTableView];
-    }else if(tag == 11) //Tag view
-    {
-        [self editModeSwitch:tagTableView];
-    }else if(tag == 12) //Value view
-    {
-        [self editModeSwitch:valueTableView];
-    }
-    
-    /*
-    if(tagTableView.isEditing){
-        tagTableView.editing = false;
-    }else{
-        tagTableView.editing = true;
-    }*/
-    
-}
-
--(void)editModeSwitch:(UITableView *)table{
-    if(table.isEditing){
-        table.editing = false;
-    }else{
-        table.editing = true;
-    }
-}
-
--(void)editButtonSwitch:(UIButton *)button{
-    if(button.backgroundColor == [UIColor redColor]){
-        button.backgroundColor = [UIColor darkGrayColor];
-    }else{
-        button.backgroundColor = [UIColor redColor];
-    }
-}
-
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
-        NSUInteger index = indexPath.row;
-    
-    if (tableView==topicTableView && editingStyle == UITableViewCellEditingStyleDelete){
-        [dataStore.topicArray removeObjectAtIndex:index];
-        [topicTableView reloadData];
-    }else if (tableView==tagTableView && editingStyle == UITableViewCellEditingStyleDelete){
-        //remove from my local array
-        [dataStore.tagData removeObjectForKey:[tagArray objectAtIndex:index]];
-        tagArray = [[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
-        [tagTableView reloadData];
-    }else if (tableView==valueTableView && editingStyle == UITableViewCellEditingStyleDelete){
-        //remove from my local array
-        [valueArray removeObjectAtIndex:index];
-        dataStore.tagData[currentTag] = [valueArray mutableCopy];
-        [valueTableView reloadData];
-    }
-}
-
-
--(IBAction)onDel:(DelButton *)button{
-    NSUInteger index = button.tag;
-    if([button.type isEqualToString:@"TagCell"]){
-        [dataStore.tagData removeObjectForKey:[tagArray objectAtIndex:index]];
-        tagArray = [[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
-        [tagTableView reloadData];
-        //NSLog(@"From View:%ld", (long)tag);
-    }else if([button.type isEqualToString:@"TopicCell"]){
-        [dataStore.topicArray removeObjectAtIndex:index];
-         [topicTableView reloadData];
-    }else if([button.type isEqualToString:@"ValueCell"]){
-        [valueArray removeObjectAtIndex:index];
-        dataStore.tagData[currentTag] = [valueArray mutableCopy];
-        [valueTableView reloadData];
-    }
-}
-
+#pragma mark - Session Functions
 
 -(void)sessionComplete{
     
@@ -472,7 +525,7 @@
 }
 
 
-//////// TIMER FUNCTIONS //////////////////
+#pragma mark - Timer Functions
 
 -(void)initializeTimer{
     //Initialize Duration Timer
@@ -558,9 +611,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-//////////// METRONOME FUNCTIONS ////////////////////////
-
-//Start or Stop Metronome
+#pragma mark - Metronome Functions
 
 -(void)setUpMetronome
 {
@@ -582,7 +633,6 @@
 
 -(IBAction)Metronome
 {
-    
     if(!bNome)
     {
         //Set "Beats Per Minute" to user's choice
@@ -666,64 +716,6 @@
         [self Metronome];
     }
 }
-
-///////// SEGUE FUNCTIONS ///////////////////
-
--(IBAction)done:(UIStoryboardSegue *)segue
-{
-    
-    if ([[segue identifier] isEqualToString:@"unwindFromNewInput"])
-    {
-        NewViewController *newViewController = segue.sourceViewController;
-        NSString *source = newViewController.source;
-        NSString *newItem = newViewController.input;
-        
-        if([source isEqualToString:@"Topic"]){
-            [dataStore.topicArray addObject:newItem];
-            [dataStore saveTopics];
-            [topicTableView reloadData];
-        }else if([source isEqualToString:@"Cancel"]){
-            //Do nothing
-        }else if([source isEqualToString:@"Tag"]){
-            //Create temp array to load dictionary
-            NSMutableArray *tmpArray = [[NSMutableArray alloc] init];
-            dataStore.tagData[newItem] = [tmpArray mutableCopy];
-            tagArray = [[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
-            [tagTableView reloadData];
-        }else if([source isEqualToString:@"Value"]){
-            [valueArray addObject:newItem];
-            dataStore.tagData[currentTag] = [valueArray mutableCopy];
-            [valueTableView reloadData];
-        }else if([source isEqualToString:@"Note"]){
-            
-            [dataStore.currentSession[@"notes"] addObject:newItem];
-            
-            //[valueArray addObject:newItem];
-            // dataStore.tagData[currentTag] = [valueArray mutableCopy];
-            //[valueTableView reloadData];
-        }
-    }
-}
-
-//This is called when we want to go to a new view
--(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([[segue identifier] isEqualToString:@"segueToNewItem"])
-    {
-        NewViewController *newViewController = segue.destinationViewController;
-        newViewController.source = currentScreen;
-    }
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
 
