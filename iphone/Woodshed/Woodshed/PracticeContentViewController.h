@@ -19,68 +19,82 @@
 {
     // Global Data Storage
     DataStore *dataStore;    //shared instance of my DataStore object
+
+    // Data Holders
+    NSArray *tagArray;
+    NSMutableArray *valueArray;
+    NSString *currentTag;
     
-    //Reference to data tables
+    // Tab Controller
+    UITabBarController *tabBarController;
+    
+    // Table Reference
     IBOutlet  UITableView *topicTableView;
     IBOutlet  UITableView *tagTableView;
     IBOutlet  UITableView *valueTableView;
     
-    
+    // Screen Labels
     IBOutlet UILabel *topicDisplayLabel;
     IBOutlet UILabel *topicDisplayLabelTwo;
     IBOutlet UILabel *topicDisplayLabelThree;
     IBOutlet UILabel *tagDisplayLabel;
     
-    //Edit mode buttons
+    // Data Editing
     IBOutlet UIButton *topicEditButton;
     IBOutlet UIButton *tagEditButton;
     IBOutlet UIButton *valueEditButton;
-    
-    
-    // TIMER TOOL
-    IBOutlet UILabel *timerDisplay;
-    IBOutlet UIButton *pauseButton;
-    IBOutlet UIButton *viewButton;
-
-    
-    
-    //Data Holders
-    //NSMutableArray *topicArray;
-    NSArray *tagArray;
-    NSMutableArray *valueArray;
-    NSString *currentTag;
-    
-    //currentScreen
     NSString *currentScreen;
     
-    int iTotalTime;
-    NSString *sDuration;
-    NSTimer *durationTimer;
-    Boolean bDisplayTimer;
-    Boolean bPractice;
-    
-    // METRONOME TOOL
-    SystemSoundID Click;
-    NSTimer *nomeTimer;
-    int BPM;
-    Boolean bNome;
-    
+    // Metronome
     IBOutlet UILabel *nomeDisplay;
     IBOutlet UIStepper *stepperOne;
     IBOutlet UIStepper *stepperTen;
     IBOutlet UIButton *nomeButton;
     
+    SystemSoundID Click;
+    NSTimer *nomeTimer;
+    int BPM;
+    Boolean bNome;
     
-    UITabBarController *tabBarController;
+    // Timer Tool
+    IBOutlet UILabel *timerDisplay;
+    IBOutlet UIButton *pauseButton;
+    IBOutlet UIButton *viewButton;
+
+    int iTotalTime;
+    NSString *sDuration;
+    NSTimer *durationTimer;
+    Boolean bDisplayTimer;
+    Boolean bPractice;
 }
 
 
-//Respond to click event
--(IBAction)onClick:(UIButton *)button;
+// Data Cells Add
+-(IBAction)addItemAction:(UIButton *)button;
+-(IBAction)returnNewItem:(UIStoryboardSegue *)segue;
 
+// Data Cells Delete
 -(IBAction)editMode:(UIButton *)button;
-
 -(IBAction)onDel:(DelButton *)button;
--(IBAction)done:(UIStoryboardSegue *)segue;
+-(void)editModeSwitch:(UITableView *)table;
+-(void)editButtonSwitch:(UIButton *)button;
+
+// Session Functions
+-(IBAction)navAction:(UIButton *)button;
+-(IBAction)practiceAction:(UIButton *)button;
+-(void)sessionBegin;
+-(void)sessionComplete;
+
+// Timer Functions
+-(void)displayTimer;
+-(void)initializeTimer;
+-(void)oneRound;
+-(void)pauseMode;
+
+// Metronome Functions
+- (IBAction)stepperChange:(UIStepper *)sender;
+-(void)setUpMetronome;
+-(void)runMetronome;
+-(void)Beat;  //Runs on each click
 
 @end

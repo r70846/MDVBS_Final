@@ -248,7 +248,23 @@
 
 #pragma mark - Data Cells Add
 
-///////// SEGUE FUNCTIONS ///////////////////
+-(IBAction)addItemAction:(UIButton *)button{
+    int tag = (int)button.tag;
+    
+    if(tag == 10){
+        currentScreen = @"Topic";
+        [self performSegueWithIdentifier:@"segueToNewItem" sender:self];
+    }else if(tag == 11){
+        currentScreen = @"Tag";
+        [self performSegueWithIdentifier:@"segueToNewItem" sender:self];
+    }else if(tag == 12){
+        currentScreen = @"Value";
+        [self performSegueWithIdentifier:@"segueToNewItem" sender:self];
+    }else if(tag == 13){
+        currentScreen = @"Note";
+        [self performSegueWithIdentifier:@"segueToNewItem" sender:self];
+    }
+}
 
 //This is called when we want to go to a new view
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -260,7 +276,7 @@
     }
 }
 
--(IBAction)done:(UIStoryboardSegue *)segue
+-(IBAction)returnNewItem:(UIStoryboardSegue *)segue
 {
     
     if ([[segue identifier] isEqualToString:@"unwindFromNewInput"])
@@ -286,12 +302,7 @@
             dataStore.tagData[currentTag] = [valueArray mutableCopy];
             [valueTableView reloadData];
         }else if([source isEqualToString:@"Note"]){
-            
             [dataStore.currentSession[@"notes"] addObject:newItem];
-            
-            //[valueArray addObject:newItem];
-            // dataStore.tagData[currentTag] = [valueArray mutableCopy];
-            //[valueTableView reloadData];
         }
     }
 }
@@ -315,24 +326,25 @@
     }
 }
 
--(void)editModeSwitch:(UITableView *)table{
-    if(table.isEditing){
-        table.editing = false;
-    }else{
-        table.editing = true;
-    }
-}
-
--(void)editButtonSwitch:(UIButton *)button{
-    if(button.backgroundColor == [UIColor redColor]){
-        button.backgroundColor = [UIColor darkGrayColor];
-    }else{
-        button.backgroundColor = [UIColor redColor];
+-(IBAction)onDel:(DelButton *)button{
+    NSUInteger index = button.tag;
+    if([button.type isEqualToString:@"TagCell"]){
+        [dataStore.tagData removeObjectForKey:[tagArray objectAtIndex:index]];
+        tagArray = [[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
+        [tagTableView reloadData];
+        //NSLog(@"From View:%ld", (long)tag);
+    }else if([button.type isEqualToString:@"TopicCell"]){
+        [dataStore.topicArray removeObjectAtIndex:index];
+        [topicTableView reloadData];
+    }else if([button.type isEqualToString:@"ValueCell"]){
+        [valueArray removeObjectAtIndex:index];
+        dataStore.tagData[currentTag] = [valueArray mutableCopy];
+        [valueTableView reloadData];
     }
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
-        NSUInteger index = indexPath.row;
+    NSUInteger index = indexPath.row;
     
     if (tableView==topicTableView && editingStyle == UITableViewCellEditingStyleDelete){
         [dataStore.topicArray removeObjectAtIndex:index];
@@ -350,34 +362,33 @@
     }
 }
 
--(IBAction)onDel:(DelButton *)button{
-    NSUInteger index = button.tag;
-    if([button.type isEqualToString:@"TagCell"]){
-        [dataStore.tagData removeObjectForKey:[tagArray objectAtIndex:index]];
-        tagArray = [[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
-        [tagTableView reloadData];
-        //NSLog(@"From View:%ld", (long)tag);
-    }else if([button.type isEqualToString:@"TopicCell"]){
-        [dataStore.topicArray removeObjectAtIndex:index];
-         [topicTableView reloadData];
-    }else if([button.type isEqualToString:@"ValueCell"]){
-        [valueArray removeObjectAtIndex:index];
-        dataStore.tagData[currentTag] = [valueArray mutableCopy];
-        [valueTableView reloadData];
+-(void)editModeSwitch:(UITableView *)table{
+    if(table.isEditing){
+        table.editing = false;
+    }else{
+        table.editing = true;
     }
 }
 
-#pragma mark - Scroll Navigation
+-(void)editButtonSwitch:(UIButton *)button{
+    if(button.backgroundColor == [UIColor redColor]){
+        button.backgroundColor = [UIColor darkGrayColor];
+    }else{
+        button.backgroundColor = [UIColor redColor];
+    }
+}
 
--(IBAction)onClick:(UIButton *)button
-{
-    PracticeViewController *practiceViewController = (PracticeViewController*) self.parentViewController;
+
+#pragma mark - Session Functions
+
+-(IBAction)navAction:(UIButton *)button{
     
-        int tag = (int)button.tag;
+    PracticeViewController *practiceViewController = (PracticeViewController*) self.parentViewController;
+    int tag = (int)button.tag;
     
     if(tag == 1) //Cancel from tag, Back to topic stage
     {
-        //Clean up and start over
+        //Clean up and start topic screen over
         [dataStore resetCurrentSession];
         
         [topicTableView reloadData];
@@ -392,89 +403,69 @@
     }
     else if(tag == 3) // Begin practice stage
     {
-        
-        [self initializeTimer];
-        
-        //Set the current date and time
-        //NSDate *currentDate = [NSDate date];
-        dataStore.startDateTime  = [NSDate date];
-        
-        //Create format for date
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        if (dateFormatter != nil)
-        {
-            [dateFormatter setDateFormat:@"M/dd/YY"];
-        }
-        
-        //Build the date into a string based on my day format
-        NSString *dateString = [[NSString alloc] initWithFormat:@"%@", [dateFormatter stringFromDate: dataStore.startDateTime]];
-        
-        //Create format for times
-        NSDateFormatter *timeFormatter = [[NSDateFormatter alloc] init];
-        [timeFormatter setDateFormat:@"h:mm a"];
-        
-        //Build the start time into a string based on my time format
-        NSString *timeString = [[NSString alloc] initWithFormat:@"%@", [timeFormatter stringFromDate: dataStore.startDateTime]];
-        
-        //Save date/time tage in current session object
-        [dataStore.currentSession setValue:dateString forKey:@"date"];
-        [dataStore.currentSession setValue:timeString forKey:@"time"];
+        [self sessionBegin];
         
         //Scroll to practice screen
         practiceViewController.iDisplayMode = 1800;
         [practiceViewController setScrollView];
-        
-        //Inititlaize time tracker on "begin"
-        iTotalTime = 0;
-        sDuration = [NSString stringWithFormat:@"%i min",iTotalTime];
-        if(bDisplayTimer)
-        {
-            timerDisplay.text = sDuration;
-        }
-        
-        //Launch repeating timer to run "Tick"
-        durationTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(oneRound) userInfo:nil repeats:YES];
-        
-        //State Change
-        bPractice = TRUE;
-        
     }
     else if(tag == 4) //Complete practice, back to top
     {
-        
+        if(bNome){
+            [self runMetronome];
+        }
         [self sessionComplete];
         
         //Scroll back to topic, then flip to History tab
         practiceViewController.iDisplayMode = 0;
         [practiceViewController setScrollView];
         [self.tabBarController setSelectedIndex:1];
-        
-    }else if(tag == 5){
-        [self displayTimer];
-    }else if(tag == 6){
-        [self pauseMode];
-    }else if(tag == 7){
-        //nome
-        
-    }else if(tag == 10){
-                currentScreen = @"Topic";
-        [self performSegueWithIdentifier:@"segueToNewItem" sender:self];
-    }else if(tag == 11){
-                currentScreen = @"Tag";
-        [self performSegueWithIdentifier:@"segueToNewItem" sender:self];
-    }else if(tag == 12){
-                currentScreen = @"Value";
-        [self performSegueWithIdentifier:@"segueToNewItem" sender:self];
-    }else if(tag == 13){
-                currentScreen = @"Note";
-        [self performSegueWithIdentifier:@"segueToNewItem" sender:self];
-    }else if(tag == 100){
-        NSLog(@"TagCell triggered...");
     }
-    
 }
 
-#pragma mark - Session Functions
+-(void)sessionBegin{
+    [self initializeTimer];
+    
+    //Set the current date and time
+    //NSDate *currentDate = [NSDate date];
+    dataStore.startDateTime  = [NSDate date];
+    
+    //Create format for date
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    if (dateFormatter != nil)
+    {
+        [dateFormatter setDateFormat:@"M/dd/YY"];
+    }
+    
+    //Build the date into a string based on my day format
+    NSString *dateString = [[NSString alloc] initWithFormat:@"%@", [dateFormatter stringFromDate: dataStore.startDateTime]];
+    
+    //Create format for times
+    NSDateFormatter *timeFormatter = [[NSDateFormatter alloc] init];
+    [timeFormatter setDateFormat:@"h:mm a"];
+    
+    //Build the start time into a string based on my time format
+    NSString *timeString = [[NSString alloc] initWithFormat:@"%@", [timeFormatter stringFromDate: dataStore.startDateTime]];
+    
+    //Save date/time tage in current session object
+    [dataStore.currentSession setValue:dateString forKey:@"date"];
+    [dataStore.currentSession setValue:timeString forKey:@"time"];
+    
+    //Inititlaize time tracker on "begin"
+    iTotalTime = 0;
+    sDuration = [NSString stringWithFormat:@"%i min",iTotalTime];
+    if(bDisplayTimer)
+    {
+        timerDisplay.text = sDuration;
+    }
+    
+    //Launch repeating timer to run "Tick"
+    durationTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(oneRound) userInfo:nil repeats:YES];
+    
+    //State Change
+    bPractice = TRUE;
+    
+}
 
 -(void)sessionComplete{
     
@@ -505,7 +496,6 @@
     NSString *sTotalDuration = [[NSString alloc] initWithFormat:@"%d: min %d sec",iMinutes, iSeconds];
     [dataStore.currentSession setValue:sTotalDuration forKey:@"<<INTERNAL>>totalduration"];
     
-    
     //Save final duration as text for user display
     [dataStore.currentSession setValue:sDuration forKey:@"duration"];
     
@@ -524,6 +514,17 @@
     [self initializeTimer];
 }
 
+-(IBAction)practiceAction:(UIButton *)button{
+    int tag = (int)button.tag;
+    
+    if(tag == 5){
+        [self displayTimer];
+    }else if(tag == 6){
+        [self pauseMode];
+    }else if(tag == 7){
+        [self runMetronome];
+    }
+}
 
 #pragma mark - Timer Functions
 
@@ -548,9 +549,8 @@
 }
 
 //Support function fpr Practice Timer
--(IBAction)displayTimer
+-(void)displayTimer
 {
-    
         UIImage *closed = [UIImage imageNamed:@"eye-c-w-long.png"];
         UIImage *open = [UIImage imageNamed:@"eye-o-w-long.png"];
     if(bDisplayTimer)
@@ -580,7 +580,7 @@
     }
 }
 
--(IBAction)pauseMode
+-(void)pauseMode
 {
     NSString *sMessage = @"";
     
@@ -590,13 +590,12 @@
     //Create alert view
     UIAlertView *paused = [[UIAlertView alloc] initWithTitle:@"Practice Session Paused" message:sMessage delegate:self cancelButtonTitle:@"RESUME" otherButtonTitles:nil];
 
-    
     //Display alert view
     [paused show];
     
 }
 
-//User response
+// Release Practice Paused Alert View
 - (void)alertView:(UIAlertView *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     
     if (buttonIndex == 0)  //[ RESUME ]
@@ -631,7 +630,7 @@
     bNome = FALSE;
 }
 
--(IBAction)Metronome
+-(void)runMetronome
 {
     if(!bNome)
     {
@@ -713,11 +712,9 @@
         bNome = FALSE;
         
         //Restart
-        [self Metronome];
+        [self runMetronome];
     }
 }
 
 @end
-
-
 

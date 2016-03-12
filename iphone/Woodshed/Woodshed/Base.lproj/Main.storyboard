@@ -510,7 +510,7 @@
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="onClick:" destination="mIc-aL-v4T" eventType="touchUpInside" id="HIO-fI-Znu"/>
+                                            <action selector="addItemAction:" destination="mIc-aL-v4T" eventType="touchUpInside" id="BTc-96-kgd"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" tag="11" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TsQ-bu-ZIU">
@@ -542,7 +542,7 @@
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="onClick:" destination="mIc-aL-v4T" eventType="touchUpInside" id="KDL-jq-Lmj"/>
+                                            <action selector="navAction:" destination="mIc-aL-v4T" eventType="touchUpInside" id="qnu-Gp-jHh"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -572,7 +572,7 @@
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="onClick:" destination="mIc-aL-v4T" eventType="touchUpInside" id="wUw-dJ-3pA"/>
+                                            <action selector="navAction:" destination="mIc-aL-v4T" eventType="touchUpInside" id="131-3P-5rG"/>
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="TOPIC : TAG" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ojx-ob-e4E">
@@ -641,7 +641,7 @@
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="onClick:" destination="mIc-aL-v4T" eventType="touchUpInside" id="vA6-IS-Fhu"/>
+                                            <action selector="addItemAction:" destination="mIc-aL-v4T" eventType="touchUpInside" id="E6s-1Q-IOp"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" tag="12" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ul1-0k-Hj6">
@@ -687,7 +687,7 @@
                                             <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="onClick:" destination="mIc-aL-v4T" eventType="touchUpInside" id="djn-kZ-SXH"/>
+                                            <action selector="addItemAction:" destination="mIc-aL-v4T" eventType="touchUpInside" id="hci-ZM-uK1"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -706,7 +706,7 @@
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="onClick:" destination="mIc-aL-v4T" eventType="touchUpInside" id="nIA-Az-7Su"/>
+                                            <action selector="navAction:" destination="mIc-aL-v4T" eventType="touchUpInside" id="Epz-Rh-dg7"/>
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NHa-2e-gxV">
@@ -731,7 +731,7 @@
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="onClick:" destination="mIc-aL-v4T" eventType="touchUpInside" id="VOj-sl-Cc5"/>
+                                            <action selector="practiceAction:" destination="mIc-aL-v4T" eventType="touchUpInside" id="T9T-tB-TW8"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" tag="6" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xVo-i5-zdg">
@@ -743,7 +743,7 @@
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="onClick:" destination="mIc-aL-v4T" eventType="touchUpInside" id="LGP-bB-IOH"/>
+                                            <action selector="practiceAction:" destination="mIc-aL-v4T" eventType="touchUpInside" id="DGG-P3-aJf"/>
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="000" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lr3-f9-NDl">
@@ -789,7 +789,7 @@
                                             <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="Metronome" destination="mIc-aL-v4T" eventType="touchUpInside" id="PsW-6s-imz"/>
+                                            <action selector="practiceAction:" destination="mIc-aL-v4T" eventType="touchUpInside" id="A7q-r6-4Z8"/>
                                         </connections>
                                     </button>
                                     <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" minimumValue="-1" maximumValue="10" translatesAutoresizingMaskIntoConstraints="NO" id="zh6-3Z-w5e">
@@ -920,7 +920,7 @@
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="onClick:" destination="mIc-aL-v4T" eventType="touchUpInside" id="Tbw-ZO-cPZ"/>
+                                            <action selector="addItemAction:" destination="mIc-aL-v4T" eventType="touchUpInside" id="Y63-Ax-RUp"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" tag="10" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v5Q-1O-fsC">
@@ -955,7 +955,7 @@
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HRJ-Xe-ayw">
+                                    <button opaque="NO" tag="8" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HRJ-Xe-ayw">
                                         <rect key="frame" x="245" y="40" width="60" height="30"/>
                                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
@@ -964,8 +964,11 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="practiceAction:" destination="mIc-aL-v4T" eventType="touchUpInside" id="quJ-F5-MjA"/>
+                                        </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f6K-Qq-4ca">
+                                    <button opaque="NO" tag="9" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f6K-Qq-4ca">
                                         <rect key="frame" x="20" y="40" width="60" height="30"/>
                                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
@@ -974,6 +977,9 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="practiceAction:" destination="mIc-aL-v4T" eventType="touchUpInside" id="UQu-gk-ciK"/>
+                                        </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="000" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N3i-QT-60P">
                                         <rect key="frame" x="100" y="40" width="130" height="30"/>
@@ -1013,7 +1019,7 @@
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="onClick:" destination="mIc-aL-v4T" eventType="touchUpInside" id="woh-FP-66V"/>
+                                            <action selector="navAction:" destination="mIc-aL-v4T" eventType="touchUpInside" id="rsv-a5-CeF"/>
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="TOPIC" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9IY-uR-KH2">
@@ -1106,12 +1112,12 @@
                                 <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2qK-6S-WRW">
-                                <rect key="frame" x="344" y="692" width="46" height="30"/>
+                                <rect key="frame" x="349" y="681" width="46" height="30"/>
                                 <state key="normal" title="Button">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="hmy-jh-Jkq" kind="unwind" identifier="unwindFromNewInput" unwindAction="done:" id="B38-rV-ZRx"/>
+                                    <segue destination="hmy-jh-Jkq" kind="unwind" identifier="unwindFromNewInput" unwindAction="returnNewItem:" id="B38-rV-ZRx"/>
                                 </connections>
                             </button>
                         </subviews>
