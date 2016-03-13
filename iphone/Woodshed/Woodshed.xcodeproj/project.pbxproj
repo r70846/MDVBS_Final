@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		601AEBA31C94FEA000804211 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 601AEBA21C94FEA000804211 /* Social.framework */; };
 		6059BEEE1C87DD87000B0819 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6059BEED1C87DD87000B0819 /* UIKit.framework */; };
 		6059BEF01C8BE15B000B0819 /* click.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6059BEEF1C8BE15B000B0819 /* click.wav */; };
 		6059BEF21C8BE1DB000B0819 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6059BEF11C8BE1DB000B0819 /* AVFoundation.framework */; };
@@ -73,6 +74,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		601AEBA21C94FEA000804211 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		6059BEED1C87DD87000B0819 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		6059BEEF1C8BE15B000B0819 /* click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = click.wav; path = "../../../../IPY/Final Sounds/click.wav"; sourceTree = "<group>"; };
 		6059BEF11C8BE1DB000B0819 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -135,6 +137,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				601AEBA31C94FEA000804211 /* Social.framework in Frameworks */,
 				6059BF131C8CCECD000B0819 /* libz.dylib in Frameworks */,
 				6059BF111C8CCEB7000B0819 /* libsqlite3.dylib in Frameworks */,
 				6059BF0F1C8CCE85000B0819 /* SystemConfiguration.framework in Frameworks */,
@@ -166,6 +169,7 @@
 		6059BEFF1C8CCC78000B0819 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				601AEBA21C94FEA000804211 /* Social.framework */,
 				6059BF121C8CCECD000B0819 /* libz.dylib */,
 				6059BF101C8CCEB7000B0819 /* libsqlite3.dylib */,
 				6059BF0E1C8CCE85000B0819 /* SystemConfiguration.framework */,

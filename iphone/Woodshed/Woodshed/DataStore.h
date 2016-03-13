@@ -15,6 +15,7 @@
 
 #import <Foundation/Foundation.h>
 #import <Parse/Parse.h>
+#import <Social/Social.h>
 
 @interface DataStore : NSObject
 {

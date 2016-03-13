@@ -73,6 +73,10 @@
     NSTimer *durationTimer;
     Boolean bDisplayTimer;
     Boolean bPractice;
+    
+    // Rep Counter
+    IBOutlet UILabel *counterDisplay;
+    int iTotalCount;
 }
 
 

@@ -1036,6 +1036,7 @@
                     </view>
                     <toolbarItems/>
                     <connections>
+                        <outlet property="counterDisplay" destination="N3i-QT-60P" id="IEK-xH-vBE"/>
                         <outlet property="nomeButton" destination="txP-tb-DdI" id="kEQ-HE-4A7"/>
                         <outlet property="nomeDisplay" destination="X93-VU-0Jo" id="JRj-pg-Grr"/>
                         <outlet property="stepperOne" destination="zh6-3Z-w5e" id="IGX-eG-eCX"/>

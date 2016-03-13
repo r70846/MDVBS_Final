@@ -415,15 +415,15 @@
             [self runMetronome];
         }
         [self sessionComplete];
-        
-        //Scroll back to topic, then flip to History tab
-        practiceViewController.iDisplayMode = 0;
-        [practiceViewController setScrollView];
-        [self.tabBarController setSelectedIndex:1];
     }
 }
 
 -(void)sessionBegin{
+    
+    //Initialize Repetition Counter
+    iTotalCount = 0;
+    counterDisplay.text = [NSString stringWithFormat:@"%i",iTotalCount];
+    
     [self initializeTimer];
     
     //Set the current date and time
@@ -503,16 +503,85 @@
     [dataStore.sessions addObject:[dataStore.currentSession mutableCopy]];
     [dataStore saveSessions];
     
-    //Clean up for next round
-    [dataStore resetCurrentSession];
+    //Build string before reseting session
+    if(TRUE){
+        [self postTweet:[self composeTweet]];
+    }
     
+    [dataStore resetCurrentSession];
+    [self resetPractice];
+}
+
+-(void)resetPractice{
     //Reload tables
     [topicTableView reloadData];
     [tagTableView reloadData];
     
-    //Initialize Duration Timer
-    [self initializeTimer];
+    //Scroll back to topic, then flip to History tab
+    PracticeViewController *practiceViewController = (PracticeViewController*) self.parentViewController;
+    practiceViewController.iDisplayMode = 0;
+    [practiceViewController setScrollView];
+    [self.tabBarController setSelectedIndex:1];
 }
+//////  Tweet Functins
+
+-(NSString*)composeTweet{
+    //Pull data from session dict object
+    NSArray *keys = [dataStore.currentSession allKeys];
+    NSString *keyString;
+    NSString *valueString;
+    NSMutableString *tweetString = (NSMutableString*)@"";
+    
+    
+    keyString = @"topic";
+    valueString = [[dataStore.currentSession objectForKey:keyString] lowercaseString];
+    tweetString = [NSMutableString stringWithFormat:@"%@%@ : %@\n", tweetString, keyString, valueString];
+    keyString = @"date";
+    valueString = [[dataStore.currentSession objectForKey:keyString] lowercaseString];
+    tweetString = [NSMutableString stringWithFormat:@"%@%@ : %@\n", tweetString, keyString, valueString];
+    keyString = @"time";
+    valueString = [[dataStore.currentSession objectForKey:keyString] lowercaseString];
+    tweetString = [NSMutableString stringWithFormat:@"%@%@ : %@\n", tweetString, keyString, valueString];
+    keyString = @"duration";
+    valueString = [[dataStore.currentSession objectForKey:keyString] lowercaseString];
+    tweetString = [NSMutableString stringWithFormat:@"%@%@ : %@\n", tweetString, keyString, valueString];
+    
+    int i;
+    for(NSString *key in keys){
+        if ([[key lowercaseString] isEqualToString:@"topic"]){
+        }else if ([[key lowercaseString] isEqualToString:@"date"]){
+        }else if ([[key lowercaseString] isEqualToString:@"time"]){
+        }else if ([[key lowercaseString] isEqualToString:@"duration"]){
+        }else if ([[key lowercaseString] isEqualToString:@"notes"]){
+        }else if ([key rangeOfString:@"<<INTERNAL>>"].location == NSNotFound){
+            keyString = [key lowercaseString];
+            valueString = [[dataStore.currentSession objectForKey:key] lowercaseString];
+            tweetString = [NSMutableString stringWithFormat:@"%@%@ : %@\n", tweetString, keyString, valueString];
+        }
+    }
+    
+    NSMutableArray *notes = (NSMutableArray*)[dataStore.currentSession  objectForKey:@"notes"];
+    
+    for(i = 0; i < [notes count]; i++){
+        tweetString = [NSMutableString stringWithFormat:@"%@%@ : %@\n", tweetString, @"note", [notes objectAtIndex:i]];
+    }
+    return tweetString;
+}
+
+
+-(void)postTweet:(NSString*)result{
+    
+    //Create built-in Specialized view ocntroller
+    SLComposeViewController *slComposeViewController = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
+    
+    NSString *tweet = [NSString stringWithFormat:@"%@\n%@", @"From the WoodShed:", result];
+    [slComposeViewController addImage:[UIImage imageNamed:@"WS90.png"]];
+    [slComposeViewController setInitialText:tweet];
+    
+    //Display view controllew
+    [self presentViewController:slComposeViewController animated:true completion:nil];
+}
+
 
 -(IBAction)practiceAction:(UIButton *)button{
     int tag = (int)button.tag;
@@ -523,6 +592,13 @@
         [self pauseMode];
     }else if(tag == 7){
         [self runMetronome];
+    }else if(tag == 8){
+        iTotalCount++;
+        counterDisplay.text = [NSString stringWithFormat:@"%i",iTotalCount];
+    }else if(tag == 9){
+        iTotalCount--;
+        if(iTotalCount < 0){iTotalCount = 0;}
+        counterDisplay.text = [NSString stringWithFormat:@"%i",iTotalCount];
     }
 }
 
