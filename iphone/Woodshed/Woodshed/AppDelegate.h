@@ -15,9 +15,14 @@
 
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
+#import "DataStore.h"
+
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
-
+{
+    // Global Data Storage
+    DataStore *dataStore;    //shared instance of my DataStore object
+}
 @property (strong, nonatomic) UIWindow *window;
 
 

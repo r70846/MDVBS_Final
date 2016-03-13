@@ -32,5 +32,6 @@
 
 -(IBAction)chooseTemplate;
 -(IBAction)clearSavedData;
+-(IBAction)logOut;
 
 @end

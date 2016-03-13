@@ -23,6 +23,10 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    
+    // Parse Code //////////////////
+    
     // Override point for customization after application launch.
     [Parse enableLocalDatastore];
     
@@ -32,10 +36,52 @@
     // [Optional] Track statistics around application opens.
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
     
+    
+    // Defaults Code //////////////////
+    
+    //Setup shared instance of data storage in RAM
+    dataStore = [DataStore sharedInstance];
+    
+    BOOL bStay = [self isStayLogged];
+    
+    // Launch Code //////////////////
+    
+    self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    
+    UIViewController *viewController;
+    
+    if(TRUE){
+        viewController = [storyboard instantiateViewControllerWithIdentifier:@"TabBarController"];
+    }else{
+        viewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginController"];
+    }
+    
+    self.window.rootViewController = viewController;
+    [self.window makeKeyAndVisible];
 
     
     return YES;
 }
+
+-(BOOL)isStayLogged{
+    //Built in dictionary
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    BOOL bStay = false;
+    NSString *sStay;
+    if(defaults != nil)
+    {
+        //Get values
+        sStay = (NSString*)[defaults objectForKey:@"stay"];
+        if([sStay isEqualToString:@"1"]){
+            bStay = true;
+        }
+        
+    }
+    return bStay;
+}
+
+
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

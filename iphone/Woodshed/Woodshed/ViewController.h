@@ -22,9 +22,6 @@
 {
     
     //DATA STORAGE
-    //DataStore *dataStore;    //shared instance of my data store object
-    
-    //IBOutlet UILabel *netWorkSign;
     
     IBOutlet UISwitch *togStayLogged;
     IBOutlet UITextField *txtUserName;
@@ -35,6 +32,11 @@
     NSString *mUser;
     NSString *mPassword;
     BOOL bStayLogged;
+    BOOL bTweetOnComplete;
+    BOOL bQuckDelate;
+    
+    
+    
     Reachability* reach;
     
 }

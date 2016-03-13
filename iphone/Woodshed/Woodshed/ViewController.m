@@ -29,10 +29,11 @@
     [self.view setBackgroundColor:[UIColor colorWithRed:1 green:0.89 blue:0.631 alpha:1]]; /*#ffe3a1*/
     [self.view setBackgroundColor:[UIColor colorWithRed:0.561 green:0.635 blue:0.655 alpha:1]];  /*#8fa2a7*/
     
-
-    
     //setup shared instance of data storage in RAM
     dataStore = [DataStore sharedInstance];
+    
+    
+    [self performSegueWithIdentifier:@"segueToTabController" sender:self];
     
     //Initialize Variables
     mUser = @"";
@@ -136,7 +137,6 @@
         
     }
     return bStay;
-    //return true;
 }
 
 
@@ -281,29 +281,6 @@
                                         }
                                     }];
 }
-
-
-/*
- -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
- {
- if ([[segue identifier] isEqualToString:@"segueToListView"])
- {
- //NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
- //NSDate *object = _objects[indexPath.row];
- 
- [segue destinationViewController];
- }
- }
- */
-
-/*
-//Respond to click event
--(IBAction)onClick:(UIButton *)button
-{
-    [self performSegueWithIdentifier:@"segueToTabController" sender:self];
-}
-*/
-
 
 
 -(IBAction)logout:(UIStoryboardSegue *)segue

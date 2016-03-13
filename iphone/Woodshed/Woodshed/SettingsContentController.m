@@ -90,6 +90,12 @@
     [dataStore resetCurrentSession];
     
 }
+
+
+-(IBAction)logOut{
+    UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"LoginController"];
+    [self presentViewController:viewController animated:NO completion:nil];
+}
 ////////////////////////////////////////////////////////
 
 - (void)didReceiveMemoryWarning {
