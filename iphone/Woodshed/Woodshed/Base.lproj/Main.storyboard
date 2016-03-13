@@ -1292,6 +1292,7 @@
                                                     </subviews>
                                                 </tableViewCellContentView>
                                                 <connections>
+                                                    <outlet property="delButton" destination="F0x-L5-j2l" id="QPX-GL-4Tz"/>
                                                     <outlet property="tagLabel" destination="C14-RC-zEX" id="rBu-Uw-Qfu"/>
                                                     <outlet property="valueLabel" destination="U6s-yZ-EqW" id="pEh-GG-80h"/>
                                                 </connections>

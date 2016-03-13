@@ -15,6 +15,8 @@
 
 #import "HistoryContentViewController.h"
 #import "HistoryViewController.h"
+#import "TagCell.h"
+#import "DelButton.h"
 
 @interface HistoryContentViewController ()
 
