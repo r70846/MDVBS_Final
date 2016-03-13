@@ -16,11 +16,13 @@
 #import <Foundation/Foundation.h>
 #import <Parse/Parse.h>
 #import <Social/Social.h>
+#import "Reachability.h"
 
 @interface DataStore : NSObject
 {
     
     NSString *dataVersion;
+    Reachability* reach;
     
 }
 
@@ -30,6 +32,12 @@
 //App Status
 @property (nonatomic)BOOL isOnline;
 @property (nonatomic)BOOL directDelete;
+@property (nonatomic)BOOL tweetOnComplete;
+@property (nonatomic)BOOL stay;
+@property (nonatomic)BOOL success;
+@property (nonatomic, strong)NSString *user;
+@property (nonatomic, strong)NSString *password;
+
 
 //Topics, Tags, values, data storage...
 @property (nonatomic, strong)NSMutableArray *topicArray;

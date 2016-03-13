@@ -32,86 +32,19 @@
     //setup shared instance of data storage in RAM
     dataStore = [DataStore sharedInstance];
     
-    
-    [self performSegueWithIdentifier:@"segueToTabController" sender:self];
-    
-    //Initialize Variables
-    mUser = @"";
-    mPassword = @"";
-    bStayLogged = false;
-    
-    /// START MILLION ////////////////////////////////////////////////////////////////////
-    
-    // Allocate a reachability object
-    reach = [Reachability reachabilityWithHostname:@"www.google.com"];
-    
-    //create a week reference to self to avoid ARC retain cycle
-    __weak typeof(self) wSelf = self;
-    
-    // Set the blocks
-    reach.reachableBlock = ^(Reachability*reach)
-    {
-        // keep in mind this is called on a background thread
-        // and if you are updating the UI it needs to happen
-        // on the main thread, like this:
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSLog(@"REACHABLE!");
-            wSelf.dataStore.isOnline = true;
-            if(wSelf.netWorkSign){
-                [wSelf.netWorkSign setHidden:YES];
-                
-                //After control returns, check login
-                [wSelf autoLog];
-            }
-        });
-    };
-    
-    reach.unreachableBlock = ^(Reachability*reach)
-    {
-        NSLog(@"UNREACHABLE!");
-        wSelf.dataStore.isOnline = false;
-        if(wSelf.netWorkSign){
-            [wSelf.netWorkSign setHidden:NO];
-        }
-    };
-    
-    // Start the notifier, which will cause the reachability object to retain itself!
-    [reach startNotifier];
-    
-    /// END MILLION ////////////////////////////////////////////////////////////////////
-    
 
 }
-
-- (void)autoLog{
-    if([self getChecked]){
-        mUser = [self getUser];
-        mPassword = [self getPassword];
-        txtUserName.text = mUser;
-        txtPassword.text = mPassword;
-        if([self validInput:mUser sPassword:mPassword]){
-            if(dataStore.isOnline){
-                [self logIn];
-            }
-        }
-    }
-}
-
 
 - (void)viewWillAppear:(BOOL)animated {
-    
-    
-    //txtUserName.text = @"";
-    //txtPassword.text = @"";
-    
-    
-     if([self getChecked]){
+     if(dataStore.stay){
          [togStayLogged setOn:YES animated:NO];
      }else{
          [togStayLogged  setOn:NO animated:NO];
      }
-    
+
+    //Initialize Variables
+    mUser = @"";
+    mPassword = @"";
     
     [super viewWillAppear:animated];
 }
@@ -122,38 +55,6 @@
 }
 
 
--(BOOL)getChecked{
-    //Built in dictionary
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    BOOL bStay = false;
-    NSString *sStay;
-    if(defaults != nil)
-    {
-        //Get values
-        sStay = (NSString*)[defaults objectForKey:@"stay"];
-        if([sStay isEqualToString:@"1"]){
-            bStay = true;
-        }
-        
-    }
-    return bStay;
-}
-
-
--(NSString*)getUser{
-    //Built in dictionary
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *user = [defaults objectForKey:@"user"];
-    return user;
-}
-
--(NSString*)getPassword{
-    //Built in dictionary
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *password = [defaults objectForKey:@"password"];
-    return password;
-}
-
 -(IBAction)setChecked{
     //Built in dictionary
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -162,8 +63,10 @@
     {
         if ([togStayLogged isOn]) {
             [defaults setObject:@"1" forKey:@"stay"];
+            dataStore.stay = true;
         }else{
             [defaults setObject:@"0" forKey:@"stay"];
+            dataStore.stay = false;
         }
         
         //saves the data
@@ -173,22 +76,18 @@
     
 }
 
-
 -(void)saveCredentials:(NSString*)sUser sPassword:(NSString*)sPassword{
     //Built in dictionary
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    
-    //[self setChecked];
     
     if(defaults != nil)
     {
         
         [defaults setObject:sUser forKey:@"user"];
         [defaults setObject:sPassword forKey:@"password"];
-        
+        [defaults setObject:@"1" forKey:@"success"];
         //saves the data
         [defaults synchronize];
-        
     }
 }
 
@@ -208,14 +107,14 @@
     
     mUser = txtUserName.text;
     mPassword = txtPassword.text;
-    
+
     if([self validInput:mUser sPassword:mPassword]){
         if(tag == 0){
-            NSLog(@"Sign Up");
+            //NSLog(@"Sign Up");
             [self processInput:false sUser:mUser sPassword:mPassword];
             
         }else{
-            NSLog(@"Log In");
+           // NSLog(@"Log In");
             [self processInput:true sUser:mUser sPassword:mPassword];
         }
     }
@@ -223,6 +122,8 @@
 
 
 -(void)processInput:(BOOL)bLogin sUser:(NSString*)sUser sPassword:(NSString*)sPassword{
+    
+    NSLog(@"process Input: user=%@ pw=%@ online=%d" , mUser, mPassword, dataStore.isOnline);
     if(dataStore.isOnline){
         if(bLogin){
             [self logIn];
@@ -235,9 +136,13 @@
 
 
 -(void)signUp {
+    
+    
     PFUser *user = [PFUser user];
     user.username = mUser;
     user.password = mPassword;
+
+                NSLog(@"Sign Up Function");
     
     [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (!error) {
@@ -245,7 +150,7 @@
             [self setChecked];
             
             // log in success - launch tab view
-            if([self getChecked]){
+            if(dataStore.stay){
                 [self saveCredentials:mUser sPassword:mPassword];
             }
             
@@ -262,6 +167,8 @@
 
 -(void)logIn
 {
+    
+    NSLog(@"Log In Function");
     [PFUser logInWithUsernameInBackground:mUser password:mPassword
                                     block:^(PFUser *user, NSError *error) {
                                         if (user) {
@@ -269,7 +176,7 @@
                                             [self setChecked];
                                             
                                             // log in success - launch list view
-                                            if([self getChecked]){
+                                            if(dataStore.stay){
                                                 [self saveCredentials:mUser sPassword:mPassword];
                                             }
                                             [self performSegueWithIdentifier:@"segueToTabController" sender:self];
@@ -285,19 +192,7 @@
 
 -(IBAction)logout:(UIStoryboardSegue *)segue
 {
-    //Logout Parse
-    [PFUser logOut];
-    PFUser *currentUser = [PFUser currentUser]; // this will now be nil
-    currentUser = nil;
-    
-    //Logout local
-    mUser = @"";
-    mPassword = @"";
-    [self saveCredentials:mUser sPassword:mPassword];
-    
-    
-    txtUserName.text = mUser;
-    txtPassword.text = mPassword;
+
 }
 
 @end

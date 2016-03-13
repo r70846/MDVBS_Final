@@ -42,8 +42,25 @@
     //Setup shared instance of data storage in RAM
     dataStore = [DataStore sharedInstance];
     
-    BOOL bStay = [self isStayLogged];
-    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if(defaults != nil)
+    {
+        dataStore.user = [defaults objectForKey:@"user"];
+        dataStore.password = [defaults objectForKey:@"password"];
+        NSString *stay = (NSString*)[defaults objectForKey:@"stay"];
+        if([stay isEqualToString:@"1"]){
+            dataStore.stay = true;
+        }else{
+            dataStore.stay = false;
+        }
+        NSString *success = (NSString*)[defaults objectForKey:@"success"];
+        if([success isEqualToString:@"1"]){
+            dataStore.success = true;
+        }else{
+            dataStore.success = false;
+        }
+    }
+
     // Launch Code //////////////////
     
     self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
@@ -51,7 +68,7 @@
     
     UIViewController *viewController;
     
-    if(TRUE){
+    if(dataStore.stay && dataStore.success){
         viewController = [storyboard instantiateViewControllerWithIdentifier:@"TabBarController"];
     }else{
         viewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginController"];

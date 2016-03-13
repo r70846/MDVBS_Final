@@ -91,10 +91,61 @@ static DataStore *_sharedInstance;
         
         //Boolean Connectivity Monitor
         _isOnline = false;
-        
+        [self startNetworkCheck];
     }
     return self;
 }
+
+-(void)startNetworkCheck{
+/// START MILLION ////////////////////////////////////////////////////////////////////
+
+// Allocate a reachability object
+reach = [Reachability reachabilityWithHostname:@"www.google.com"];
+
+//create a week reference to self to avoid ARC retain cycle
+//__weak typeof(self) wSelf = self;
+
+// Set the blocks
+reach.reachableBlock = ^(Reachability*reach)
+{
+    // keep in mind this is called on a background thread
+    // and if you are updating the UI it needs to happen
+    // on the main thread, like this:
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSLog(@"REACHABLE!");
+        _isOnline = true;
+        
+        /*
+        if(wSelf.netWorkSign){
+            [wSelf.netWorkSign setHidden:YES];
+            
+            //After control returns, check login
+            [wSelf autoLog];
+        }
+        */
+        
+    });
+};
+
+reach.unreachableBlock = ^(Reachability*reach)
+{
+    NSLog(@"UNREACHABLE!");
+    _isOnline = false;
+    /*
+    if(wSelf.netWorkSign){
+        [wSelf.netWorkSign setHidden:NO];
+    }
+     */
+};
+
+// Start the notifier, which will cause the reachability object to retain itself!
+[reach startNotifier];
+
+
+}
+
+
 
 
 //Methods

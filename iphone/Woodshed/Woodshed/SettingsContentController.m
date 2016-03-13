@@ -93,6 +93,27 @@
 
 
 -(IBAction)logOut{
+    
+    
+    // Logout Parse
+    [PFUser logOut];
+    PFUser *currentUser = [PFUser currentUser]; // this will now be nil
+    currentUser = nil;
+    
+    // Clear local storage
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if(defaults != nil)
+    {
+        
+        [defaults setObject:@"" forKey:@"user"];
+        [defaults setObject:@"" forKey:@"password"];
+        [defaults setObject:@"0" forKey:@"success"];
+        
+        //saves the data
+        [defaults synchronize];
+    }
+    
+    // Show Login Screen
     UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"LoginController"];
     [self presentViewController:viewController animated:NO completion:nil];
 }

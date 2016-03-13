@@ -16,7 +16,7 @@
 #import <UIKit/UIKit.h>
 #import "DataStore.h"
 #import "Reachability.h"
-
+#import <Parse/Parse.h>
 
 @interface ViewController : UIViewController
 {
@@ -31,19 +31,12 @@
     
     NSString *mUser;
     NSString *mPassword;
-    BOOL bStayLogged;
-    BOOL bTweetOnComplete;
-    BOOL bQuckDelate;
-    
-    
-    
-    Reachability* reach;
-    
 }
 
 //Use properties instead of variables to reference from 'self' or wSelf
 
 //shared instance of my data store object as 'weak' property
+
 @property DataStore *dataStore;
 
 @property IBOutlet UILabel *netWorkSign;
@@ -53,11 +46,6 @@
 
 -(void)signUp;
 -(void)logIn;
-
-
--(BOOL)getChecked;
--(NSString*)getUser;
-
 
 -(BOOL)validInput:(NSString*)sUser sPassword:(NSString*)sPassword;
 
