@@ -100,6 +100,11 @@
     PFUser *currentUser = [PFUser currentUser]; // this will now be nil
     currentUser = nil;
     
+    
+    dataStore.user = @"";
+    dataStore.password = @"";
+    dataStore.topicsID = nil;
+    
     // Clear local storage
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if(defaults != nil)

@@ -38,9 +38,9 @@
 @property (nonatomic, strong)NSString *user;
 @property (nonatomic, strong)NSString *password;
 
-
 //Topics, Tags, values, data storage...
 @property (nonatomic, strong)NSMutableArray *topicArray;
+@property (nonatomic, strong)NSMutableDictionary *topicData;
 @property (nonatomic, strong)NSMutableDictionary *tagData;
 
 @property (nonatomic, strong)NSString *templateChoice;
@@ -52,6 +52,10 @@
 @property (nonatomic, strong)NSDate *endDateTime;
 @property (nonatomic, strong)NSMutableArray *sessions;
 
+
+// Parse IDs
+@property (nonatomic, strong)NSString *topicsID;
+
 //Harddrive storage
 @property (nonatomic, strong)NSString *jsonTopicsPath;
 @property (nonatomic, strong)NSString *jsonTagsPath;
@@ -60,13 +64,19 @@
 
 
 -(void)resetCurrentSession;
+
+
+-(void)loadParseData;
+
 -(void)loadTags;
 
 -(void)saveTopics;
--(void)saveSessions;
--(void)clearTopics;
--(void)clearSessions;
 -(void)loadTopics;
+
+-(void)clearTopics;
+
+-(void)saveSessions;
 -(void)loadSessions;
+-(void)clearSessions;
 
 @end

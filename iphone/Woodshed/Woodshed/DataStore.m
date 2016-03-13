@@ -25,7 +25,7 @@ static DataStore *_sharedInstance;
     if (self = [super init])
     {
         //Keep track of datastructure versioning
-        dataVersion = @"alpha10";
+        dataVersion = @"beta10";
         
         //Create Array to hold Sessions Data
         _sessions = [[NSMutableArray alloc] init];
@@ -33,6 +33,9 @@ static DataStore *_sharedInstance;
         //Create Array to hold Topic Data
         _topicArray = [[NSMutableArray alloc] init];
         
+        //Create Dictionary Object to hold tag data
+        _topicData = [[NSMutableDictionary alloc]init];
+
         //Create Dictionary Object to hold tag data
         _tagData = [[NSMutableDictionary alloc]init];
         
@@ -63,33 +66,21 @@ static DataStore *_sharedInstance;
         _jsonSessionsPath = [path stringByAppendingPathComponent:@"session.json"];
         
         
-///////// LOAD TOPICS ////////////////////////////
-        [self loadSessions];
         
-        //[self clearTopics];
-        
-        [self loadTopics];
-        
-///////// LOAD TEMPLATES //////////////////////////////////
-///////// LOAD TAGS, AND VALUES ////////////////////////////
-        
-        
-        [_templateArray addObject:@"[ All Tags ]"];
-        [_templateArray addObject:@"Bowed String Tags"];
-        [_templateArray addObject:@"Woodwind Tags"];
-        [_templateArray addObject:@"Brass Tags"];
-        [_templateArray addObject:@"Drum Tags"];
-        [_templateArray addObject:@"Guitar Tags"];
-        [_templateArray addObject:@"[ None ]"];
-        
-        _templateChoice = [_templateArray objectAtIndex:0];
-
-        // function to load tag data
-        [self loadTags];
-        
-///////// TRACK STATE ////////////////////////////
-        
-        //Boolean Connectivity Monitor
+        //Delete data & start over if previous version
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSString *version;
+        if(defaults != nil)
+        {
+            version = [defaults objectForKey:@"version"];
+            if([version isEqualToString:dataVersion]){
+            }else{
+                [self clearTopics];
+                [self clearSessions];
+                [defaults setObject:dataVersion forKey:@"version"];
+            }
+        }
+    
         _isOnline = false;
         [self startNetworkCheck];
     }
@@ -145,9 +136,6 @@ reach.unreachableBlock = ^(Reachability*reach)
 
 }
 
-
-
-
 //Methods
 -(void)resetCurrentSession{
     
@@ -172,60 +160,172 @@ reach.unreachableBlock = ^(Reachability*reach)
     return _sharedInstance;
 }
 
+-(void)loadParseData{
+
+    ///////// LOAD TOPICS ////////////////////////////
+
+    //[self loadTopicArray];
+    [self loadTopics];
+
+    [self loadSessions];
+
+    ///////// LOAD TEMPLATES //////////////////////////////////
+    ///////// LOAD TAGS, AND VALUES ////////////////////////////
+
+
+    [self loadTagTemplates];
+    _templateChoice = [_templateArray objectAtIndex:0];
+
+    // function to load tag data
+    [self loadTags];
+
+}
+
+///////// TRACK STATE ////////////////////////////
+
+//Boolean Connectivity Monitor
+
 
 ////////// TOPICS //////////////////////
 
+
+
 -(void)loadTopics{
     
-    [_topicArray removeAllObjects];
+    [_topicData removeAllObjects];
+            //PFObject *topicData = [PFObject objectWithClassName:@"TopicData"];
+    
+    PFQuery *query = [PFQuery queryWithClassName:@"TopicData"];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            // The find succeeded.
+            NSLog(@"Successfully retrieved %lu topic dicts.", objects.count);
+            
+            if(objects.count > 0){
+                //Good to go
+            }else{
+                [self loadDefaultTopics];
+                NSLog(@"No coud data, loading defaults");
+            }
+            //PFObject *topicData = [objects objectAtIndex:objects.count];
+            PFObject *topicData = [objects objectAtIndex:0];
+            _topicData = (NSMutableDictionary*)topicData[@"topicData"];
+            _topicArray = (NSMutableArray*)[_topicData allKeys];
+            _topicsID = topicData.objectId;;
+        } else {
+            // Log details of the failure
+            NSLog(@"Error: %@ %@", error, [error userInfo]);
+        }
+    }];
+}
+    
+-(void)loadDefaultTopics{
+    
+    BOOL localData = false;
     
     //If file exists load data
-    if([[NSFileManager defaultManager] fileExistsAtPath:_jsonTopicsPath])
+    if([[NSFileManager defaultManager] fileExistsAtPath:_jsonTopicsPath] && localData)
     {
         //Read content of file as data object
         NSData* oData = [NSData dataWithContentsOfFile:_jsonTopicsPath];
         
-        //Serialize data object to JSON data (Mutable Array)
-        _topicArray = [NSJSONSerialization JSONObjectWithData:oData options:NSJSONReadingMutableContainers | NSJSONReadingMutableLeaves error:nil];
-        
-        NSLog(@"retrieved topics");
+        //Serialize data object to JSON data (Mutable Ditcionary)
+        _topicData = [NSJSONSerialization JSONObjectWithData:oData options:NSJSONReadingMutableContainers | NSJSONReadingMutableLeaves error:nil];
+        _topicArray = (NSMutableArray*)[_topicData allKeys];
+        NSLog(@"retrieved local topic data");
     }else{
-        
-        NSLog(@"default topics");
+        NSLog(@"default topic data");
         
         //No stored data use, defaults
-        [_topicArray addObject:@"All of Me"];
-        [_topicArray addObject:@"How High the Moon"];
-        [_topicArray addObject:@"Autumn Leaves"];
-        [_topicArray addObject:@"Bach Minuet in D"];
-        [_topicArray addObject:@"Malaguena"];
-        [_topicArray addObject:@"Minor 7th Arpeggio"];
-        [_topicArray addObject:@"Major 7th Arpeggio"];
-        [_topicArray addObject:@"Diminished 7th Arpeggios"];
-        [_topicArray addObject:@"Augmented 7th Arpeggios"];
-        [_topicArray addObject:@"Major Scale"];
-        [_topicArray addObject:@"Natural Minor Scale"];
-        [_topicArray addObject:@"Harmonic Minor Scale"];
-        [_topicArray addObject:@"Melodic Minor Scale"];
-        [_topicArray addObject:@"Diminished Scale"];
-        [_topicArray addObject:@"Whole Tone Scale"];
-        [_topicArray addObject:@"Dorian Mode"];
-        [_topicArray addObject:@"Phrygian Mode"];
+        _topicData[@"All of Me"] = @"0";
+        _topicData[@"How High the Moon"] = @"0";
+        _topicData[@"Autumn Leaves"] = @"0";
+        _topicData[@"Bach Minuet in D"] = @"0";
+        _topicData[@"Malaguena"] = @"0";
+        _topicData[@"Minor 7th Arpeggio"] = @"0";
+        _topicData[@"Major 7th Arpeggio"] = @"0";
+        _topicData[@"Augmented 7th Arpeggios"] = @"0";
+        _topicData[@"Major Scale"] = @"0";
+        _topicData[@"Natural Minor Scale"] = @"0";
+        _topicData[@"Harmonic Minor Scale"] = @"0";
+        _topicData[@"Melodic Minor Scale"] = @"0";
+        _topicData[@"Diminished Scale"] = @"0";
+        _topicData[@"Whole Tone Scale"] = @"0";
+        _topicData[@"Dorian Mode"] = @"0";
+        _topicData[@"Phrygian Mode"] = @"0";
+        _topicArray = (NSMutableArray*)[_topicData allKeys];
+        
+        PFObject *topicData = [PFObject objectWithClassName:@"TopicData"];
+        topicData[@"topicData"] = _topicData;
+        
+        [topicData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (succeeded) {
+                NSLog (@"Saved Defualt topics to parse");
+
+            } else {
+                // There was a problem, check error.description
+                NSLog (@"Parse error saving defailt topics:%@", error.description);
+            }
+        }];
     }
 }
 
--(void)saveTopics{
-    //Save as a JSON file
-    if ([NSJSONSerialization isValidJSONObject: _topicArray]) {
-        
-        NSData *jsonData = [NSJSONSerialization dataWithJSONObject: _topicArray options: NSJSONWritingPrettyPrinted error: NULL];
-        [jsonData writeToFile:_jsonTopicsPath atomically:YES];
-    }else
-    {
-        NSLog (@"can't save as JSON");
-        NSLog(@"%@", [_topicArray description]);
-    }
+-(void)example{
+    
+    PFQuery *query = [PFQuery queryWithClassName:@"GameScore"];
+    
+    // Retrieve the object by id
+    [query getObjectInBackgroundWithId:@"xWMyZ4YEGZ"
+                                 block:^(PFObject *gameScore, NSError *error) {
+                                     // Now let's update it with some new data. In this case, only cheatMode and score
+                                     // will get sent to the cloud. playerName hasn't changed.
+                                     gameScore[@"cheatMode"] = @YES;
+                                     gameScore[@"score"] = @1338;
+                                     [gameScore saveInBackground];
+                                 }];
+
+    
+    
 }
+-(void)saveTopics{
+        NSLog (@"in save topics function");
+    
+    BOOL localData = false;
+    
+    //Save as a JSON file
+    if ([NSJSONSerialization isValidJSONObject: _topicData] && localData) {
+        
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject: _topicData options: NSJSONWritingPrettyPrinted error: NULL];
+        [jsonData writeToFile:_jsonTopicsPath atomically:YES];
+        NSLog (@"can't save topic data as JSON");
+        NSLog(@"%@", [_topicData description]);
+    }else{
+    //Save to cloud
+        
+        NSLog (@"top of the cload block");
+        
+    PFQuery *query = [PFQuery queryWithClassName:@"TopicData"];
+
+        // Retrieve the object by id
+    [query getObjectInBackgroundWithId:_topicsID
+                                    block:^(PFObject *topicData, NSError *error) {
+                                    // Now let's update it with some new data. In this case, only cheatMode and score
+                                    // will get sent to the cloud. playerName hasn't changed.
+                                    topicData[@"topicData"] = _topicData;
+                                    [topicData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                                        if (succeeded) {
+                                                NSLog (@"Saved revised topics to parse");
+                                                
+                                        } else {
+                                                // There was a problem, check error.description
+                                                NSLog (@"Parse error saving revises topics:%@", error.description);
+                                        }
+                                    }];
+                                }];
+    }
+    _topicArray = (NSMutableArray*)[_topicData allKeys];
+}
+
 
 -(void)clearTopics{
     NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -270,7 +370,18 @@ reach.unreachableBlock = ^(Reachability*reach)
     }
 }
 
-
+-(void)loadTagTemplates{
+    
+    [_templateArray removeAllObjects];
+    [_templateArray addObject:@"[ All Tags ]"];
+    [_templateArray addObject:@"Bowed String Tags"];
+    [_templateArray addObject:@"Woodwind Tags"];
+    [_templateArray addObject:@"Brass Tags"];
+    [_templateArray addObject:@"Drum Tags"];
+    [_templateArray addObject:@"Guitar Tags"];
+    [_templateArray addObject:@"[ None ]"];
+    
+}
 
 ////////// TAGS //////////////////////
 

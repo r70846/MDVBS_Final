@@ -34,9 +34,16 @@
     [[UITabBar appearance] setTintColor:[UIColor darkGrayColor]];
     //[[UITabBar appearance] setBarTintColor:[UIColor yellowColor]];
 
-    
     //Setup shared instance of data storage in RAM
     dataStore = [DataStore sharedInstance];
+    
+    
+    PFUser *user = [PFUser currentUser];
+    user.ACL = [PFACL ACLWithUser:user];
+    [PFACL setDefaultACL:[PFACL ACL] withAccessForCurrentUser:YES];
+    
+    [dataStore loadParseData];
+    [self loadTopics];
     
     //Settings
     dataStore.directDelete = FALSE;
@@ -51,8 +58,6 @@
     //PFObject *testObject = [PFObject objectWithClassName:@"TestObject"];
     //testObject[@"final"] = @"countdown";
     //[testObject saveInBackground];
-    
-
     
     //Pull tag array from dataStore dictionary
     //valueArray must be loaded dynamically with each tag choice
@@ -86,7 +91,51 @@
     [tagTableView reloadData];
     [valueTableView reloadData];
 }
+
+-(void)loadTopics{
     
+    PFQuery *query = [PFQuery queryWithClassName:@"TopicData"];
+    
+    NSLog(@"topicsID: %@", dataStore.topicsID);
+    
+    if(dataStore.topicsID){
+        [query getObjectInBackgroundWithId:dataStore.topicsID block:^(PFObject *topicData, NSError *error) {
+            // Do something with the returned PFObject in the gameScore variable.
+            if (!error) {
+                // The find succeeded.
+                dataStore.topicData = (NSMutableDictionary*)topicData[@"topicData"];
+                dataStore.topicArray = (NSMutableArray*)[dataStore.topicData allKeys];
+                [topicTableView reloadData];
+                NSLog(@"retrieved in practive view by ID");
+            } else {
+                // Log details of the failure
+                NSLog(@"Error from topics by ID: %@ %@", error, [error userInfo]);
+            }
+        }];
+        
+    }else{
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            // The find succeeded.
+            // Do something with the found objects
+            //for (PFObject *object in objects) {NSLog(@"%@", object.objectId);}
+            
+            //PFObject *topicData = [objects objectAtIndex:objects.count];
+            PFObject *topicData = [objects objectAtIndex:0];
+            dataStore.topicData = (NSMutableDictionary*)topicData[@"topicData"];
+            dataStore.topicArray = (NSMutableArray*)[dataStore.topicData allKeys];
+            dataStore.topicsID = topicData.objectId;
+             NSLog(@"retrieved in practive view without ID");
+            [topicTableView reloadData];
+        } else {
+            // Log details of the failure
+            NSLog(@"Error: %@ %@", error, [error userInfo]);
+        }
+    }];
+    }
+}
+
+
 #pragma mark - Data Cells Display 
     
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -96,6 +145,7 @@
     if (tableView==topicTableView)
     {
         iCnt = [dataStore.topicArray count];
+        //NSLog(@"TopicArray Count: %lu", (unsigned long)iCnt);
     }
     else if (tableView==tagTableView)
     {
@@ -286,7 +336,9 @@
         NSString *newItem = newViewController.input;
         
         if([source isEqualToString:@"Topic"]){
-            [dataStore.topicArray addObject:newItem];
+            //[dataStore.topicArray addObject:newItem];
+            //[dataStore saveTopicArray];
+            dataStore.topicData[newItem] = @"0";
             [dataStore saveTopics];
             [topicTableView reloadData];
         }else if([source isEqualToString:@"Cancel"]){
@@ -334,7 +386,10 @@
         [tagTableView reloadData];
         //NSLog(@"From View:%ld", (long)tag);
     }else if([button.type isEqualToString:@"TopicCell"]){
-        [dataStore.topicArray removeObjectAtIndex:index];
+        //[dataStore.topicArray removeObjectAtIndex:index];
+        //[dataStore saveTopicArray];
+        [dataStore.topicData removeObjectForKey:[dataStore.topicArray objectAtIndex:index]];
+        [dataStore saveTopics];
         [topicTableView reloadData];
     }else if([button.type isEqualToString:@"ValueCell"]){
         [valueArray removeObjectAtIndex:index];
@@ -347,7 +402,11 @@
     NSUInteger index = indexPath.row;
     
     if (tableView==topicTableView && editingStyle == UITableViewCellEditingStyleDelete){
-        [dataStore.topicArray removeObjectAtIndex:index];
+        //[dataStore.topicArray removeObjectAtIndex:index];
+        //[dataStore saveTopicArray];
+        [dataStore.topicData removeObjectForKey:[dataStore.topicArray objectAtIndex:index]];
+        NSLog(@"about to trigger topics save from practice...");
+        [dataStore saveTopics];
         [topicTableView reloadData];
     }else if (tableView==tagTableView && editingStyle == UITableViewCellEditingStyleDelete){
         //remove from my local array

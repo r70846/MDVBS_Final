@@ -31,8 +31,6 @@
     
     //setup shared instance of data storage in RAM
     dataStore = [DataStore sharedInstance];
-    
-
 }
 
 - (void)viewWillAppear:(BOOL)animated {

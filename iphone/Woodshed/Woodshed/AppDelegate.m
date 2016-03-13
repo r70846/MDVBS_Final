@@ -36,7 +36,6 @@
     // [Optional] Track statistics around application opens.
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
     
-    
     // Defaults Code //////////////////
     
     //Setup shared instance of data storage in RAM
@@ -61,6 +60,7 @@
         }
     }
 
+
     // Launch Code //////////////////
     
     self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
@@ -70,6 +70,18 @@
     
     if(dataStore.stay && dataStore.success){
         viewController = [storyboard instantiateViewControllerWithIdentifier:@"TabBarController"];
+        [PFUser logInWithUsernameInBackground:dataStore.user password:dataStore.password
+                                        block:^(PFUser *user, NSError *error) {
+                                            if (user) {
+                                            } else {
+                                                // Show error
+                                                NSString *strError = [error userInfo][@"error"];
+                                                NSLog(@"Login error from app delegate: %@", strError);
+                                            }
+                                        }];
+        
+        
+        
     }else{
         viewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginController"];
     }
