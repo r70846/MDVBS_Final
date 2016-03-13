@@ -32,6 +32,9 @@
     //Setup shared instance of data storage in RAM
     dataStore = [DataStore sharedInstance];
     
+    //Show or hide edit mode
+    historyEditButton.hidden = dataStore.directDelete;
+    
     //Local RAM storage for table displays
     tagArray = [[NSMutableArray alloc] init];
     valueArray = [[NSMutableArray alloc] init];
@@ -71,35 +74,53 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell;
+
     
     if (tableView==historyTableView)
     {
+        HistoryCell *cell;
+        
         //Get the cell..
         cell = [tableView dequeueReusableCellWithIdentifier:@"HistoryCell"];
         if(cell != nil)
         {
             //Get data
             NSMutableDictionary *session = [dataStore.sessions objectAtIndex:indexPath.row];
-           NSString *dateTime = [NSString stringWithFormat:@"%@ %@",[session objectForKey:@"date"], [session objectForKey:@"time"]];
+            NSString *dateTime = [NSString stringWithFormat:@"%@ %@",[session objectForKey:@"date"], [session objectForKey:@"time"]];
             
             //Load cell
-            cell.textLabel.text = [session objectForKey:@"topic"];
-            cell.detailTextLabel.text = dateTime;
+            //cell.textLabel.text = [session objectForKey:@"topic"];
+            //cell.detailTextLabel.text = dateTime;
+            NSString *topic = [session objectForKey:@"topic"];
+            [cell refreshCellWithInfo:topic dateText:dateTime];
         }
+        cell.delButton.tag=indexPath.row;
+        cell.delButton.type = @"HistoryCell";
+        cell.delButton.hidden = !dataStore.directDelete;
+        return cell;
     }
     else if (tableView==detailTableView)
     {
+        TagCell *cell;
         //Get the cell..
         cell = [tableView dequeueReusableCellWithIdentifier:@"DetailCell"];
         if(cell != nil)
         {
-            cell.textLabel.text = (NSString*)[tagArray objectAtIndex:indexPath.row];
-            cell.detailTextLabel.text = (NSString*)[valueArray objectAtIndex:indexPath.row];
+            //cell.textLabel.text = (NSString*)[tagArray objectAtIndex:indexPath.row];
+            //cell.detailTextLabel.text = (NSString*)[valueArray objectAtIndex:indexPath.row];
+            
+            NSString *tag = (NSString*)[tagArray objectAtIndex:indexPath.row];
+            NSString *val = (NSString*)[valueArray objectAtIndex:indexPath.row];
+            
+            [cell refreshCellWithInfo:tag valtext:val];
         }
+        cell.delButton.tag=indexPath.row;
+        cell.delButton.type = @"DetailCell";
+        cell.delButton.hidden = true;
+        return cell;
+    }else{
+        return nil;
     }
-
-    return cell;
 }
 
 
@@ -199,6 +220,34 @@
 }
 
 
+-(IBAction)editMode:(UIButton *)button{
+    if(historyTableView.isEditing){
+        historyTableView.editing = false;
+    }else{
+        historyTableView.editing = true;
+    }
+    if(button.backgroundColor == [UIColor redColor]){
+        button.backgroundColor = [UIColor darkGrayColor];
+    }else{
+        button.backgroundColor = [UIColor redColor];
+    }
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
+    NSUInteger index = indexPath.row;
+    
+    if (tableView==historyTableView && editingStyle == UITableViewCellEditingStyleDelete){
+        [dataStore.sessions removeObjectAtIndex:index];
+        [historyTableView reloadData];
+    }
+}
+-(IBAction)onDel:(DelButton *)button{
+    NSUInteger index = button.tag;
+    if([button.type isEqualToString:@"HistoryCell"]){
+        [dataStore.sessions removeObjectAtIndex:index];
+        [historyTableView reloadData];
+    }
+}
 
 -(IBAction)onClick:(UIButton *)button
 {

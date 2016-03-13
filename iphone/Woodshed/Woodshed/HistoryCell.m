@@ -14,6 +14,7 @@
 ///////////////////////////////////////////////////
 
 #import "HistoryCell.h"
+#import "DelButton.h"
 
 @implementation HistoryCell
 
@@ -25,6 +26,13 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+}
+
+//Call this method to update
+-(void)refreshCellWithInfo:(NSString*)topicText dateText:(NSString*)dateText{
+    topicLabel.text = topicText;
+    dateLabel.text = dateText;
+    
 }
 
 @end

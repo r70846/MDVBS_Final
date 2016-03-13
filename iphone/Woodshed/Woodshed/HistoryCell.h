@@ -14,7 +14,18 @@
 ///////////////////////////////////////////////////
 
 #import <UIKit/UIKit.h>
+#import "DelButton.h"
 
 @interface HistoryCell : UITableViewCell
+{
+IBOutlet UILabel *topicLabel;
+IBOutlet UILabel *dateLabel;
+
+}
+
+//Call this method to update
+-(void)refreshCellWithInfo:(NSString*)topicText dateText:(NSString*)dateText;
+
+@property (nonatomic, strong)IBOutlet DelButton *delButton;
 
 @end

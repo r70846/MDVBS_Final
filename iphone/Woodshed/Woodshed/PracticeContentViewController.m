@@ -40,7 +40,7 @@
     
     //Settings
     dataStore.directDelete = FALSE;
-    dataStore.directDelete = TRUE;
+    //dataStore.directDelete = TRUE;
     
     //Show or hide edit mode
     topicEditButton.hidden = dataStore.directDelete;

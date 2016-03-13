@@ -15,6 +15,9 @@
 
 #import <UIKit/UIKit.h>
 #import "DataStore.h"
+#import "HistoryCell.h"
+#import "TagCell.h"
+#import "DelButton.h"
 
 @interface HistoryContentViewController : UIViewController <UIActionSheetDelegate, UITextViewDelegate, UITextFieldDelegate>
 
@@ -29,6 +32,8 @@
     IBOutlet UILabel *topicDisplayLabel;
     IBOutlet UILabel *dateTimeDisplayLabel;
     
+    // Data Editing
+    IBOutlet UIButton *historyEditButton;
     
     NSMutableArray *filterArray;
     NSMutableArray *sortArray;
@@ -45,5 +50,6 @@
 
 //Respond to click event
 -(IBAction)onClick:(UIButton *)button;
+-(IBAction)editMode:(UIButton *)button;
 
 @end
