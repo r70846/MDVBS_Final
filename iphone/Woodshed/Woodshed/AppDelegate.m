@@ -67,7 +67,8 @@
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     
     UIViewController *viewController;
-    
+ 
+
     if(dataStore.stay && dataStore.success){
         viewController = [storyboard instantiateViewControllerWithIdentifier:@"TabBarController"];
         [PFUser logInWithUsernameInBackground:dataStore.user password:dataStore.password
@@ -88,7 +89,6 @@
     
     self.window.rootViewController = viewController;
     [self.window makeKeyAndVisible];
-
     
     return YES;
 }

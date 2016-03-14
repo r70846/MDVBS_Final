@@ -83,14 +83,18 @@
 }
 
 -(IBAction)clearSavedData{
-    [dataStore clearTopics];
+    [dataStore.sessions removeAllObjects];
     [dataStore clearSessions];
-    [dataStore loadTopics];
     [dataStore loadSessions];
     [dataStore resetCurrentSession];
-    
+    //[self clearCustomData];
 }
 
+
+-(void)clearCustomData{
+    [dataStore clearTopics];
+    [dataStore loadTopics];
+}
 
 -(IBAction)logOut{
     
@@ -104,6 +108,7 @@
     dataStore.user = @"";
     dataStore.password = @"";
     dataStore.topicsID = nil;
+    dataStore.sessionsID = nil;
     
     // Clear local storage
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

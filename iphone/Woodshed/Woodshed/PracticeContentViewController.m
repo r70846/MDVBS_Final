@@ -31,6 +31,9 @@
     [self.view setBackgroundColor:[UIColor colorWithRed:1 green:0.89 blue:0.631 alpha:1]]; ; /*#ffe3a1*/
     [self.view setBackgroundColor:[UIColor colorWithRed:0.561 green:0.635 blue:0.655 alpha:1]];  /*#8fa2a7*/
     
+    //create a week reference to self to avoid ARC retain cycle
+    //[self.tabBarController setDelegate:[[self.tabBarController viewControllers] objectAtIndex:0]];
+    
     [[UITabBar appearance] setTintColor:[UIColor darkGrayColor]];
     //[[UITabBar appearance] setBarTintColor:[UIColor yellowColor]];
 
@@ -44,6 +47,7 @@
     
     [dataStore loadParseData];
     [self loadTopics];
+    [self loadSessions];
     
     //Settings
     dataStore.directDelete = FALSE;
@@ -134,7 +138,44 @@
     }];
     }
 }
-
+-(void)loadSessions{
+    
+    PFQuery *query = [PFQuery queryWithClassName:@"SessionData"];
+    
+    if(dataStore.sessionsID){
+        [query getObjectInBackgroundWithId:dataStore.sessionsID block:^(PFObject *sessionData, NSError *error) {
+            if (!error) {
+                // The find succeeded.
+                dataStore.sessions = (NSMutableArray*)sessionData[@"sessionData"];
+                NSLog(@"retrieved in practive view by ID");
+            } else {
+                // Log details of the failure
+                NSLog(@"Error from topics by ID: %@ %@", error, [error userInfo]);
+            }
+        }];
+        
+    }else{
+    
+    NSLog(@"sessionsID: %@", dataStore.sessionsID);
+    
+    if(dataStore.sessionsID){
+    }else{
+        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            if (!error) {
+                // The find succeeded.
+                // Do something with the found objects
+                PFObject *sessionData = [objects objectAtIndex:0];
+                dataStore.sessions = (NSMutableArray*)sessionData[@"sessionData"];
+                dataStore.sessionsID = sessionData.objectId;
+                NSLog(@"retrieved sessions in practive view without ID");
+            } else {
+                // Log details of the failure
+                NSLog(@"Error: %@ %@", error, [error userInfo]);
+            }
+        }];
+    }
+    }
+}
 
 #pragma mark - Data Cells Display 
     

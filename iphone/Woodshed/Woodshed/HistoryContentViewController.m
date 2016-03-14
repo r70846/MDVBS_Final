@@ -48,11 +48,51 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     
-    [dataStore loadSessions];
-    [historyTableView reloadData ];
+    NSLog(@"History will appear..");
+    
+    [historyTableView reloadData];
 }
 
-
+-(void)loadSessions{
+    
+    PFQuery *query = [PFQuery queryWithClassName:@"SessionData"];
+    
+    if(dataStore.sessionsID){
+        [query getObjectInBackgroundWithId:dataStore.sessionsID block:^(PFObject *sessionData, NSError *error) {
+            if (!error) {
+                // The find succeeded.
+                dataStore.sessions = (NSMutableArray*)sessionData[@"sessionData"];
+                [historyTableView reloadData];
+                NSLog(@"retrieved in practive view by ID");
+            } else {
+                // Log details of the failure
+                NSLog(@"Error from topics by ID: %@ %@", error, [error userInfo]);
+            }
+        }];
+        
+    }else{
+        
+        NSLog(@"sessionsID: %@", dataStore.sessionsID);
+        
+        if(dataStore.sessionsID){
+        }else{
+            [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                if (!error) {
+                    // The find succeeded.
+                    // Do something with the found objects
+                    PFObject *sessionData = [objects objectAtIndex:0];
+                    dataStore.sessions = (NSMutableArray*)sessionData[@"sessionData"];
+                    dataStore.sessionsID = sessionData.objectId;
+                    [historyTableView reloadData];
+                    NSLog(@"retrieved sessions in practive view without ID");
+                } else {
+                    // Log details of the failure
+                    NSLog(@"Error: %@ %@", error, [error userInfo]);
+                }
+            }];
+        }
+    }
+}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {

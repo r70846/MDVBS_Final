@@ -189,7 +189,6 @@ reach.unreachableBlock = ^(Reachability*reach)
 ////////// TOPICS //////////////////////
 
 
-
 -(void)loadTopics{
     
     [_topicData removeAllObjects];
@@ -202,16 +201,21 @@ reach.unreachableBlock = ^(Reachability*reach)
             NSLog(@"Successfully retrieved %lu topic dicts.", objects.count);
             
             if(objects.count > 0){
-                //Good to go
+                //PFObject *topicData = [objects objectAtIndex:objects.count];
+                PFObject *topicData = [objects objectAtIndex:0];
+                _topicData = (NSMutableDictionary*)topicData[@"topicData"];
+                if([_topicData count] != 0){
+                    _topicArray = (NSMutableArray*)[_topicData allKeys];
+                    _topicsID = topicData.objectId;
+                }else{
+                    [self loadDefaultTopics];
+                    NSLog(@"Empty cloud object, loading defaults");
+                }
             }else{
                 [self loadDefaultTopics];
-                NSLog(@"No coud data, loading defaults");
+                NSLog(@"No cloud data, loading defaults");
             }
-            //PFObject *topicData = [objects objectAtIndex:objects.count];
-            PFObject *topicData = [objects objectAtIndex:0];
-            _topicData = (NSMutableDictionary*)topicData[@"topicData"];
-            _topicArray = (NSMutableArray*)[_topicData allKeys];
-            _topicsID = topicData.objectId;;
+
         } else {
             // Log details of the failure
             NSLog(@"Error: %@ %@", error, [error userInfo]);
@@ -222,7 +226,7 @@ reach.unreachableBlock = ^(Reachability*reach)
 -(void)loadDefaultTopics{
     
     BOOL localData = false;
-    
+
     //If file exists load data
     if([[NSFileManager defaultManager] fileExistsAtPath:_jsonTopicsPath] && localData)
     {
@@ -235,6 +239,8 @@ reach.unreachableBlock = ^(Reachability*reach)
         NSLog(@"retrieved local topic data");
     }else{
         NSLog(@"default topic data");
+        
+        [_topicData removeAllObjects];
         
         //No stored data use, defaults
         _topicData[@"All of Me"] = @"0";
@@ -270,23 +276,6 @@ reach.unreachableBlock = ^(Reachability*reach)
     }
 }
 
--(void)example{
-    
-    PFQuery *query = [PFQuery queryWithClassName:@"GameScore"];
-    
-    // Retrieve the object by id
-    [query getObjectInBackgroundWithId:@"xWMyZ4YEGZ"
-                                 block:^(PFObject *gameScore, NSError *error) {
-                                     // Now let's update it with some new data. In this case, only cheatMode and score
-                                     // will get sent to the cloud. playerName hasn't changed.
-                                     gameScore[@"cheatMode"] = @YES;
-                                     gameScore[@"score"] = @1338;
-                                     [gameScore saveInBackground];
-                                 }];
-
-    
-    
-}
 -(void)saveTopics{
         NSLog (@"in save topics function");
     
@@ -297,6 +286,7 @@ reach.unreachableBlock = ^(Reachability*reach)
         
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject: _topicData options: NSJSONWritingPrettyPrinted error: NULL];
         [jsonData writeToFile:_jsonTopicsPath atomically:YES];
+    }else if(localData){
         NSLog (@"can't save topic data as JSON");
         NSLog(@"%@", [_topicData description]);
     }else{
@@ -328,34 +318,130 @@ reach.unreachableBlock = ^(Reachability*reach)
 
 
 -(void)clearTopics{
+    
+    NSString *ID = _topicsID;
+    _topicsID = nil;
+    
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSError *error;
     [fileManager removeItemAtPath:_jsonTopicsPath error:&error];
+    
+    PFQuery *query = [PFQuery queryWithClassName:@"TopicData"];
+    
+    [query getObjectInBackgroundWithId:ID block:^(PFObject *topicsData, NSError *error) {
+        // Do something with the returned PFObject
+        if(!error){
+            [topicsData deleteInBackground];
+            [self loadDefaultTopics];
+        }else{
+            NSLog(@"Error clearing topics: %@",error.description);
+        }
+
+    }];
 }
 
 ////////// SESSIONS //////////////////////
 
 -(void)saveSessions{
+    
+    BOOL localData = false;
     //Save as a JSON file
-    if ([NSJSONSerialization isValidJSONObject: _sessions]) {
-        
+    if ([NSJSONSerialization isValidJSONObject: _sessions] && localData) {
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject: _sessions options: NSJSONWritingPrettyPrinted error: NULL];
         [jsonData writeToFile:_jsonSessionsPath atomically:YES];
         NSLog (@"sessions saved");
-    }else
-    {
-        NSLog (@"can't save as JSON");
+    }else if(localData){
+        NSLog (@"can't save session data as JSON");
         NSLog(@"%@", [_sessions description]);
+    }else{
+        //Save to cloud
+        PFQuery *query = [PFQuery queryWithClassName:@"SessionData"];
+        
+        // Retrieve the object by id
+        [query getObjectInBackgroundWithId:_sessionsID
+                                     block:^(PFObject *sessionData, NSError *error) {
+                                         // Now let's update it with some new data. In this case, only cheatMode and score
+                                         // will get sent to the cloud. playerName hasn't changed.
+                                         sessionData[@"sessionData"] = _sessions;
+                                         [sessionData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                                             if (succeeded) {
+                                                 NSLog (@"Saved revised sessions to parse");
+                                                 
+                                             } else {
+                                                 // There was a problem, check error.description
+                                                 NSLog (@"Parse error saving revised sessions:%@", error.description);
+                                             }
+                                         }];
+                                     }];
     }
+   // _topicArray = (NSMutableArray*)[_topicData allKeys];
+}
+
+-(void)loadEmptySessions{
+    PFObject *sessionData = [PFObject objectWithClassName:@"SessionData"];
+    [_sessions removeAllObjects];
+    sessionData[@"sessionData"] = _sessions;
+    
+    [sessionData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (succeeded) {
+            NSLog (@"Saved empty sessions to parse");
+            
+        } else {
+            // There was a problem, check error.description
+            NSLog (@"Parse error saving empty sessions:%@", error.description);
+        }
+    }];
 }
 
 -(void)clearSessions{
+    
+    [_sessions removeAllObjects];
+    
+    NSString *ID = _sessionsID;
+    _sessionsID = nil;
+    
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSError *error;
     [fileManager removeItemAtPath:_jsonSessionsPath error:&error];
+    
+    PFQuery *query = [PFQuery queryWithClassName:@"SessionData"];
+    
+    [query getObjectInBackgroundWithId:ID block:^(PFObject *sessionData, NSError *error) {
+        // Do something with the returned PFObject
+        if(!error){
+            [sessionData deleteInBackground];
+        }else{
+            NSLog(@"Error clearing sessions: %@",error.description);
+        }
+    }];
 }
 
 -(void)loadSessions{
+    
+    //PFObject *topicData = [PFObject objectWithClassName:@"TopicData"];
+    
+    PFQuery *query = [PFQuery queryWithClassName:@"SessionData"];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            // The find succeeded.
+            NSLog(@"Successfully retrieved %lu sessions array.", objects.count);
+            
+            if(objects.count > 0){
+                PFObject *sessionData = [objects objectAtIndex:0];
+                _sessions = (NSMutableArray*)sessionData[@"sessionData"];
+                _sessionsID = sessionData.objectId;
+            }else{
+                [self loadEmptySessions];
+                NSLog(@"No cloud data, loading empty sessions");
+            }
+        } else {
+            // Log details of the failure
+            NSLog(@"Session loading error: %@ %@", error, [error userInfo]);
+        }
+    }];
+}
+
+-(void)loadSessionsLocal{
     
     [_sessions removeAllObjects];
     

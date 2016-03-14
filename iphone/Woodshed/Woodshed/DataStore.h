@@ -55,6 +55,7 @@
 
 // Parse IDs
 @property (nonatomic, strong)NSString *topicsID;
+@property (nonatomic, strong)NSString *sessionsID;
 
 //Harddrive storage
 @property (nonatomic, strong)NSString *jsonTopicsPath;
