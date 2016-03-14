@@ -67,6 +67,7 @@
 
 -(void)resetCurrentSession;
 
+-(void)loadTagTemplates;
 
 -(void)loadParseData;
 

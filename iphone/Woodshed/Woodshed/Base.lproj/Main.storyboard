@@ -468,7 +468,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="mBy-c4-Ss8">
-                                        <rect key="frame" x="10" y="60" width="305" height="300"/>
+                                        <rect key="frame" x="10" y="120" width="305" height="240"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <prototypes>
                                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TagCell" id="6t2-rR-z9y" customClass="TagCell">
@@ -537,6 +537,24 @@
                                         </state>
                                         <connections>
                                             <action selector="editMode:" destination="mIc-aL-v4T" eventType="touchUpInside" id="0l0-6B-lkg"/>
+                                        </connections>
+                                    </button>
+                                    <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="GUITAR TAGS" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SQa-ee-Vbv">
+                                        <rect key="frame" x="16" y="72" width="258" height="30"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4iz-mi-RcS">
+                                        <rect key="frame" x="273" y="73" width="30" height="28"/>
+                                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                                        <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <state key="normal" title="&gt;">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="chooseTemplate" destination="mIc-aL-v4T" eventType="touchUpInside" id="6EU-KJ-9KD"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -1057,6 +1075,8 @@
                         <outlet property="tagDisplayLabel" destination="PM6-Ru-iTo" id="ucU-Ia-GM4"/>
                         <outlet property="tagEditButton" destination="TsQ-bu-ZIU" id="aVn-MQ-oeo"/>
                         <outlet property="tagTableView" destination="mBy-c4-Ss8" id="u9j-1Z-Sgn"/>
+                        <outlet property="templateButton" destination="4iz-mi-RcS" id="OfR-D8-t0k"/>
+                        <outlet property="templateTextDisplay" destination="SQa-ee-Vbv" id="me0-Jt-wld"/>
                         <outlet property="timerDisplay" destination="lr3-f9-NDl" id="fwg-rI-bwi"/>
                         <outlet property="topicDisplayLabel" destination="WJc-4Y-B4b" id="y2N-MU-Cwf"/>
                         <outlet property="topicDisplayLabelThree" destination="fux-v1-2iy" id="xg1-Qb-oOS"/>

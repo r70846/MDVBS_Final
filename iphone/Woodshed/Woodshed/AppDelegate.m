@@ -59,7 +59,7 @@
             dataStore.success = false;
         }
         NSString *tweet = (NSString*)[defaults objectForKey:@"tweet"];
-        if([success isEqualToString:@"1"]){
+        if([tweet isEqualToString:@"1"]){
             dataStore.tweet = true;
         }else{
             dataStore.tweet = false;

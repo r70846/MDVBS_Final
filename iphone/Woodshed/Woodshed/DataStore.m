@@ -171,11 +171,7 @@ reach.unreachableBlock = ^(Reachability*reach)
 
     ///////// LOAD TEMPLATES //////////////////////////////////
     ///////// LOAD TAGS, AND VALUES ////////////////////////////
-
-
-    [self loadTagTemplates];
-    _templateChoice = [_templateArray objectAtIndex:0];
-
+    
     // function to load tag data
     [self loadTags];
 
@@ -467,6 +463,7 @@ reach.unreachableBlock = ^(Reachability*reach)
     [_templateArray addObject:@"Guitar Tags"];
     [_templateArray addObject:@"[ None ]"];
     
+    _templateChoice = [_templateArray objectAtIndex:0];
 }
 
 ////////// TAGS //////////////////////

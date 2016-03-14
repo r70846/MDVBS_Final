@@ -22,7 +22,7 @@
 #import "SimpleCell.h"
 #import "DelButton.h"
 
-@interface PracticeContentViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface PracticeContentViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UITextViewDelegate, UITextFieldDelegate>
 {
     // Global Data Storage
     DataStore *dataStore;    //shared instance of my DataStore object
@@ -51,6 +51,11 @@
     IBOutlet UIButton *tagEditButton;
     IBOutlet UIButton *valueEditButton;
     NSString *currentScreen;
+    
+    // Tag Templates
+    IBOutlet UIButton *templateButton;
+    IBOutlet UITextField *templateTextDisplay;
+    UIActionSheet *templateSheet;
     
     // Metronome
     IBOutlet UILabel *nomeDisplay;
@@ -89,6 +94,9 @@
 -(IBAction)onDel:(DelButton *)button;
 -(void)editModeSwitch:(UITableView *)table;
 -(void)editButtonSwitch:(UIButton *)button;
+
+// Tag Templates
+-(IBAction)chooseTemplate;
 
 // Session Functions
 -(IBAction)navAction:(UIButton *)button;

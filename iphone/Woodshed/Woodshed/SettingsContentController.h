@@ -15,7 +15,6 @@
 
 #import <UIKit/UIKit.h>
 #import "DataStore.h"
-#import "DataStore.h"
 @interface SettingsContentController : UIViewController <UIActionSheetDelegate, UITextViewDelegate, UITextFieldDelegate>
 {
     // Global Data Storage
