@@ -604,7 +604,7 @@
     [dataStore saveSessions];
     
     //Build string before reseting session
-    if(TRUE){
+    if(dataStore.tweet){
         [self postTweet:[self composeTweet]];
     }
     

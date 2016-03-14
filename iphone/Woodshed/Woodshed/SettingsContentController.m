@@ -37,6 +37,14 @@
     
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    if(dataStore.stay){
+        [togTweetComplete setOn:YES animated:NO];
+    }else{
+        [togTweetComplete  setOn:NO animated:NO];
+    }
+    [super viewWillAppear:animated];
+}
 
 -(void)setUpTemplateSheet
 {
@@ -127,6 +135,30 @@
     UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"LoginController"];
     [self presentViewController:viewController animated:NO completion:nil];
 }
+
+
+-(IBAction)setTweetState{
+    //Built in dictionary
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    if(defaults != nil)
+    {
+        if ([togTweetComplete isOn]) {
+            [defaults setObject:@"1" forKey:@"tweet"];
+            dataStore.tweet = true;
+        }else{
+            [defaults setObject:@"0" forKey:@"tweet"];
+            dataStore.tweet = false;
+        }
+        
+        //saves the data
+        [defaults synchronize];
+        
+    }
+    
+}
+
+
 ////////////////////////////////////////////////////////
 
 - (void)didReceiveMemoryWarning {

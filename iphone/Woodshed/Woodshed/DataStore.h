@@ -32,9 +32,10 @@
 //App Status
 @property (nonatomic)BOOL isOnline;
 @property (nonatomic)BOOL directDelete;
-@property (nonatomic)BOOL tweetOnComplete;
+@property (nonatomic)BOOL tweet;
 @property (nonatomic)BOOL stay;
 @property (nonatomic)BOOL success;
+
 @property (nonatomic, strong)NSString *user;
 @property (nonatomic, strong)NSString *password;
 

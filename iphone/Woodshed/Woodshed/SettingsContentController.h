@@ -22,7 +22,7 @@
     DataStore *dataStore;    //shared instance of my DataStore object
     
     
-    
+    IBOutlet UISwitch *togTweetComplete;
     IBOutlet UIButton *templateButton;
     IBOutlet UITextField *templateTextDisplay;
     
