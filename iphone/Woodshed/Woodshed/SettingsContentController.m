@@ -38,7 +38,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    if(dataStore.stay){
+    if(dataStore.tweet){
         [togTweetComplete setOn:YES animated:NO];
     }else{
         [togTweetComplete  setOn:NO animated:NO];

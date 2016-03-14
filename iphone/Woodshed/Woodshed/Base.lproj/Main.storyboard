@@ -315,35 +315,6 @@
                                 </subviews>
                                 <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="w8F-Io-2na">
-                                <rect key="frame" x="26" y="516" width="325" height="100"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="TAG TEMPLATES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ac4-ar-DQ3">
-                                        <rect key="frame" x="20" y="15" width="106" height="21"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="GUITAR TAGS" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Nrh-4H-Vj7">
-                                        <rect key="frame" x="20" y="50" width="258" height="30"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
-                                    </textField>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wud-AT-Usc">
-                                        <rect key="frame" x="277" y="51" width="30" height="28"/>
-                                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
-                                        <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                        <state key="normal" title="&gt;">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="chooseTemplate" destination="c7P-1f-qLN" eventType="touchUpInside" id="ggr-kh-jjH"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
-                            </view>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DgJ-YF-950">
                                 <rect key="frame" x="26" y="281" width="325" height="150"/>
                                 <subviews>
@@ -411,7 +382,7 @@
                                 <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MGq-TW-JeX">
-                                <rect key="frame" x="26" y="611" width="325" height="100"/>
+                                <rect key="frame" x="26" y="513" width="325" height="100"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="ACCOUNT" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zDc-gQ-VyK">
                                         <rect key="frame" x="20" y="15" width="106" height="21"/>
@@ -439,7 +410,6 @@
                     </view>
                     <toolbarItems/>
                     <connections>
-                        <outlet property="templateTextDisplay" destination="Nrh-4H-Vj7" id="a2h-Dp-hAP"/>
                         <outlet property="togTweetComplete" destination="376-CS-ELk" id="q5I-I9-3bY"/>
                     </connections>
                 </viewController>

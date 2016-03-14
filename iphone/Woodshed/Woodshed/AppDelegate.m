@@ -64,6 +64,7 @@
         }else{
             dataStore.tweet = false;
         }
+        NSLog(@"Tweet Setting is :%@", tweet);
     }
 
 
