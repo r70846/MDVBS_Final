@@ -468,6 +468,10 @@ reach.unreachableBlock = ^(Reachability*reach)
 
 ////////// TAGS //////////////////////
 
+
+
+
+
 -(void)loadTags{
     
     [_tagData removeAllObjects];
@@ -477,6 +481,7 @@ reach.unreachableBlock = ^(Reachability*reach)
     
     //Key Center
     [valueArray removeAllObjects];
+    [valueArray addObject:@"_standard"];
     [valueArray addObject:@"A"];
     [valueArray addObject:@"A#"];
     [valueArray addObject:@"Bb"];
@@ -497,6 +502,7 @@ reach.unreachableBlock = ^(Reachability*reach)
     
     //Tempo
     [valueArray removeAllObjects];
+    [valueArray addObject:@"_standard"];
     [valueArray addObject:@"Grave"];
     [valueArray addObject:@"Largo"];
     [valueArray addObject:@"Larghetto"];
@@ -522,6 +528,7 @@ reach.unreachableBlock = ^(Reachability*reach)
         
         //Bowing Pattern
         [valueArray removeAllObjects];
+        [valueArray addObject:@"_template"];
         [valueArray addObject:@"Straight Bowing"];
         [valueArray addObject:@"Shuffle Bowing"];
         [valueArray addObject:@"Swing Bowing"];
@@ -538,6 +545,7 @@ reach.unreachableBlock = ^(Reachability*reach)
         
         //Tonguing Technique
         [valueArray removeAllObjects];
+        [valueArray addObject:@"_template"];
         [valueArray addObject:@"Single Tongue"];
         [valueArray addObject:@"Double Tongue"];
         [valueArray addObject:@"Triple Tongue"];
@@ -550,6 +558,7 @@ reach.unreachableBlock = ^(Reachability*reach)
         
         //Lip Slurs
         [valueArray removeAllObjects];
+        [valueArray addObject:@"_template"];
         [valueArray addObject:@"Two Note Slurs"];
         [valueArray addObject:@"Three Note Slurs"];
         [valueArray addObject:@"Four Note Slurs"];
@@ -562,6 +571,7 @@ reach.unreachableBlock = ^(Reachability*reach)
         
         //Drum Stick Grip
         [valueArray removeAllObjects];
+        [valueArray addObject:@"_template"];
         [valueArray addObject:@"Traditional Grip"];
         [valueArray addObject:@"Reverse Traditional Grip"];
         [valueArray addObject:@"German Grip"];
@@ -576,6 +586,7 @@ reach.unreachableBlock = ^(Reachability*reach)
         
         //Picking Technique
         [valueArray removeAllObjects];
+        [valueArray addObject:@"_template"];
         [valueArray addObject:@"Down Picking"];
         [valueArray addObject:@"Alternate Picking"];
         [valueArray addObject:@"Sweep Picking"];
@@ -586,6 +597,16 @@ reach.unreachableBlock = ^(Reachability*reach)
     //NSLog(@"%@", _tagData);
 }
 
-
+-(void)filterTags{
+    NSMutableArray *tags = (NSMutableArray*)[_tagData allKeys];
+    NSMutableDictionary *userTagData = [[NSMutableDictionary alloc]init];
+    
+    for(NSString *tag in tags){
+        NSArray *vals = [_tagData objectForKey:tag];
+        if([[vals objectAtIndex:0] isEqualToString:@"_user"]){
+            userTagData[tag] = vals;
+        }
+    }
+}
 
 @end

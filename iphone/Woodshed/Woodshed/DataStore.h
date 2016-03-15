@@ -80,6 +80,7 @@
 
 -(void)saveSessions;
 -(void)loadSessions;
+-(void)loadEmptySessions;
 -(void)clearSessions;
 
 @end

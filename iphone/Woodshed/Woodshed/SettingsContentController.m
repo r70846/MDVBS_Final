@@ -93,7 +93,7 @@
 -(IBAction)clearSavedData{
     [dataStore.sessions removeAllObjects];
     [dataStore clearSessions];
-    [dataStore loadSessions];
+    [dataStore loadEmptySessions];
     [dataStore resetCurrentSession];
     //[self clearCustomData];
 }

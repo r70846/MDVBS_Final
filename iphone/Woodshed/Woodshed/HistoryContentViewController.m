@@ -71,26 +71,20 @@
         }];
         
     }else{
-        
-        NSLog(@"sessionsID: %@", dataStore.sessionsID);
-        
-        if(dataStore.sessionsID){
-        }else{
-            [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-                if (!error) {
-                    // The find succeeded.
-                    // Do something with the found objects
-                    PFObject *sessionData = [objects objectAtIndex:0];
-                    dataStore.sessions = (NSMutableArray*)sessionData[@"sessionData"];
-                    dataStore.sessionsID = sessionData.objectId;
-                    [historyTableView reloadData];
-                    NSLog(@"retrieved sessions in practive view without ID");
-                } else {
-                    // Log details of the failure
-                    NSLog(@"Error: %@ %@", error, [error userInfo]);
-                }
-            }];
-        }
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            if (!error) {
+                // The find succeeded.
+                // Do something with the found objects
+                PFObject *sessionData = [objects objectAtIndex:0];
+                dataStore.sessions = (NSMutableArray*)sessionData[@"sessionData"];
+                dataStore.sessionsID = sessionData.objectId;
+                [historyTableView reloadData];
+                NSLog(@"retrieved sessions in practive view without ID");
+            } else {
+                // Log details of the failure
+                NSLog(@"Error: %@ %@", error, [error userInfo]);
+            }
+        }];
     }
 }
 

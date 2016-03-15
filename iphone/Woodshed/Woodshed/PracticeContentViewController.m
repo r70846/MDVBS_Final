@@ -238,12 +238,10 @@
         if(cell != nil)
         {
             NSString *tag = [tagArray objectAtIndex:indexPath.row];
-            //cell.textLabel.text = tag;
             
             if ([[dataStore.currentSession allKeys] containsObject:tag]) {
                 
                 //Cell Contents
-                //cell.detailTextLabel.text = dataStore.currentSession[tag];
                 NSString *val = dataStore.currentSession[tag];
                 
                 //Cell color
@@ -273,7 +271,28 @@
         cell = [tableView dequeueReusableCellWithIdentifier:@"ValueCell"];
         if(cell != nil)
         {
-            cell.displayText.text =(NSString*)[valueArray objectAtIndex:indexPath.row];
+            NSString *priorValue = @"";
+            NSString *thisValue = [valueArray objectAtIndex:indexPath.row];
+            
+                // If this tag was already set...
+            if ([[dataStore.currentSession allKeys] containsObject:currentTag]) {
+                // What was it set too (?)...
+                priorValue = dataStore.currentSession[currentTag];
+                if([thisValue isEqualToString:priorValue]){
+                    //Cell color
+                    cell.backgroundColor =[UIColor colorWithRed:0.984 green:0.957 blue:0.875 alpha:1]; /*#fbf4df*/
+                }else{
+                    cell.backgroundColor = [UIColor whiteColor];
+                }
+            } else {
+                cell.backgroundColor = [UIColor whiteColor];
+            }
+            
+            if(indexPath.row == 0){
+                cell.displayText.text = @"[ none ]";
+            }else{
+                cell.displayText.text =(NSString*)[valueArray objectAtIndex:indexPath.row];
+            }
         }
         cell.delButton.tag=indexPath.row;
         cell.delButton.type = @"ValueCell";
@@ -323,21 +342,27 @@
         PracticeViewController *practiceViewController = (PracticeViewController*) self.parentViewController;
         practiceViewController.iDisplayMode = 1200;
         [practiceViewController setScrollView];
+        
     }
     else if (tableView==valueTableView)
     {
-        //Get user value choice, save to current session
-        NSString  *value = [valueArray objectAtIndex:indexPath.row];
-        //dataStore.currentSession[[currentTag copy]] = [value copy];
-        dataStore.currentSession[currentTag] = [value copy];
-        
+        if(indexPath.row == 0){
+            [dataStore.currentSession removeObjectForKey:currentTag];
+        }else{
+            //Get user value choice, save to current session
+            NSString  *value = [valueArray objectAtIndex:indexPath.row];
+            dataStore.currentSession[currentTag] = [value copy];
+        }
+
         //Display amended values in tag table
         [tagTableView reloadData];
+        [valueTableView reloadData];
         
-        //Scroll to next screen
+        //Scroll back to tag screen
         PracticeViewController *practiceViewController = (PracticeViewController*) self.parentViewController;
         practiceViewController.iDisplayMode = 600;
         [practiceViewController setScrollView];
+
     }
 }
 
@@ -391,11 +416,13 @@
         }else if([source isEqualToString:@"Tag"]){
             //Create temp array to load dictionary
             NSMutableArray *tmpArray = [[NSMutableArray alloc] init];
+            [tmpArray addObject:@"_user"];
             dataStore.tagData[newItem] = [tmpArray mutableCopy];
             tagArray = [[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
             [tagTableView reloadData];
         }else if([source isEqualToString:@"Value"]){
             [valueArray addObject:newItem];
+            [valueArray replaceObjectAtIndex:0 withObject:@"_user"];
             dataStore.tagData[currentTag] = [valueArray mutableCopy];
             [valueTableView reloadData];
         }else if([source isEqualToString:@"Note"]){
