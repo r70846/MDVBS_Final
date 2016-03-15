@@ -46,6 +46,7 @@
     {
         dataStore.user = [defaults objectForKey:@"user"];
         dataStore.password = [defaults objectForKey:@"password"];
+        dataStore.tagTemplate = [defaults objectForKey:@"tagTemplate"];
         NSString *stay = (NSString*)[defaults objectForKey:@"stay"];
         if([stay isEqualToString:@"1"]){
             dataStore.stay = true;
@@ -75,27 +76,29 @@
     
     UIViewController *viewController;
  
-
-    if(dataStore.stay && dataStore.success){
+    // Logout Parse
+    //[PFUser logOut];
+    
+    if(dataStore.stay && dataStore.success && true){
         viewController = [storyboard instantiateViewControllerWithIdentifier:@"TabBarController"];
         [PFUser logInWithUsernameInBackground:dataStore.user password:dataStore.password
                                         block:^(PFUser *user, NSError *error) {
                                             if (user) {
+                                                NSLog(@"Login success %@", dataStore.user);
                                             } else {
                                                 // Show error
                                                 NSString *strError = [error userInfo][@"error"];
                                                 NSLog(@"Login error from app delegate: %@", strError);
                                             }
                                         }];
-        
-        
-        
     }else{
         viewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginController"];
     }
     
     self.window.rootViewController = viewController;
     [self.window makeKeyAndVisible];
+    
+    sleep(2);
     
     return YES;
 }

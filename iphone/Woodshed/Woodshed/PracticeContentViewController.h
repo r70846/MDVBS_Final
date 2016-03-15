@@ -28,7 +28,6 @@
     DataStore *dataStore;    //shared instance of my DataStore object
 
     // Data Holders
-    NSArray *tagArray;
     NSMutableArray *valueArray;
     NSString *currentTag;
     

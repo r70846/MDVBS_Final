@@ -27,6 +27,11 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    //PFUser *user = [PFUser currentUser];
+    //user.ACL = [PFACL ACLWithUser:user];
+    //[PFACL setDefaultACL:[PFACL ACL] withAccessForCurrentUser:YES];
+    
+    
     //Appearance
     [self.view setBackgroundColor:[UIColor colorWithRed:1 green:0.89 blue:0.631 alpha:1]]; ; /*#ffe3a1*/
     [self.view setBackgroundColor:[UIColor colorWithRed:0.561 green:0.635 blue:0.655 alpha:1]];  /*#8fa2a7*/
@@ -43,14 +48,14 @@
     //Setup tag templatea
     [dataStore loadTagTemplates];
     [self setUpTemplateSheet];
-    templateTextDisplay.text = dataStore.templateChoice;
     
-    PFUser *user = [PFUser currentUser];
-    user.ACL = [PFACL ACLWithUser:user];
-    [PFACL setDefaultACL:[PFACL ACL] withAccessForCurrentUser:YES];
+    //PFUser *user = [PFUser currentUser];
+    //user.ACL = [PFACL ACLWithUser:user];
+    //[PFACL setDefaultACL:[PFACL ACL] withAccessForCurrentUser:YES];
     
     [dataStore loadParseData];
     [self loadTopics];
+    [self loadTags];
     [self loadSessions];
     
     //Settings
@@ -62,14 +67,9 @@
     tagEditButton.hidden = dataStore.directDelete;
     valueEditButton.hidden = dataStore.directDelete;
     
-    //Data
-    //PFObject *testObject = [PFObject objectWithClassName:@"TestObject"];
-    //testObject[@"final"] = @"countdown";
-    //[testObject saveInBackground];
-    
     //Pull tag array from dataStore dictionary
     //valueArray must be loaded dynamically with each tag choice
-    tagArray = [[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
+    dataStore.tagArray = (NSMutableArray*)[[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
     valueArray = [[NSMutableArray alloc] init];
     
     // Vars for tracking state
@@ -91,8 +91,14 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     
-    //valueArray must be loaded dynamically with each tag choice
-    tagArray = [[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
+    if([dataStore.tagTemplate isEqualToString:[dataStore.templateArray objectAtIndex:0]]){
+        templateTextDisplay.text = @"[ Tag Templates ]";
+    }else{
+        templateTextDisplay.text = dataStore.tagTemplate;
+    }
+    if([templateTextDisplay.text isEqualToString:@""]){
+        templateTextDisplay.text = @"[ Tag Templates ]";
+    }
     
     //Reload data tables
     [topicTableView reloadData];
@@ -142,6 +148,47 @@
     }];
     }
 }
+-(void)loadTags{
+    
+    PFQuery *query = [PFQuery queryWithClassName:@"TagData"];
+    
+    NSLog(@"tagsID: %@", dataStore.tagsID);
+    
+    if(dataStore.tagsID){
+        [query getObjectInBackgroundWithId:dataStore.tagsID block:^(PFObject *tagData, NSError *error) {
+            // Do something with the returned PFObject in the gameScore variable.
+            if (!error) {
+                // The find succeeded.
+                dataStore.tagData = (NSMutableDictionary*)tagData[@"tagData"];
+                [dataStore addTagsFromTemplate];
+                dataStore.tagArray = (NSMutableArray*)[dataStore.tagData allKeys];
+                [tagTableView reloadData];
+                NSLog(@"retrieved in practive view by ID");
+            } else {
+                // Log details of the failure
+                NSLog(@"Error from topics by ID: %@ %@", error, [error userInfo]);
+            }
+        }];
+        
+    }else{
+        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            if (!error) {
+                // The find succeeded.
+                PFObject *tagData = [objects objectAtIndex:0];
+                dataStore.tagData = (NSMutableDictionary*)tagData[@"tagData"];
+                [dataStore addTagsFromTemplate];
+                dataStore.tagArray = (NSMutableArray*)[dataStore.tagData allKeys];
+                dataStore.tagsID = tagData.objectId;
+                NSLog(@"retrieved in practive view without ID");
+                [tagTableView reloadData];
+            } else {
+                // Log details of the failure
+                NSLog(@"Error: %@ %@", error, [error userInfo]);
+            }
+        }];
+    }
+}
+
 -(void)loadSessions{
     
     PFQuery *query = [PFQuery queryWithClassName:@"SessionData"];
@@ -194,7 +241,7 @@
     }
     else if (tableView==tagTableView)
     {
-        iCnt = [tagArray count];
+        iCnt = [dataStore.tagArray count];
     }
     else if (tableView==valueTableView)
     {
@@ -237,7 +284,7 @@
         cell = [tableView dequeueReusableCellWithIdentifier:@"TagCell"];
         if(cell != nil)
         {
-            NSString *tag = [tagArray objectAtIndex:indexPath.row];
+            NSString *tag = [dataStore.tagArray objectAtIndex:indexPath.row];
             
             if ([[dataStore.currentSession allKeys] containsObject:tag]) {
                 
@@ -331,7 +378,7 @@
     else if (tableView==tagTableView)
     {
         //Get user tag choice, display and save to session
-        currentTag = [tagArray objectAtIndex:indexPath.row];
+        currentTag = [dataStore.tagArray objectAtIndex:indexPath.row];
         tagDisplayLabel.text = currentTag;
         
         //Display values in value table
@@ -418,12 +465,15 @@
             NSMutableArray *tmpArray = [[NSMutableArray alloc] init];
             [tmpArray addObject:@"_user"];
             dataStore.tagData[newItem] = [tmpArray mutableCopy];
-            tagArray = [[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
+            dataStore.tagArray = (NSMutableArray*)[[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
+            [dataStore saveTags];
             [tagTableView reloadData];
         }else if([source isEqualToString:@"Value"]){
             [valueArray addObject:newItem];
             [valueArray replaceObjectAtIndex:0 withObject:@"_user"];
             dataStore.tagData[currentTag] = [valueArray mutableCopy];
+            dataStore.tagArray = (NSMutableArray*)[[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
+            [dataStore saveTags];
             [valueTableView reloadData];
         }else if([source isEqualToString:@"Note"]){
             [dataStore.currentSession[@"notes"] addObject:newItem];
@@ -453,8 +503,8 @@
 -(IBAction)onDel:(DelButton *)button{
     NSUInteger index = button.tag;
     if([button.type isEqualToString:@"TagCell"]){
-        [dataStore.tagData removeObjectForKey:[tagArray objectAtIndex:index]];
-        tagArray = [[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
+        [dataStore.tagData removeObjectForKey:[dataStore.tagArray objectAtIndex:index]];
+        dataStore.tagArray = (NSMutableArray*)[[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
         [tagTableView reloadData];
         //NSLog(@"From View:%ld", (long)tag);
     }else if([button.type isEqualToString:@"TopicCell"]){
@@ -482,13 +532,16 @@
         [topicTableView reloadData];
     }else if (tableView==tagTableView && editingStyle == UITableViewCellEditingStyleDelete){
         //remove from my local array
-        [dataStore.tagData removeObjectForKey:[tagArray objectAtIndex:index]];
-        tagArray = [[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
+        [dataStore.tagData removeObjectForKey:[dataStore.tagArray objectAtIndex:index]];
+        dataStore.tagArray = (NSMutableArray*)[[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
+        [dataStore saveTags];
         [tagTableView reloadData];
     }else if (tableView==valueTableView && editingStyle == UITableViewCellEditingStyleDelete){
         //remove from my local array
         [valueArray removeObjectAtIndex:index];
+        [valueArray replaceObjectAtIndex:0 withObject:@"_user"];
         dataStore.tagData[currentTag] = [valueArray mutableCopy];
+        [dataStore saveTags];
         [valueTableView reloadData];
     }
 }
@@ -942,6 +995,11 @@
     //Add cancel button on the end
     templateSheet.cancelButtonIndex = [templateSheet addButtonWithTitle:@"Cancel"];
     
+
+    if([dataStore.tagTemplate isEqualToString:[dataStore.templateArray objectAtIndex:0]]){
+        templateTextDisplay.text = @"[ Tag Templates ]";
+    }
+    
     //To handle keyboard
     //[topicDisplay setDelegate:self];
     
@@ -958,10 +1016,20 @@
     if (actionSheet.tag == 100) {
         if(buttonIndex < [dataStore.templateArray count]){
             NSString *choice = [dataStore.templateArray objectAtIndex:buttonIndex];
-            templateTextDisplay.text = choice;
-            dataStore.templateChoice = choice;
-            [dataStore loadTags];
-            tagArray = [[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
+            if(buttonIndex == 0){
+                templateTextDisplay.text = @"[ Tag Templates ]";
+            }else{
+                templateTextDisplay.text = choice;
+            }
+            dataStore.tagTemplate = choice;
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            
+            if(defaults != nil)
+            {
+                [defaults setObject:choice forKey:@"tagTemplate"];
+            }
+            [self loadTags];
+            dataStore.tagArray = (NSMutableArray*)[[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
             [tagTableView reloadData];
         }
     }

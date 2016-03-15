@@ -42,9 +42,11 @@
 //Topics, Tags, values, data storage...
 @property (nonatomic, strong)NSMutableArray *topicArray;
 @property (nonatomic, strong)NSMutableDictionary *topicData;
+
+@property (nonatomic, strong)NSMutableArray *tagArray;
 @property (nonatomic, strong)NSMutableDictionary *tagData;
 
-@property (nonatomic, strong)NSString *templateChoice;
+@property (nonatomic, strong)NSString *tagTemplate;
 @property (nonatomic, strong)NSMutableArray *templateArray;
 
 //Session tracking
@@ -56,6 +58,7 @@
 
 // Parse IDs
 @property (nonatomic, strong)NSString *topicsID;
+@property (nonatomic, strong)NSString *tagsID;
 @property (nonatomic, strong)NSString *sessionsID;
 
 //Harddrive storage
@@ -70,9 +73,9 @@
 -(void)loadTagTemplates;
 
 -(void)loadParseData;
-
+-(void)saveTags;
 -(void)loadTags;
-
+-(void)addTagsFromTemplate;
 -(void)saveTopics;
 -(void)loadTopics;
 

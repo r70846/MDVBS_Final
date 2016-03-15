@@ -35,6 +35,8 @@
     // Data Editing
     IBOutlet UIButton *historyEditButton;
     
+    
+    NSMutableArray *sessions;
     NSMutableArray *filterArray;
     NSMutableArray *sortArray;
     UIActionSheet *filterActionSheet;

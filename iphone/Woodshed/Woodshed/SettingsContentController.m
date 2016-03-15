@@ -33,7 +33,7 @@
     
     //Setup tag templatea
     [self setUpTemplateSheet];
-    templateTextDisplay.text = dataStore.templateChoice;
+    templateTextDisplay.text = dataStore.tagTemplate;
     
 }
 
@@ -84,7 +84,7 @@
         if(buttonIndex < [dataStore.templateArray count]){
             NSString *choice = [dataStore.templateArray objectAtIndex:buttonIndex];
             templateTextDisplay.text = choice;
-            dataStore.templateChoice = choice;
+            dataStore.tagTemplate = choice;
             [dataStore loadTags];
         }
     }

@@ -40,7 +40,7 @@
     //Local RAM storage for table displays
     tagArray = [[NSMutableArray alloc] init];
     valueArray = [[NSMutableArray alloc] init];
-
+    
     //Setup Interface Items
     [self setUpSortSheet];
 }
@@ -71,20 +71,26 @@
         }];
         
     }else{
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-            if (!error) {
-                // The find succeeded.
-                // Do something with the found objects
-                PFObject *sessionData = [objects objectAtIndex:0];
-                dataStore.sessions = (NSMutableArray*)sessionData[@"sessionData"];
-                dataStore.sessionsID = sessionData.objectId;
-                [historyTableView reloadData];
-                NSLog(@"retrieved sessions in practive view without ID");
-            } else {
-                // Log details of the failure
-                NSLog(@"Error: %@ %@", error, [error userInfo]);
-            }
-        }];
+        
+        NSLog(@"sessionsID: %@", dataStore.sessionsID);
+        
+        if(dataStore.sessionsID){
+        }else{
+            [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                if (!error) {
+                    // The find succeeded.
+                    // Do something with the found objects
+                    PFObject *sessionData = [objects objectAtIndex:0];
+                    dataStore.sessions = (NSMutableArray*)sessionData[@"sessionData"];
+                    dataStore.sessionsID = sessionData.objectId;
+                    [historyTableView reloadData];
+                    NSLog(@"retrieved sessions in practive view without ID");
+                } else {
+                    // Log details of the failure
+                    NSLog(@"Error: %@ %@", error, [error userInfo]);
+                }
+            }];
+        }
     }
 }
 
@@ -110,7 +116,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
+    
     
     if (tableView==historyTableView)
     {
@@ -167,11 +173,11 @@
     {
         //Get data
         detailSession = [dataStore.sessions objectAtIndex:indexPath.row];
-           NSString *dateTime = [NSString stringWithFormat:@"%@ %@",[detailSession objectForKey:@"date"], [detailSession objectForKey:@"time"]];
+        NSString *dateTime = [NSString stringWithFormat:@"%@ %@",[detailSession objectForKey:@"date"], [detailSession objectForKey:@"time"]];
         
         topicDisplayLabel.text = [detailSession objectForKey:@"topic"];
         dateTimeDisplayLabel.text = dateTime;
-
+        
         //Clear my arrays
         [tagArray removeAllObjects];
         [valueArray removeAllObjects];
@@ -186,7 +192,7 @@
             }else if ([[key lowercaseString] isEqualToString:@"date"]){
             }else if ([[key lowercaseString] isEqualToString:@"time"]){
             }else if ([[key lowercaseString] isEqualToString:@"notes"]){
-                    NSLog(@"notes detected...");
+                NSLog(@"notes detected...");
             }else if ([key rangeOfString:@"<<INTERNAL>>"].location == NSNotFound){
                 [tagArray addObject:[key lowercaseString]];
                 [valueArray addObject:[[detailSession objectForKey:key] lowercaseString]];
@@ -236,10 +242,10 @@
     
     //Build "actionsheet" as a drop down menu
     sortActionSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                   delegate:self
-                                          cancelButtonTitle:nil
-                                     destructiveButtonTitle:nil
-                                          otherButtonTitles:nil];
+                                                  delegate:self
+                                         cancelButtonTitle:nil
+                                    destructiveButtonTitle:nil
+                                         otherButtonTitles:nil];
     //Tag it so I can add more later...
     sortActionSheet.tag = 100;
     
@@ -291,23 +297,55 @@
     
     if(tag == 0) //Cancel from tag, Back to topic stage
     {
-    HistoryViewController *historyViewController = (HistoryViewController*) self.parentViewController;
+        HistoryViewController *historyViewController = (HistoryViewController*) self.parentViewController;
         historyViewController.iDisplayMode = 0;
         [historyViewController setScrollView];
     }else{
-            [sortActionSheet showInView:self.view];
+        [sortActionSheet showInView:self.view];
     }
 }
 
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (actionSheet.tag == 100) {
+        if(buttonIndex < [sortArray count]){
+            
+            if([[sortArray objectAtIndex:buttonIndex] isEqualToString:@"Sort by Date"]){
+                dataStore.sessions = (NSMutableArray*)[dataStore.sessions sortedArrayUsingFunction:dateSort context:nil];
+            }else if([[sortArray objectAtIndex:buttonIndex] isEqualToString:@"Sort by Topic"]){
+                dataStore.sessions = [self sortSessionsByTopic:dataStore.sessions];
+            }
+            
+            //NSLog(@"index : %lu", buttonIndex);
+            
+            [historyTableView reloadData];
+        }
+    }
 }
-*/
+
+- (NSMutableArray*)sortSessionsByTopic:(NSMutableArray *)array {
+    array = (NSMutableArray*)[array sortedArrayUsingComparator:^(NSDictionary *item1, NSDictionary *item2) {
+        NSString *topic1 = [item1 objectForKey:@"topic"];
+        NSString *topic2 = [item2 objectForKey:@"topic"];
+        return [topic1 compare:topic2 options: NSCaseInsensitiveSearch];
+    }];
+    return array;
+}
+
+
+
+NSComparisonResult dateSort(NSDictionary *item1, NSDictionary *item2, void *context){
+    
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    [df setDateFormat:@"M/d/yy h:mm a"];
+    
+    NSString* string1 = [NSString stringWithFormat:@"%@ %@",[item1 objectForKey:@"date"], [item1 objectForKey:@"time"]];
+    NSString* string2 = [NSString stringWithFormat:@"%@ %@",[item2 objectForKey:@"date"], [item2 objectForKey:@"time"]];
+    
+    NSDate *d1 = [df dateFromString:string1];
+    NSDate *d2 = [df dateFromString:string2];
+    return [d1 compare:d2];
+}
+
 
 @end

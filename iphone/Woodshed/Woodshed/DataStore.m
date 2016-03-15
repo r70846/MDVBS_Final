@@ -44,7 +44,7 @@ static DataStore *_sharedInstance;
         
         
         //Create Array to hold tag/value templates
-        _templateChoice = [[NSMutableString alloc]init];
+        _tagTemplate = [[NSMutableString alloc]init];
         
         //Create Array to hold tag/value templates
         _templateArray= [[NSMutableArray alloc]init];
@@ -162,18 +162,11 @@ reach.unreachableBlock = ^(Reachability*reach)
 
 -(void)loadParseData{
 
-    ///////// LOAD TOPICS ////////////////////////////
-
-    //[self loadTopicArray];
     [self loadTopics];
+    
+    [self loadTags];
 
     [self loadSessions];
-
-    ///////// LOAD TEMPLATES //////////////////////////////////
-    ///////// LOAD TAGS, AND VALUES ////////////////////////////
-    
-    // function to load tag data
-    [self loadTags];
 
 }
 
@@ -455,24 +448,57 @@ reach.unreachableBlock = ^(Reachability*reach)
 -(void)loadTagTemplates{
     
     [_templateArray removeAllObjects];
-    [_templateArray addObject:@"[ All Tags ]"];
+    [_templateArray addObject:@"[ None ]"];
     [_templateArray addObject:@"Bowed String Tags"];
     [_templateArray addObject:@"Woodwind Tags"];
     [_templateArray addObject:@"Brass Tags"];
     [_templateArray addObject:@"Drum Tags"];
     [_templateArray addObject:@"Guitar Tags"];
-    [_templateArray addObject:@"[ None ]"];
     
-    _templateChoice = [_templateArray objectAtIndex:0];
+    //_tagTemplate = [_templateArray objectAtIndex:0];
 }
 
 ////////// TAGS //////////////////////
 
 
-
-
-
 -(void)loadTags{
+    
+    [_tagData removeAllObjects];
+    
+    PFQuery *query = [PFQuery queryWithClassName:@"TagData"];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            // The find succeeded.
+            NSLog(@"Successfully retrieved %lu user tags dicts.", objects.count);
+            
+            if(objects.count > 0){
+                //PFObject *topicData = [objects objectAtIndex:objects.count];
+                PFObject *tagData = [objects objectAtIndex:0];
+                _tagData = (NSMutableDictionary*)tagData[@"tagData"];
+                if([_tagData count] != 0){
+                    NSLog(@"TAG DATA: %@", _tagData.description);
+                    [self addTagsFromTemplate];
+                    _tagArray = (NSMutableArray*)[_tagData allKeys];
+                    _tagsID = tagData.objectId;
+                }else{
+                    [self loadDefaultTags];
+                    NSLog(@"Empty cloud object, loading default tags");
+                }
+            }else{
+                [self loadDefaultTags];
+                NSLog(@"No cloud data, loading default tags");
+            }
+            
+        } else {
+            // Log details of the failure
+            NSLog(@"Error: %@ %@", error, [error userInfo]);
+        }
+    }];
+}
+
+
+
+-(void)loadDefaultTags{
     
     [_tagData removeAllObjects];
     
@@ -482,22 +508,22 @@ reach.unreachableBlock = ^(Reachability*reach)
     //Key Center
     [valueArray removeAllObjects];
     [valueArray addObject:@"_standard"];
-    [valueArray addObject:@"A"];
-    [valueArray addObject:@"A#"];
-    [valueArray addObject:@"Bb"];
-    [valueArray addObject:@"C"];
-    [valueArray addObject:@"C#"];
-    [valueArray addObject:@"Db"];
-    [valueArray addObject:@"D"];
-    [valueArray addObject:@"D#"];
-    [valueArray addObject:@"Eb"];
-    [valueArray addObject:@"E"];
-    [valueArray addObject:@"F"];
-    [valueArray addObject:@"F#"];
-    [valueArray addObject:@"Gb"];
-    [valueArray addObject:@"G"];
-    [valueArray addObject:@"G#"];
-    [valueArray addObject:@"Ab"];
+    [valueArray addObject:@"A Natural"];
+    [valueArray addObject:@"A Sharp"];
+    [valueArray addObject:@"B Flat"];
+    [valueArray addObject:@"C Natural"];
+    [valueArray addObject:@"C Sharp"];
+    [valueArray addObject:@"D Flat"];
+    [valueArray addObject:@"D Natural"];
+    [valueArray addObject:@"D Sharp"];
+    [valueArray addObject:@"E Flat"];
+    [valueArray addObject:@"E Natural"];
+    [valueArray addObject:@"F Natural"];
+    [valueArray addObject:@"F Sharp"];
+    [valueArray addObject:@"G Flat"];
+    [valueArray addObject:@"G Natural"];
+    [valueArray addObject:@"G Sharp"];
+    [valueArray addObject:@"A Flat"];
     _tagData[@"Key Center"] = [valueArray mutableCopy];
     
     //Tempo
@@ -519,94 +545,143 @@ reach.unreachableBlock = ^(Reachability*reach)
     [valueArray addObject:@"Allegro"];
     _tagData[@"Tempo"] = [valueArray mutableCopy];
     
+    PFObject *tagData = [PFObject objectWithClassName:@"TagData"];
+    tagData[@"tagData"] = _tagData;
     
+    [tagData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (succeeded) {
+            NSLog (@"Saved Defualt tags to parse");
+            [self addTagsFromTemplate];
+            _tagArray = (NSMutableArray*)[_tagData allKeys]; //NEW
+        } else {
+            // There was a problem, check error.description
+            NSLog (@"Parse error saving defailt tags:%@", error.description);
+        }
+    }];
+}
+
+-(void)addTagsFromTemplate{
+    
+    //Create temp array to load dictionary
+    NSMutableArray *valueArray = [[NSMutableArray alloc] init];
     //Instrument specific tags
     
     //Bowed Strings
-    if ([_templateChoice isEqualToString:@"[ All Tags ]"] ||
-        [_templateChoice isEqualToString:@"Bowed String Tags"]){
+    if([_tagData objectForKey:@"Bowing Pattern"]== nil){
+        if ([_tagTemplate isEqualToString:@"[ All Tags ]"] ||
+            [_tagTemplate isEqualToString:@"Bowed String Tags"]){
         
-        //Bowing Pattern
-        [valueArray removeAllObjects];
-        [valueArray addObject:@"_template"];
-        [valueArray addObject:@"Straight Bowing"];
-        [valueArray addObject:@"Shuffle Bowing"];
-        [valueArray addObject:@"Swing Bowing"];
-        [valueArray addObject:@"Chain Bowing"];
-        [valueArray addObject:@"Long Bow"];
-        [valueArray addObject:@"Three Notes Per Bow"];
-        _tagData[@"Bowing Pattern"] = [valueArray mutableCopy];
+            //Bowing Pattern
+            [valueArray removeAllObjects];
+            [valueArray addObject:@"_template"];
+            [valueArray addObject:@"Straight Bowing"];
+            [valueArray addObject:@"Shuffle Bowing"];
+            [valueArray addObject:@"Swing Bowing"];
+            [valueArray addObject:@"Chain Bowing"];
+            [valueArray addObject:@"Long Bow"];
+            [valueArray addObject:@"Three Notes Per Bow"];
+            _tagData[@"Bowing Pattern"] = [valueArray mutableCopy];
+        }
     }
-    
     //Woodwinds
-    if ([_templateChoice isEqualToString:@"[ All Tags ]"] ||
-        [_templateChoice isEqualToString:@"Woodwind Tags"] ||
-        [_templateChoice isEqualToString:@"Brass Tags"]){
+    if([_tagData objectForKey:@"Tonguing Technique"] == nil){
+        if ([_tagTemplate isEqualToString:@"[ All Tags ]"] ||
+            [_tagTemplate isEqualToString:@"Woodwind Tags"] ||
+            [_tagTemplate isEqualToString:@"Brass Tags"]){
         
-        //Tonguing Technique
-        [valueArray removeAllObjects];
-        [valueArray addObject:@"_template"];
-        [valueArray addObject:@"Single Tongue"];
-        [valueArray addObject:@"Double Tongue"];
-        [valueArray addObject:@"Triple Tongue"];
-        _tagData[@"Tonguing Technique"] = [valueArray mutableCopy];
+            //Tonguing Technique
+            [valueArray removeAllObjects];
+            [valueArray addObject:@"_template"];
+            [valueArray addObject:@"Single Tongue"];
+            [valueArray addObject:@"Double Tongue"];
+            [valueArray addObject:@"Triple Tongue"];
+            _tagData[@"Tonguing Technique"] = [valueArray mutableCopy];
+        }
     }
-    
     //Brass
-    if ([_templateChoice isEqualToString:@"[ All Tags ]"] ||
-        [_templateChoice isEqualToString:@"Brass Tags"]){
+    if([_tagData objectForKey:@"Lip Slurs"] == nil){
+        if ([_tagTemplate isEqualToString:@"[ All Tags ]"] ||
+            [_tagTemplate isEqualToString:@"Brass Tags"]){
         
-        //Lip Slurs
-        [valueArray removeAllObjects];
-        [valueArray addObject:@"_template"];
-        [valueArray addObject:@"Two Note Slurs"];
-        [valueArray addObject:@"Three Note Slurs"];
-        [valueArray addObject:@"Four Note Slurs"];
-        _tagData[@"Lip Slurs"] = [valueArray mutableCopy];
+            //Lip Slurs
+            [valueArray removeAllObjects];
+            [valueArray addObject:@"_template"];
+            [valueArray addObject:@"Two Note Slurs"];
+            [valueArray addObject:@"Three Note Slurs"];
+            [valueArray addObject:@"Four Note Slurs"];
+            _tagData[@"Lip Slurs"] = [valueArray mutableCopy];
+        }
     }
-    
     //Drums
-    if ([_templateChoice isEqualToString:@"[ All Tags ]"] ||
-        [_templateChoice isEqualToString:@"Drum Tags"]){
+    if([_tagData objectForKey:@"Drum Stick Grip"] == nil){
+        if ([_tagTemplate isEqualToString:@"[ All Tags ]"] ||
+            [_tagTemplate isEqualToString:@"Drum Tags"]){
         
-        //Drum Stick Grip
-        [valueArray removeAllObjects];
-        [valueArray addObject:@"_template"];
-        [valueArray addObject:@"Traditional Grip"];
-        [valueArray addObject:@"Reverse Traditional Grip"];
-        [valueArray addObject:@"German Grip"];
-        [valueArray addObject:@"French Grip"];
-        [valueArray addObject:@"American Grip"];
-        _tagData[@"Drum Stick Grip"] = [valueArray mutableCopy];
+            //Drum Stick Grip
+            [valueArray removeAllObjects];
+            [valueArray addObject:@"_template"];
+            [valueArray addObject:@"Traditional Grip"];
+            [valueArray addObject:@"Reverse Traditional Grip"];
+            [valueArray addObject:@"German Grip"];
+            [valueArray addObject:@"French Grip"];
+            [valueArray addObject:@"American Grip"];
+            _tagData[@"Drum Stick Grip"] = [valueArray mutableCopy];
+        }
     }
-    
     //Guitar
-    if ([_templateChoice isEqualToString:@"[ All Tags ]"] ||
-        [_templateChoice isEqualToString:@"Guitar Tags"]){
+    if([_tagData objectForKey:@"Drum Stick Grip"] == nil){
+        if ([_tagTemplate isEqualToString:@"[ All Tags ]"] ||
+            [_tagTemplate isEqualToString:@"Guitar Tags"]){
         
-        //Picking Technique
-        [valueArray removeAllObjects];
-        [valueArray addObject:@"_template"];
-        [valueArray addObject:@"Down Picking"];
-        [valueArray addObject:@"Alternate Picking"];
-        [valueArray addObject:@"Sweep Picking"];
-        [valueArray addObject:@"Finger Picking"];
+            //Picking Technique
+            [valueArray removeAllObjects];
+            [valueArray addObject:@"_template"];
+            [valueArray addObject:@"Down Picking"];
+            [valueArray addObject:@"Alternate Picking"];
+            [valueArray addObject:@"Sweep Picking"];
+            [valueArray addObject:@"Finger Picking"];
         _tagData[@"Picking Technique"] = [valueArray mutableCopy];
+        }
     }
-    
     //NSLog(@"%@", _tagData);
 }
 
--(void)filterTags{
-    NSMutableArray *tags = (NSMutableArray*)[_tagData allKeys];
+-(void)saveTags{
+    NSLog (@"in save tags function");
+    
+    //Save to cloud
+    PFQuery *query = [PFQuery queryWithClassName:@"TagData"];
+        
+    // Retrieve the object by id
+    [query getObjectInBackgroundWithId:_tagsID
+                                    block:^(PFObject *tagData, NSError *error) {
+                                        tagData[@"tagData"] = [self filterTags];
+                                        [tagData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                                            if (succeeded) {
+                                                NSLog (@"Saved revised tags to parse");
+                                                 
+                                            } else {
+                                                // There was a problem, check error.description
+                                                NSLog (@"Parse error saving revises tagss:%@", error.description);
+                                             }
+                                         }];
+                                     }];
+
+    //_tagArray = (NSMutableArray*)[_tagData allKeys];
+}
+
+
+-(NSMutableDictionary*)filterTags{
+    _tagArray = (NSMutableArray*)[_tagData allKeys];
     NSMutableDictionary *userTagData = [[NSMutableDictionary alloc]init];
     
-    for(NSString *tag in tags){
+    for(NSString *tag in _tagArray){
         NSArray *vals = [_tagData objectForKey:tag];
-        if([[vals objectAtIndex:0] isEqualToString:@"_user"]){
+        if([[vals objectAtIndex:0] isEqualToString:@"_user"] || [[vals objectAtIndex:0] isEqualToString:@"_standard"]){
             userTagData[tag] = vals;
         }
     }
+    return userTagData;
 }
 
 @end
