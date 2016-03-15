@@ -41,15 +41,27 @@
     tagArray = [[NSMutableArray alloc] init];
     valueArray = [[NSMutableArray alloc] init];
     
+    //Local copy of sessionss data
+    sessions = [[NSMutableArray alloc] init];
+    lookupTable = [[NSMutableDictionary alloc] init];
+    [self copySessionData];
+    
     //Setup Interface Items
     [self setUpSortSheet];
 }
 
+-(void)copySessionData{
+    sessions = dataStore.sessions;
+    
+    [lookupTable removeAllObjects];
+    for(int i = 0; i < [dataStore.sessions count]; i++){
+        NSString *index = [NSString stringWithFormat:@"%d",i];
+        lookupTable[[dataStore.sessions objectAtIndex:i]] = index;
+    }
+}
 
 - (void)viewWillAppear:(BOOL)animated {
-    
-    NSLog(@"History will appear..");
-    
+    //NSLog(@"History will appear..");
     [historyTableView reloadData];
 }
 

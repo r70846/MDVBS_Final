@@ -37,6 +37,9 @@
     
     
     NSMutableArray *sessions;
+    NSMutableDictionary *lookupTable;
+    
+    
     NSMutableArray *filterArray;
     NSMutableArray *sortArray;
     UIActionSheet *filterActionSheet;
