@@ -62,6 +62,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     //NSLog(@"History will appear..");
+    [self copySessionData];
     [historyTableView reloadData];
 }
 
@@ -74,6 +75,7 @@
             if (!error) {
                 // The find succeeded.
                 dataStore.sessions = (NSMutableArray*)sessionData[@"sessionData"];
+                [self copySessionData];
                 [historyTableView reloadData];
                 NSLog(@"retrieved in practive view by ID");
             } else {
@@ -95,6 +97,7 @@
                     PFObject *sessionData = [objects objectAtIndex:0];
                     dataStore.sessions = (NSMutableArray*)sessionData[@"sessionData"];
                     dataStore.sessionsID = sessionData.objectId;
+                    [self copySessionData];
                     [historyTableView reloadData];
                     NSLog(@"retrieved sessions in practive view without ID");
                 } else {
@@ -112,7 +115,7 @@
     NSUInteger iCnt;
     if (tableView==historyTableView)
     {
-        iCnt = [dataStore.sessions count];
+        iCnt = [sessions count];
     }
     else if (tableView==detailTableView)
     {
@@ -139,7 +142,7 @@
         if(cell != nil)
         {
             //Get data
-            NSMutableDictionary *session = [dataStore.sessions objectAtIndex:indexPath.row];
+            NSMutableDictionary *session = [sessions objectAtIndex:indexPath.row];
             NSString *dateTime = [NSString stringWithFormat:@"%@ %@",[session objectForKey:@"date"], [session objectForKey:@"time"]];
             
             //Load cell
@@ -184,7 +187,7 @@
     if (tableView==historyTableView)
     {
         //Get data
-        detailSession = [dataStore.sessions objectAtIndex:indexPath.row];
+        detailSession = [sessions objectAtIndex:indexPath.row];
         NSString *dateTime = [NSString stringWithFormat:@"%@ %@",[detailSession objectForKey:@"date"], [detailSession objectForKey:@"time"]];
         
         topicDisplayLabel.text = [detailSession objectForKey:@"topic"];
@@ -291,14 +294,22 @@
     NSUInteger index = indexPath.row;
     
     if (tableView==historyTableView && editingStyle == UITableViewCellEditingStyleDelete){
-        [dataStore.sessions removeObjectAtIndex:index];
+        //NSLog(@"Visible Index: %lu", (unsigned long)index);
+        //NSLog(@"Actual Index: %@", [lookupTable objectForKey:[sessions objectAtIndex:index]]);
+        int actualIndex = [[lookupTable objectForKey:[sessions objectAtIndex:index]] intValue];
+        [dataStore.sessions removeObjectAtIndex:actualIndex];
+        [dataStore saveSessions];
+        [self copySessionData];
         [historyTableView reloadData];
     }
 }
 -(IBAction)onDel:(DelButton *)button{
     NSUInteger index = button.tag;
     if([button.type isEqualToString:@"HistoryCell"]){
-        [dataStore.sessions removeObjectAtIndex:index];
+        int actualIndex = [[lookupTable objectForKey:[sessions objectAtIndex:index]] intValue];
+        [dataStore.sessions removeObjectAtIndex:actualIndex];
+        [dataStore saveSessions];
+        [self copySessionData];
         [historyTableView reloadData];
     }
 }
@@ -323,9 +334,9 @@
         if(buttonIndex < [sortArray count]){
             
             if([[sortArray objectAtIndex:buttonIndex] isEqualToString:@"Sort by Date"]){
-                dataStore.sessions = (NSMutableArray*)[dataStore.sessions sortedArrayUsingFunction:dateSort context:nil];
+                sessions = (NSMutableArray*)[sessions sortedArrayUsingFunction:dateSort context:nil];
             }else if([[sortArray objectAtIndex:buttonIndex] isEqualToString:@"Sort by Topic"]){
-                dataStore.sessions = [self sortSessionsByTopic:dataStore.sessions];
+                sessions = [self sortSessionsByTopic:sessions];
             }
             
             //NSLog(@"index : %lu", buttonIndex);
