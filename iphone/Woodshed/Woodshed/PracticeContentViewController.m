@@ -198,6 +198,7 @@
             if (!error) {
                 // The find succeeded.
                 dataStore.sessions = (NSMutableArray*)sessionData[@"sessionData"];
+                [dataStore loadTopicFilter];
                 NSLog(@"retrieved in practive view by ID");
             } else {
                 // Log details of the failure
@@ -686,6 +687,8 @@
     //Store current session in sessions, & clear for next round..
     [dataStore.sessions addObject:[dataStore.currentSession mutableCopy]];
     [dataStore saveSessions];
+    [dataStore loadTopicFilter];
+    
     
     //Build string before reseting session
     if(dataStore.tweet){

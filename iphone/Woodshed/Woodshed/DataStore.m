@@ -35,6 +35,9 @@ static DataStore *_sharedInstance;
         
         //Create Dictionary Object to hold tag data
         _topicData = [[NSMutableDictionary alloc]init];
+        
+        //Create Dictionary Object to hold tag data
+        _topicFilter = [[NSMutableDictionary alloc]init];
 
         //Create Dictionary Object to hold tag data
         _tagData = [[NSMutableDictionary alloc]init];
@@ -167,7 +170,7 @@ reach.unreachableBlock = ^(Reachability*reach)
     [self loadTags];
 
     [self loadSessions];
-
+    
 }
 
 ///////// TRACK STATE ////////////////////////////
@@ -211,7 +214,25 @@ reach.unreachableBlock = ^(Reachability*reach)
         }
     }];
 }
-    
+
+-(void)loadTopicFilter{
+    [_topicFilter removeAllObjects];
+    NSString *sTopic;
+    NSString *sCount;
+    for(NSMutableDictionary *session in _sessions){
+        sTopic = session[@"topic"];
+        sCount = _topicFilter[sTopic];
+        if(sCount == nil){
+            _topicFilter[sTopic] = @"0";
+        }else{
+            int count = [sCount intValue];
+            count++;
+            _topicFilter[sTopic] = [NSString stringWithFormat:@"%i",count];
+        }
+        
+
+    }
+}
 -(void)loadDefaultTopics{
     
     BOOL localData = false;
@@ -418,9 +439,11 @@ reach.unreachableBlock = ^(Reachability*reach)
             if(objects.count > 0){
                 PFObject *sessionData = [objects objectAtIndex:0];
                 _sessions = (NSMutableArray*)sessionData[@"sessionData"];
+                [self loadTopicFilter];
                 _sessionsID = sessionData.objectId;
             }else{
                 [self loadEmptySessions];
+                [self loadTopicFilter];
                 NSLog(@"No cloud data, loading empty sessions");
             }
         } else {

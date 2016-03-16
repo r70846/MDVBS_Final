@@ -42,6 +42,9 @@
 //Topics, Tags, values, data storage...
 @property (nonatomic, strong)NSMutableArray *topicArray;
 @property (nonatomic, strong)NSMutableDictionary *topicData;
+@property (nonatomic, strong)NSMutableDictionary *topicFilter;
+
+
 
 @property (nonatomic, strong)NSMutableArray *tagArray;
 @property (nonatomic, strong)NSMutableDictionary *tagData;
@@ -85,5 +88,5 @@
 -(void)loadSessions;
 -(void)loadEmptySessions;
 -(void)clearSessions;
-
+-(void)loadTopicFilter;
 @end

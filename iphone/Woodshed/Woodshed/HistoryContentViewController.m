@@ -48,15 +48,29 @@
     
     //Setup Interface Items
     [self setUpSortSheet];
+    [self setUpFilterSheet];
 }
 
 -(void)copySessionData{
     sessions = dataStore.sessions;
-    
+    [dataStore.topicFilter removeAllObjects];
     [lookupTable removeAllObjects];
+    
     for(int i = 0; i < [dataStore.sessions count]; i++){
+        NSString *sTopic;
+        NSString *sCount;
         NSString *index = [NSString stringWithFormat:@"%d",i];
-        lookupTable[[dataStore.sessions objectAtIndex:i]] = index;
+        NSMutableDictionary *session = [dataStore.sessions objectAtIndex:i];
+        lookupTable[session] = index;
+        sTopic = session[@"topic"];
+        sCount = dataStore.topicFilter[sTopic];
+            if(sCount == nil){
+                dataStore.topicFilter[sTopic] = @"0";
+            }else{
+                int count = [sCount intValue];
+                count++;
+                dataStore.topicFilter[sTopic] = [NSString stringWithFormat:@"%i",count];
+            }
     }
 }
 
@@ -247,34 +261,6 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void)setUpSortSheet
-{
-    
-    //Create Array to hold all possible topics
-    sortArray = [[NSMutableArray alloc] init];
-    [sortArray addObject:@"Sort by Topic"];
-    [sortArray addObject:@"Sort by Date"];
-    
-    //Build "actionsheet" as a drop down menu
-    sortActionSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                  delegate:self
-                                         cancelButtonTitle:nil
-                                    destructiveButtonTitle:nil
-                                         otherButtonTitles:nil];
-    //Tag it so I can add more later...
-    sortActionSheet.tag = 100;
-    
-    //Add button for each topic in array
-    for (NSString *sort in sortArray) {
-        [sortActionSheet addButtonWithTitle:sort];
-    }
-    
-    //Add cancel button on the end
-    sortActionSheet.cancelButtonIndex = [sortActionSheet addButtonWithTitle:@"Cancel"];
-    
-    //To handle keyboard
-    //[topicDisplay setDelegate:self];
-}
 
 
 -(IBAction)editMode:(UIButton *)button{
@@ -323,9 +309,70 @@
         HistoryViewController *historyViewController = (HistoryViewController*) self.parentViewController;
         historyViewController.iDisplayMode = 0;
         [historyViewController setScrollView];
-    }else{
+    }else if(tag == 1){
         [sortActionSheet showInView:self.view];
+    }else if(tag == 2){
+        [filterActionSheet showInView:self.view];
     }
+}
+
+#pragma mark - Sort & Filter Functions
+
+
+-(void)setUpFilterSheet
+{
+    
+    NSArray *topics = [dataStore.topicFilter allKeys];
+    
+    //Build "actionsheet" as a drop down menu
+    filterActionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                  delegate:self
+                                         cancelButtonTitle:nil
+                                    destructiveButtonTitle:nil
+                                         otherButtonTitles:nil];
+    //Tag it so I can add more later...
+    filterActionSheet.tag = 200;
+    
+    //Add button for each topic in array
+    for (NSString *topic in topics) {
+        [filterActionSheet addButtonWithTitle:topic];
+    }
+    
+    //Add cancel button on the end
+    filterActionSheet.cancelButtonIndex = [filterActionSheet addButtonWithTitle:@"Cancel"];
+    
+    //To handle keyboard
+    //[topicDisplay setDelegate:self];
+}
+
+
+-(void)setUpSortSheet
+{
+    
+    //Create Array to hold all possible topics
+    sortArray = [[NSMutableArray alloc] init];
+    [sortArray addObject:@"Sort by Topic"];
+    [sortArray addObject:@"Sort by Date"];
+    
+    //Build "actionsheet" as a drop down menu
+    sortActionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                  delegate:self
+                                         cancelButtonTitle:nil
+                                    destructiveButtonTitle:nil
+                                         otherButtonTitles:nil];
+    //Tag it so I can add more later...
+    sortActionSheet.tag = 100;
+    
+    //Add button for each topic in array
+    for (NSString *sort in sortArray) {
+        [sortActionSheet addButtonWithTitle:sort];
+    }
+    
+    //Add cancel button on the end
+    sortActionSheet.cancelButtonIndex = [sortActionSheet addButtonWithTitle:@"Cancel"];
+    
+    //To handle keyboard
+    //[topicDisplay setDelegate:self];
 }
 
 
@@ -338,12 +385,30 @@
             }else if([[sortArray objectAtIndex:buttonIndex] isEqualToString:@"Sort by Topic"]){
                 sessions = [self sortSessionsByTopic:sessions];
             }
+        }else{
+            //Cancel button
+            [self copySessionData];
+        }
+        [historyTableView reloadData];
+    }else if (actionSheet.tag == 200) {
+        NSArray *topics = [dataStore.topicFilter allKeys];
+        NSString *topic = [topics objectAtIndex:buttonIndex];
+        NSMutableArray *filteredSessions = [[NSMutableArray alloc] init];
+        if(buttonIndex == filterActionSheet.cancelButtonIndex){
             
-            //NSLog(@"index : %lu", buttonIndex);
-            
+        }else{
+            sessions = dataStore.sessions;
+            for(int i = 0; i < [sessions count]; i++){
+                if([[sessions objectAtIndex:i][@"topic"] isEqualToString:topic]){
+                     [filteredSessions addObject:[sessions objectAtIndex:i]];
+                }
+            }
+            sessions = filteredSessions;
             [historyTableView reloadData];
         }
+        
     }
+    
 }
 
 - (NSMutableArray*)sortSessionsByTopic:(NSMutableArray *)array {
