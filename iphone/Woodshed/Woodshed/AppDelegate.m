@@ -36,6 +36,10 @@
     // [Optional] Track statistics around application opens.
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
     
+    PFUser *user = [PFUser currentUser];
+    user.ACL = [PFACL ACLWithUser:user];
+    [PFACL setDefaultACL:[PFACL ACL] withAccessForCurrentUser:YES];
+    
     // Defaults Code //////////////////
     
     //Setup shared instance of data storage in RAM

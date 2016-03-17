@@ -86,6 +86,7 @@ static DataStore *_sharedInstance;
     
         _isOnline = false;
         [self startNetworkCheck];
+        
     }
     return self;
 }

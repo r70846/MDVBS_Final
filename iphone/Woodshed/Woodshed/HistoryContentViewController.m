@@ -387,23 +387,27 @@
             }
         }else{
             //Cancel button
-            [self copySessionData];
+            sessions = dataStore.sessions;
+            [historyTableView reloadData];
         }
         [historyTableView reloadData];
     }else if (actionSheet.tag == 200) {
         NSArray *topics = [dataStore.topicFilter allKeys];
-        NSString *topic = [topics objectAtIndex:buttonIndex];
         NSMutableArray *filteredSessions = [[NSMutableArray alloc] init];
-        if(buttonIndex == filterActionSheet.cancelButtonIndex){
-            
-        }else{
+        
+        if(buttonIndex < [topics count]){
+            NSString *topic = [topics objectAtIndex:buttonIndex];
             sessions = dataStore.sessions;
             for(int i = 0; i < [sessions count]; i++){
                 if([[sessions objectAtIndex:i][@"topic"] isEqualToString:topic]){
-                     [filteredSessions addObject:[sessions objectAtIndex:i]];
+                    [filteredSessions addObject:[sessions objectAtIndex:i]];
                 }
             }
             sessions = filteredSessions;
+            [historyTableView reloadData];
+        }else{
+            //Cancel button
+            sessions = dataStore.sessions;
             [historyTableView reloadData];
         }
         
