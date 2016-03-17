@@ -323,11 +323,14 @@
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="russg@fullsail.edu" borderStyle="roundedRect" placeholder="password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="No6-fl-SVV">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="russg@fullsail.edu" borderStyle="roundedRect" placeholder="default email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="No6-fl-SVV">
                                         <rect key="frame" x="20" y="50" width="285" height="30"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
+                                        <connections>
+                                            <action selector="onChange" destination="c7P-1f-qLN" eventType="valueChanged" id="XvD-zX-oAj"/>
+                                        </connections>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KJ2-Xr-xFU">
                                         <rect key="frame" x="20" y="95" width="285" height="35"/>
@@ -338,7 +341,16 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="showEmailView" destination="c7P-1f-qLN" eventType="touchUpInside" id="far-s3-MN4"/>
+                                        </connections>
                                     </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="." textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iG3-Xq-gYb">
+                                        <rect key="frame" x="120" y="16" width="180" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <color key="textColor" red="0.50196081399917603" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" white="0.86429195800000003" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
@@ -382,7 +394,7 @@
                                 <color key="backgroundColor" white="0.86429195800000003" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MGq-TW-JeX">
-                                <rect key="frame" x="26" y="513" width="325" height="100"/>
+                                <rect key="frame" x="26" y="513" width="325" height="128"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="ACCOUNT" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zDc-gQ-VyK">
                                         <rect key="frame" x="20" y="15" width="106" height="21"/>
@@ -410,6 +422,9 @@
                     </view>
                     <toolbarItems/>
                     <connections>
+                        <outlet property="exportButton" destination="KJ2-Xr-xFU" id="6bR-zU-yMB"/>
+                        <outlet property="exportEmail" destination="No6-fl-SVV" id="Wta-dr-KjD"/>
+                        <outlet property="messageLabel" destination="iG3-Xq-gYb" id="CtC-lc-VUL"/>
                         <outlet property="togTweetComplete" destination="376-CS-ELk" id="q5I-I9-3bY"/>
                     </connections>
                 </viewController>

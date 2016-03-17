@@ -15,7 +15,9 @@
 
 #import <UIKit/UIKit.h>
 #import "DataStore.h"
-@interface SettingsContentController : UIViewController <UIActionSheetDelegate, UITextViewDelegate, UITextFieldDelegate>
+#import <MessageUI/MessageUI.h>
+
+@interface SettingsContentController : UIViewController <UIActionSheetDelegate, UITextViewDelegate, UITextFieldDelegate, MFMailComposeViewControllerDelegate>
 {
     // Global Data Storage
     DataStore *dataStore;    //shared instance of my DataStore object
@@ -26,6 +28,22 @@
     IBOutlet UITextField *templateTextDisplay;
     
     UIActionSheet *templateSheet;
+    
+    //Default email for export
+    NSString *defaultEmail;
+
+    //Message Label
+    IBOutlet UILabel *messageLabel;
+    
+    //Email Field
+    IBOutlet UITextField *exportEmail;
+    
+    //Email Button
+    IBOutlet UIButton *exportButton;
+    
+    //Keep track of where I'm coming from - (Tab Bar |or| Email View)
+    Boolean bEmailView;
+    
 }
 
 

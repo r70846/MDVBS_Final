@@ -31,6 +31,35 @@
     //setup shared instance of data storage in RAM
     dataStore = [DataStore sharedInstance];
     
+    ///////////////////////////////
+    
+    //To indicate email view
+    bEmailView = false;
+    
+    //retract keyboard
+    [exportEmail setDelegate:self];
+    
+    /*
+    //Fill in defaul email for export
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if(defaults != nil)
+    {
+        //Get value
+        defaultEmail = [defaults objectForKey:@"email"];
+        if(defaultEmail != nil){
+            exportEmail.text = defaultEmail;
+        }
+        else
+        {
+            [defaults setObject:@"" forKey:@"email"];
+            //saves the data
+            [defaults synchronize];
+        }
+    }
+    */
+    
+    ///////////////////////////////
+    
     //Setup tag templatea
     [self setUpTemplateSheet];
     templateTextDisplay.text = dataStore.tagTemplate;
@@ -43,6 +72,27 @@
     }else{
         [togTweetComplete  setOn:NO animated:NO];
     }
+    
+    if(bEmailView){  //If we're coming from Email View
+        
+        //Hide branding graphic
+        //brandImage.hidden = true;
+        
+        //Track status - No longer in Email View
+        bEmailView = false;
+    }
+    else            //Coming from Tab Bar Controller
+    {
+        
+        //Rebuild comma delimited data file
+        //[self createCSVFile];
+        
+        //Show graphic and hide message
+        //brandImage.hidden = false;
+        messageLabel.text = @"";
+    }
+
+    
     [super viewWillAppear:animated];
 }
 
@@ -157,6 +207,107 @@
     }
     
 }
+
+////////////////////////////////////////////////////////
+
+-(IBAction)onChange
+{
+    NSLog(@"%@", exportEmail.text);
+    //Built in dictionary
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if(defaults != nil)
+    {
+        //Get changed email from text filed
+        defaultEmail = exportEmail.text;
+        
+        if(defaultEmail != NULL){
+            [defaults setObject:defaultEmail forKey:@"email"];
+            
+            //saves the data
+            [defaults synchronize];
+        }
+    }
+}
+
+
+
+-(IBAction)showEmailView{
+    
+    if([dataStore.sessions count] > 0)  // If we have data to export...
+    {
+        NSString *sSubject = @"Practice History";
+        NSString *sMessage = @"Practice History";
+        //NSArray *sRecipents = [NSArray arrayWithObject:defaultEmail];
+        NSArray *sRecipents = [NSArray arrayWithObject:@"russg@fullsail.edu"];
+        
+        MFMailComposeViewController *emailView = [[MFMailComposeViewController alloc] init];
+        emailView.mailComposeDelegate = self;
+        [emailView setSubject:sSubject];
+        [emailView setMessageBody:sMessage isHTML:NO];
+        [emailView setToRecipients:sRecipents];
+        
+        //Get reference to file as data object
+        NSData *dFile = [NSData dataWithContentsOfFile:dataStore.csvPath];
+        
+        //Attach csv records file to email
+        [emailView addAttachmentData:dFile mimeType:@"csv" fileName:@"datalog"];
+        
+        // Show email controller
+        [self presentViewController:emailView animated:YES completion:NULL];
+        
+        //To indicate email view
+        bEmailView = true;
+    }
+    else // No data to export...
+    {
+        //Hide graphic and show message
+        //brandImage.hidden = true;
+        messageLabel.text = @"No Records\n Available";
+    }
+    
+}
+
+- (void) mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+{
+    switch (result)
+    {
+        case MFMailComposeResultCancelled:
+            messageLabel.text = @"Export Email Cancelled";
+            break;
+        case MFMailComposeResultSaved:
+            messageLabel.text = @"Export Email Saved";
+            break;
+        case MFMailComposeResultSent:
+            messageLabel.text = @"Export Email Sent";
+            break;
+        case MFMailComposeResultFailed:
+            messageLabel.text = [error localizedDescription];
+            break;
+        default:
+            break;
+    }
+    
+    // Dismiss Email View
+    [self dismissViewControllerAnimated:YES completion:NULL];
+}
+
+-(void)createCSVFile
+{
+    
+    
+    //Write header to file - overwrites old or create if absent
+    NSString *sHeader = @"Topic,Date,Time,Duration,Repetitions,Tempo,Key,Bowing,Notes\n";
+    [sHeader writeToFile:dataStore.csvPath atomically:YES encoding:NSUTF8StringEncoding error:nil];
+    
+   
+        //Compile all valid date to a single string for display
+   // NSString *sDetails = [[NSString alloc] initWithFormat:@"%@\n", @"data"];
+    
+        //Add row to current data file
+        //[self appendToFile:sDetails];
+
+}
+
 
 
 ////////////////////////////////////////////////////////
