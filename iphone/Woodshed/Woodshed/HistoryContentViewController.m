@@ -34,6 +34,8 @@
     //Setup shared instance of data storage in RAM
     dataStore = [DataStore sharedInstance];
     
+    [self loadSessions];
+    
     //Show or hide edit mode
     historyEditButton.hidden = dataStore.directDelete;
     
@@ -99,11 +101,6 @@
         }];
         
     }else{
-        
-        NSLog(@"sessionsID: %@", dataStore.sessionsID);
-        
-        if(dataStore.sessionsID){
-        }else{
             [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                 if (!error) {
                     // The find succeeded.
@@ -119,7 +116,6 @@
                     NSLog(@"Error: %@ %@", error, [error userInfo]);
                 }
             }];
-        }
     }
 }
 
