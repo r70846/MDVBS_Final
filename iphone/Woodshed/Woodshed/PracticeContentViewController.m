@@ -80,6 +80,9 @@
     //Set up Metronome
     [self setUpMetronome];
     
+    //Set up drone
+    [self setUpDrone];
+    
     //Establishing Screen Size
     /*
      int iWidth = [[UIScreen mainScreen] bounds].size.width;
@@ -904,12 +907,12 @@
         AudioServicesPlaySystemSound(Click);
         
         //Change state
-        [nomeButton setTitle: @"Stop" forState: UIControlStateNormal];
-        [nomeButton setTitle: @"Stop" forState: UIControlStateApplication];
-        [nomeButton setTitle: @"Stop" forState: UIControlStateHighlighted];
-        [nomeButton setTitle: @"Stop" forState: UIControlStateReserved];
-        [nomeButton setTitle: @"Stop" forState: UIControlStateSelected];
-        [nomeButton setTitle: @"Stop" forState: UIControlStateDisabled];
+        [nomeButton setTitle: @"OFF" forState: UIControlStateNormal];
+        [nomeButton setTitle: @"OFF" forState: UIControlStateApplication];
+        [nomeButton setTitle: @"OFF" forState: UIControlStateHighlighted];
+        [nomeButton setTitle: @"OFF" forState: UIControlStateReserved];
+        [nomeButton setTitle: @"OFF" forState: UIControlStateSelected];
+        [nomeButton setTitle: @"OFF" forState: UIControlStateDisabled];
         bNome = TRUE;
     }
     else
@@ -918,12 +921,12 @@
         [nomeTimer invalidate];
         
         //Change state
-        [nomeButton setTitle: @"Start" forState: UIControlStateNormal];
-        [nomeButton setTitle: @"Start" forState: UIControlStateApplication];
-        [nomeButton setTitle: @"Start" forState: UIControlStateHighlighted];
-        [nomeButton setTitle: @"Start" forState: UIControlStateReserved];
-        [nomeButton setTitle: @"Start" forState: UIControlStateSelected];
-        [nomeButton setTitle: @"Start" forState: UIControlStateDisabled];
+        [nomeButton setTitle: @"ON" forState: UIControlStateNormal];
+        [nomeButton setTitle: @"ON" forState: UIControlStateApplication];
+        [nomeButton setTitle: @"ON" forState: UIControlStateHighlighted];
+        [nomeButton setTitle: @"ON" forState: UIControlStateReserved];
+        [nomeButton setTitle: @"ON" forState: UIControlStateSelected];
+        [nomeButton setTitle: @"ON" forState: UIControlStateDisabled];
         bNome = FALSE;
     }
 }
@@ -1031,6 +1034,128 @@
         }
     }
 }
+
+
+
+// Drone tool
+-(void)setUpDrone
+{
+    //Build array of 12 keys
+    keyArray = [[NSMutableArray alloc] init];
+    [keyArray addObject:@"A"];
+    [keyArray addObject:@"A#"];
+    [keyArray addObject:@"B"];
+    [keyArray addObject:@"C"];
+    [keyArray addObject:@"C#"];
+    [keyArray addObject:@"D"];
+    [keyArray addObject:@"D#"];
+    [keyArray addObject:@"E"];
+    [keyArray addObject:@"F"];
+    [keyArray addObject:@"F#"];
+    [keyArray addObject:@"G"];
+    [keyArray addObject:@"G#"];
+    
+    //Display the tonic from the stepper
+    droneDisplay.text = [NSString stringWithFormat:@"%@",[keyArray objectAtIndex:(int)droneStepper.value]];
+    
+    //Initialize drone state variable
+    bDrone = FALSE;
+}
+    
+//Start or Stop Drone Tone
+-(IBAction)drone
+{
+    
+    if(!bDrone)
+    {
+        NSError *error;
+        
+        //Get the tonic note from my array
+        NSString *sTonic = [[NSString alloc] initWithFormat:@"%@", [keyArray objectAtIndex:(int)droneStepper.value]];
+        
+        //Create string to represent resource path.
+        NSString *dronePath = [[NSBundle mainBundle] pathForResource:sTonic ofType:@"wav"];
+        
+        //Create File URL based on string representation of path
+        NSURL *DroneURL = [NSURL fileURLWithPath:dronePath];
+        
+        //Point AVPlayers to File URL for wav file
+        drone1 = [[AVAudioPlayer alloc] initWithContentsOfURL:DroneURL error:&error];
+        drone2 = [[AVAudioPlayer alloc] initWithContentsOfURL:DroneURL error:&error];
+        
+        //Trigger Loop 1 of drone
+        [drone1 setNumberOfLoops: -1];
+        [drone1 prepareToPlay];
+        
+        //Trigger Loop 2 of drone
+        [drone2 setNumberOfLoops: -1];
+        [drone2 prepareToPlay];
+        
+        //Offset timing of two drone copies
+        drone1.currentTime = 0;
+        drone2.currentTime = 5;
+        
+        //Play drones
+        [drone1 play];
+        [drone2 play];
+        
+        //Change State
+        [droneButton setTitle: @"OFF" forState: UIControlStateNormal];
+        [droneButton setTitle: @"OFF" forState: UIControlStateApplication];
+        [droneButton setTitle: @"OFF" forState: UIControlStateHighlighted];
+        [droneButton setTitle: @"OFF" forState: UIControlStateReserved];
+        [droneButton setTitle: @"OFF" forState: UIControlStateSelected];
+        [droneButton setTitle: @"OFF" forState: UIControlStateDisabled];
+        
+        bDrone = TRUE;
+    }
+    else
+    {
+        //Stop Drone Audio
+        [drone1 stop];
+        [drone2 stop];
+        
+        //Reset drone audio playback
+        drone1.currentTime = 0;
+        drone2.currentTime = 5;
+        
+        //Change State
+        [droneButton setTitle: @"ON" forState: UIControlStateNormal];
+        [droneButton setTitle: @"ON" forState: UIControlStateApplication];
+        [droneButton setTitle: @"ON" forState: UIControlStateHighlighted];
+        [droneButton setTitle: @"ON" forState: UIControlStateReserved];
+        [droneButton setTitle: @"ON" forState: UIControlStateSelected];
+        [droneButton setTitle: @"ON" forState: UIControlStateDisabled];
+        bDrone = FALSE;
+    }
+}
+
+
+//Support function for Drone Tone
+-(IBAction)droneStepperChange:(UIStepper *)sender;
+{
+    if(bDrone)
+    {
+        //Stop Drone Audio
+        [drone1 stop];
+        [drone2 stop];
+        
+        //Reset drone audio playback
+        drone1.currentTime = 0;
+        drone2.currentTime = 5;
+        
+        //Change State
+        bDrone = FALSE;
+        
+        //Restart
+        [self drone];
+        
+    }
+    //Display the tonic note user has chosen
+    droneDisplay.text = [NSString stringWithFormat:@"%@",[keyArray objectAtIndex:(int)droneStepper.value]];
+}
+
+
 
 
 @end

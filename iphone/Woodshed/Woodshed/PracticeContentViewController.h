@@ -81,6 +81,20 @@
     // Rep Counter
     IBOutlet UILabel *counterDisplay;
     int iTotalCount;
+    
+    //TONE GENERATOR
+    //two audio players and a timer will create identical overlaping loops
+    //two looping copies of the same wav file started at a time offest produce the drone
+    
+    IBOutlet UIStepper *droneStepper;
+    IBOutlet UIButton *droneButton;
+    IBOutlet UILabel *droneDisplay;
+    
+    AVAudioPlayer *drone1;
+    AVAudioPlayer *drone2;
+    NSMutableArray *keyArray;
+    Boolean bDrone;
+    
 }
 
 
@@ -114,5 +128,8 @@
 -(void)setUpMetronome;
 -(void)runMetronome;
 -(void)Beat;  //Runs on each click
+
+// Drone Functions
+-(IBAction)drone;
 
 @end
