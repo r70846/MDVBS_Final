@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		601AEBA31C94FEA000804211 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 601AEBA21C94FEA000804211 /* Social.framework */; };
 		6059BEEE1C87DD87000B0819 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6059BEED1C87DD87000B0819 /* UIKit.framework */; };
-		6059BEF01C8BE15B000B0819 /* click.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6059BEEF1C8BE15B000B0819 /* click.wav */; };
 		6059BEF21C8BE1DB000B0819 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6059BEF11C8BE1DB000B0819 /* AVFoundation.framework */; };
 		6059BEF41C8BE1E2000B0819 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6059BEF31C8BE1E2000B0819 /* AudioToolbox.framework */; };
 		6059BEFA1C8CCB56000B0819 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6059BEF81C8CCB56000B0819 /* Bolts.framework */; };
@@ -31,6 +30,19 @@
 		6059BF1E1C9381C3000B0819 /* DelButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 6059BF1D1C9381C3000B0819 /* DelButton.m */; };
 		6059BF211C93B0D2000B0819 /* SimpleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6059BF201C93B0D2000B0819 /* SimpleCell.m */; };
 		6059BF241C93B316000B0819 /* HistoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6059BF231C93B316000B0819 /* HistoryCell.m */; };
+		605E7A4D1C9DE8210029FEEC /* A#.wav in Resources */ = {isa = PBXBuildFile; fileRef = 605E7A401C9DE8210029FEEC /* A#.wav */; };
+		605E7A4E1C9DE8210029FEEC /* A.wav in Resources */ = {isa = PBXBuildFile; fileRef = 605E7A411C9DE8210029FEEC /* A.wav */; };
+		605E7A4F1C9DE8210029FEEC /* B.wav in Resources */ = {isa = PBXBuildFile; fileRef = 605E7A421C9DE8210029FEEC /* B.wav */; };
+		605E7A501C9DE8210029FEEC /* C#.wav in Resources */ = {isa = PBXBuildFile; fileRef = 605E7A431C9DE8210029FEEC /* C#.wav */; };
+		605E7A511C9DE8210029FEEC /* C.wav in Resources */ = {isa = PBXBuildFile; fileRef = 605E7A441C9DE8210029FEEC /* C.wav */; };
+		605E7A521C9DE8210029FEEC /* click.wav in Resources */ = {isa = PBXBuildFile; fileRef = 605E7A451C9DE8210029FEEC /* click.wav */; };
+		605E7A531C9DE8210029FEEC /* D#.wav in Resources */ = {isa = PBXBuildFile; fileRef = 605E7A461C9DE8210029FEEC /* D#.wav */; };
+		605E7A541C9DE8210029FEEC /* D.wav in Resources */ = {isa = PBXBuildFile; fileRef = 605E7A471C9DE8210029FEEC /* D.wav */; };
+		605E7A551C9DE8210029FEEC /* E.wav in Resources */ = {isa = PBXBuildFile; fileRef = 605E7A481C9DE8210029FEEC /* E.wav */; };
+		605E7A561C9DE8210029FEEC /* F#.wav in Resources */ = {isa = PBXBuildFile; fileRef = 605E7A491C9DE8210029FEEC /* F#.wav */; };
+		605E7A571C9DE8210029FEEC /* F.wav in Resources */ = {isa = PBXBuildFile; fileRef = 605E7A4A1C9DE8210029FEEC /* F.wav */; };
+		605E7A581C9DE8210029FEEC /* G#.wav in Resources */ = {isa = PBXBuildFile; fileRef = 605E7A4B1C9DE8210029FEEC /* G#.wav */; };
+		605E7A591C9DE8210029FEEC /* G.wav in Resources */ = {isa = PBXBuildFile; fileRef = 605E7A4C1C9DE8210029FEEC /* G.wav */; };
 		605EBC951C7FF4F200892640 /* NewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 605EBC941C7FF4F200892640 /* NewViewController.m */; };
 		608C02041C79077200159E53 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 608C02031C79077200159E53 /* main.m */; };
 		608C02071C79077200159E53 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 608C02061C79077200159E53 /* AppDelegate.m */; };
@@ -76,7 +88,6 @@
 /* Begin PBXFileReference section */
 		601AEBA21C94FEA000804211 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		6059BEED1C87DD87000B0819 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		6059BEEF1C8BE15B000B0819 /* click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = click.wav; path = "../../../../IPY/Final Sounds/click.wav"; sourceTree = "<group>"; };
 		6059BEF11C8BE1DB000B0819 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		6059BEF31C8BE1E2000B0819 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		6059BEF81C8CCB56000B0819 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
@@ -101,6 +112,19 @@
 		6059BF201C93B0D2000B0819 /* SimpleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleCell.m; sourceTree = "<group>"; };
 		6059BF221C93B316000B0819 /* HistoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryCell.h; sourceTree = "<group>"; };
 		6059BF231C93B316000B0819 /* HistoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryCell.m; sourceTree = "<group>"; };
+		605E7A401C9DE8210029FEEC /* A#.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "A#.wav"; sourceTree = "<group>"; };
+		605E7A411C9DE8210029FEEC /* A.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = A.wav; sourceTree = "<group>"; };
+		605E7A421C9DE8210029FEEC /* B.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = B.wav; sourceTree = "<group>"; };
+		605E7A431C9DE8210029FEEC /* C#.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "C#.wav"; sourceTree = "<group>"; };
+		605E7A441C9DE8210029FEEC /* C.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = C.wav; sourceTree = "<group>"; };
+		605E7A451C9DE8210029FEEC /* click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = click.wav; sourceTree = "<group>"; };
+		605E7A461C9DE8210029FEEC /* D#.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "D#.wav"; sourceTree = "<group>"; };
+		605E7A471C9DE8210029FEEC /* D.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = D.wav; sourceTree = "<group>"; };
+		605E7A481C9DE8210029FEEC /* E.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = E.wav; sourceTree = "<group>"; };
+		605E7A491C9DE8210029FEEC /* F#.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "F#.wav"; sourceTree = "<group>"; };
+		605E7A4A1C9DE8210029FEEC /* F.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = F.wav; sourceTree = "<group>"; };
+		605E7A4B1C9DE8210029FEEC /* G#.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "G#.wav"; sourceTree = "<group>"; };
+		605E7A4C1C9DE8210029FEEC /* G.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = G.wav; sourceTree = "<group>"; };
 		605EBC931C7FF4F200892640 /* NewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewViewController.h; sourceTree = "<group>"; };
 		605EBC941C7FF4F200892640 /* NewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewViewController.m; sourceTree = "<group>"; };
 		608C01FE1C79077200159E53 /* Woodshed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Woodshed.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -189,6 +213,26 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		605E7A3F1C9DE8210029FEEC /* sounds */ = {
+			isa = PBXGroup;
+			children = (
+				605E7A401C9DE8210029FEEC /* A#.wav */,
+				605E7A411C9DE8210029FEEC /* A.wav */,
+				605E7A421C9DE8210029FEEC /* B.wav */,
+				605E7A431C9DE8210029FEEC /* C#.wav */,
+				605E7A441C9DE8210029FEEC /* C.wav */,
+				605E7A451C9DE8210029FEEC /* click.wav */,
+				605E7A461C9DE8210029FEEC /* D#.wav */,
+				605E7A471C9DE8210029FEEC /* D.wav */,
+				605E7A481C9DE8210029FEEC /* E.wav */,
+				605E7A491C9DE8210029FEEC /* F#.wav */,
+				605E7A4A1C9DE8210029FEEC /* F.wav */,
+				605E7A4B1C9DE8210029FEEC /* G#.wav */,
+				605E7A4C1C9DE8210029FEEC /* G.wav */,
+			);
+			path = sounds;
+			sourceTree = "<group>";
+		};
 		608C01F51C79077200159E53 = {
 			isa = PBXGroup;
 			children = (
@@ -211,6 +255,7 @@
 		608C02001C79077200159E53 /* Woodshed */ = {
 			isa = PBXGroup;
 			children = (
+				605E7A3F1C9DE8210029FEEC /* sounds */,
 				6059BF171C8CCF69000B0819 /* Reachability.m */,
 				6059BF161C8CCF34000B0819 /* Reachability.h */,
 				608C02051C79077200159E53 /* AppDelegate.h */,
@@ -252,7 +297,6 @@
 		608C02011C79077200159E53 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				6059BEEF1C8BE15B000B0819 /* click.wav */,
 				608C02021C79077200159E53 /* Info.plist */,
 				608C02031C79077200159E53 /* main.m */,
 			);
@@ -357,10 +401,22 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				605E7A561C9DE8210029FEEC /* F#.wav in Resources */,
+				605E7A571C9DE8210029FEEC /* F.wav in Resources */,
+				605E7A541C9DE8210029FEEC /* D.wav in Resources */,
+				605E7A521C9DE8210029FEEC /* click.wav in Resources */,
 				608C023C1C7911A800159E53 /* Images.xcassets in Resources */,
+				605E7A581C9DE8210029FEEC /* G#.wav in Resources */,
 				608C020D1C79077200159E53 /* Main.storyboard in Resources */,
+				605E7A4D1C9DE8210029FEEC /* A#.wav in Resources */,
+				605E7A591C9DE8210029FEEC /* G.wav in Resources */,
+				605E7A4F1C9DE8210029FEEC /* B.wav in Resources */,
+				605E7A551C9DE8210029FEEC /* E.wav in Resources */,
+				605E7A531C9DE8210029FEEC /* D#.wav in Resources */,
+				605E7A511C9DE8210029FEEC /* C.wav in Resources */,
+				605E7A4E1C9DE8210029FEEC /* A.wav in Resources */,
 				608C02121C79077200159E53 /* LaunchScreen.xib in Resources */,
-				6059BEF01C8BE15B000B0819 /* click.wav in Resources */,
+				605E7A501C9DE8210029FEEC /* C#.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
