@@ -934,7 +934,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" tag="9" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f6K-Qq-4ca">
-                                        <rect key="frame" x="120" y="161" width="40" height="34"/>
+                                        <rect key="frame" x="20" y="162" width="40" height="34"/>
                                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                         <color key="tintColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -963,7 +963,7 @@
                                         <rect key="frame" x="35" y="46" width="40" height="40"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <color key="tintColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <state key="normal" image="Notes-icon 48">
+                                        <state key="normal" image="icon-notes-48">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </state>
@@ -972,7 +972,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" tag="8" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HRJ-Xe-ayw">
-                                        <rect key="frame" x="21" y="161" width="90" height="34"/>
+                                        <rect key="frame" x="70" y="162" width="90" height="34"/>
                                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                         <color key="tintColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -1017,13 +1017,6 @@
                                             <action selector="practiceAction:" destination="mIc-aL-v4T" eventType="touchUpInside" id="I9F-is-wjr"/>
                                         </connections>
                                     </button>
-                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" minimumValue="-1" maximumValue="10" translatesAutoresizingMaskIntoConstraints="NO" id="Xpa-wV-qdH">
-                                        <rect key="frame" x="215" y="224" width="94" height="29"/>
-                                        <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                        <connections>
-                                            <action selector="stepperChange:" destination="mIc-aL-v4T" eventType="valueChanged" id="V3P-Y4-YcG"/>
-                                        </connections>
-                                    </stepper>
                                     <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="40" minimumValue="40" maximumValue="330" stepValue="10" translatesAutoresizingMaskIntoConstraints="NO" id="FCo-qt-clR">
                                         <rect key="frame" x="215" y="258" width="94" height="29"/>
                                         <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -1038,12 +1031,26 @@
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fZG-Lr-baV" customClass="DelButton">
+                                        <rect key="frame" x="282" y="105" width="30" height="30"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <state key="normal" title="x">
+                                            <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="deleteAudio:" destination="mIc-aL-v4T" eventType="touchUpInside" id="emv-ae-1hW"/>
+                                        </connections>
+                                    </button>
                                     <button opaque="NO" alpha="0.69999998807907104" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wF2-Zw-f5l">
-                                        <rect key="frame" x="188" y="149" width="57" height="40"/>
+                                        <rect key="frame" x="199" y="139" width="40" height="40"/>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        <state key="normal" title="-" image="play-1">
+                                        <state key="normal" title="-" image="icon-rec-48">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="recordPauseAudio:" destination="mIc-aL-v4T" eventType="touchUpInside" id="di6-YA-tn0"/>
+                                        </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="SNIPPET" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R8l-UE-1tf">
                                         <rect key="frame" x="190" y="110" width="113" height="20"/>
@@ -1051,20 +1058,39 @@
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" alpha="0.69999998807907104" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LYd-NP-XKk">
-                                        <rect key="frame" x="246" y="148" width="57" height="40"/>
-                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        <state key="normal" title="-" image="play-1">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                    </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="000" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N3i-QT-60P">
-                                        <rect key="frame" x="25" y="124" width="142" height="30"/>
+                                        <rect key="frame" x="22" y="126" width="142" height="27"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" alpha="0.69999998807907104" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MED-LL-z9w">
+                                        <rect key="frame" x="249" y="138" width="40" height="40"/>
+                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <state key="normal" title="-" image="icon-playm-48">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="playStopAudio:" destination="mIc-aL-v4T" eventType="touchUpInside" id="R5i-Oz-21b"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="-" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fix-Qc-42m">
+                                        <rect key="frame" x="180" y="176" width="135" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                        <color key="textColor" red="0.50196081400000003" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" fixedFrame="YES" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="nz0-q8-h3k">
+                                        <rect key="frame" x="195" y="190" width="105" height="2"/>
+                                    </progressView>
+                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" minimumValue="-1" maximumValue="10" translatesAutoresizingMaskIntoConstraints="NO" id="Xpa-wV-qdH">
+                                        <rect key="frame" x="215" y="224" width="94" height="29"/>
+                                        <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <connections>
+                                            <action selector="stepperChange:" destination="mIc-aL-v4T" eventType="valueChanged" id="V3P-Y4-YcG"/>
+                                        </connections>
+                                    </stepper>
                                 </subviews>
                                 <color key="backgroundColor" white="0.86429195800000003" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
@@ -1073,6 +1099,11 @@
                     </view>
                     <toolbarItems/>
                     <connections>
+                        <outlet property="audioMessage" destination="fix-Qc-42m" id="N7Y-Qa-RlR"/>
+                        <outlet property="audioProgress" destination="nz0-q8-h3k" id="XUe-WC-uPq"/>
+                        <outlet property="btnDeleteAudio" destination="fZG-Lr-baV" id="s7q-vu-bXG"/>
+                        <outlet property="btnPlayStop" destination="MED-LL-z9w" id="PDt-1T-Hd6"/>
+                        <outlet property="btnRecPause" destination="wF2-Zw-f5l" id="D5L-RW-JfE"/>
                         <outlet property="counterDisplay" destination="N3i-QT-60P" id="IEK-xH-vBE"/>
                         <outlet property="droneButton" destination="fdm-70-X0v" id="1OC-7y-63f"/>
                         <outlet property="droneDisplay" destination="zTO-gh-aTi" id="MIS-WL-7Zh"/>
@@ -1388,12 +1419,13 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Notes-icon 48" width="48" height="48"/>
         <image name="eye-c-w-long" width="380" height="240"/>
         <image name="first" width="30" height="30"/>
         <image name="half-moon" width="291" height="144"/>
+        <image name="icon-notes-48" width="48" height="48"/>
+        <image name="icon-playm-48" width="128" height="128"/>
+        <image name="icon-rec-48" width="48" height="48"/>
         <image name="pause-w-long" width="380" height="240"/>
-        <image name="play-1" width="160" height="120"/>
         <image name="second" width="30" height="30"/>
         <image name="settings_24" width="24" height="24"/>
         <image name="three-quart-moon" width="291" height="216"/>

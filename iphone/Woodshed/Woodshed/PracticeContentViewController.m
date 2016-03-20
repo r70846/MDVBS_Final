@@ -30,7 +30,11 @@
     //PFUser *user = [PFUser currentUser];
     //user.ACL = [PFACL ACLWithUser:user];
     //[PFACL setDefaultACL:[PFACL ACL] withAccessForCurrentUser:YES];
+
     
+    [self setUpAudio];
+    
+
     
     //Appearance
     [self.view setBackgroundColor:[UIColor colorWithRed:1 green:0.89 blue:0.631 alpha:1]]; ; /*#ffe3a1*/
@@ -1155,8 +1159,198 @@
     droneDisplay.text = [NSString stringWithFormat:@"%@",[keyArray objectAtIndex:(int)droneStepper.value]];
 }
 
+//////////////////////////////
+
+-(void)setUpAudio{
+    
+    stop = [UIImage imageNamed:@"icon-stop-48.png"];
+    play = [UIImage imageNamed:@"icon-play-48.png"];
+    pause = [UIImage imageNamed:@"icon-pause-48.png"];
+    record = [UIImage imageNamed:@"icon-rec-48.png"];
+    recordLit = [UIImage imageNamed:@"icon-rec-lit-48.png"];
+    pauseLit = [UIImage imageNamed:@"icon-pause-lit-48.png"];
+    
+    // Create audio file and reference
+    NSArray *pathComponents = [NSArray arrayWithObjects:
+                               [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject],
+                               @"snippet.m4a",
+                               nil];
+    audioFileURL = [NSURL fileURLWithPathComponents:pathComponents];
+    
+    // Audio session setup
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    [session setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+    
+    // Audio recorder settings as dict object
+    NSMutableDictionary *recordSetting = [[NSMutableDictionary alloc] init];
+    
+    [recordSetting setValue:[NSNumber numberWithInt:kAudioFormatMPEG4AAC] forKey:AVFormatIDKey];
+    [recordSetting setValue:[NSNumber numberWithFloat:44100.0] forKey:AVSampleRateKey];
+    [recordSetting setValue:[NSNumber numberWithInt: 2] forKey:AVNumberOfChannelsKey];
+    
+    // Prepare audio recorder
+    audioRecorder = [[AVAudioRecorder alloc] initWithURL:audioFileURL settings:recordSetting error:NULL];
+    audioRecorder.delegate = self;
+    audioRecorder.meteringEnabled = YES;
+    [audioRecorder prepareToRecord];
+    
+    // Initialize state variables
+    audioState =  [self updateAudioState:noaudio];
+}
 
 
+- (IBAction)recordPauseAudio:(id)sender {
+    
+    if (audioState == noaudio || audioState == pausedRecording || audioState == audio) {  // Record
+        AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+        [audioSession setActive:YES error:nil];
+        
+        // Begin record
+        [audioRecorder record];
+        audioState =  [self updateAudioState:recording];
+        
+    } else if(audioState == recording && audioRecorder.recording){ // Pause
+        
+        //Pause record
+        [audioRecorder pause];
+        audioState =  [self updateAudioState:pausedRecording];
+        
+    } else if(audioState == playing && audioPlayer.playing){
+        
+        //Pause playback
+        [audioPlayer pause];;
+        audioState =  [self updateAudioState:pausedPlaying];
+        
+    } else if(audioState == pausedPlaying){
+        
+        //Pause playback
+        [audioPlayer play];;
+        audioState =  [self updateAudioState:playing];
+    }
+}
+
+
+- (IBAction)playStopAudio:(id)sender {
+    if (audioState == noaudio){
+    } else if(audioState == audio){ //Play
+        
+        // Prepare & play audio
+        audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:audioRecorder.url error:nil];
+        [audioPlayer setDelegate:self];
+        [audioPlayer prepareToPlay];
+        [audioPlayer play];
+        audioState =  [self updateAudioState:playing];
+        
+        self->audioTimer = [NSTimer scheduledTimerWithTimeInterval:0.25
+                                                            target:self
+                                                          selector:@selector(updateProgress)
+                                                          userInfo:nil
+                                                           repeats:YES];
+        
+    } else if(audioState == pausedPlaying){
+        
+        // Stop playback
+        [audioPlayer stop];
+        audioState =  [self updateAudioState:audio];
+        
+    } else if(audioState == recording || audioState == pausedRecording ){
+        
+        // Stop record
+        [audioRecorder stop];
+        AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+        [audioSession setActive:NO error:nil];
+        audioState =  [self updateAudioState:audio];
+        
+    } else if(audioState == playing || audioState == pausedPlaying ){
+        
+        // Stop playback
+        [audioPlayer stop];
+        audioState =  [self updateAudioState:audio];
+    }
+}
+
+-(AudioState)updateAudioState:(AudioState)state{
+    
+    NSString *placeHolder =  @"__________________";
+    
+    switch (state)
+    {
+        case noaudio:
+            [btnRecPause setImage:record forState: UIControlStateNormal];
+            [btnPlayStop setImage:stop forState: UIControlStateNormal];
+            btnDeleteAudio.hidden = true;
+            audioProgress.hidden = true;
+            audioMessage.text = placeHolder;
+            break;
+        case audio:
+            [btnRecPause setImage:record forState: UIControlStateNormal];
+            [btnPlayStop setImage:play forState: UIControlStateNormal];
+            btnDeleteAudio.hidden = false;
+            audioProgress.hidden = true;
+            audioMessage.text = placeHolder;
+            break;
+        case recording:;
+            [btnRecPause setImage:pause forState: UIControlStateNormal];
+            [btnPlayStop setImage:stop forState: UIControlStateNormal];
+            btnDeleteAudio.hidden = true;
+            audioProgress.hidden = true;
+            audioMessage.text = @"recording";
+            break;
+        case pausedRecording:
+            [btnRecPause setImage:pauseLit forState: UIControlStateNormal];
+            [btnPlayStop setImage:stop forState: UIControlStateNormal];
+            btnDeleteAudio.hidden = true;
+            audioProgress.hidden = true;
+            audioMessage.text = @"recording paused";
+            break;
+        case playing:
+            [btnRecPause setImage:pause forState: UIControlStateNormal];
+            [btnPlayStop setImage:stop forState: UIControlStateNormal];
+            btnDeleteAudio.hidden = true;
+            audioProgress.hidden = false;
+            audioMessage.text = placeHolder;
+            break;
+        case pausedPlaying:
+            [btnRecPause setImage:pauseLit forState: UIControlStateNormal];
+            [btnPlayStop setImage:stop forState: UIControlStateNormal];
+            btnDeleteAudio.hidden = true;
+            audioProgress.hidden = true;
+            audioMessage.text = @"paused playback";
+            break;
+    }
+    return state;
+}
+
+- (IBAction)deleteAudio:(id)sender{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSError *error;
+    [fileManager removeItemAtPath:audioFileURL.path error:&error];
+    if(!error){
+        audioState = [self updateAudioState:noaudio];
+    }else{
+        NSLog(@"%@", error.description);
+    }
+}
+
+
+- (void)updateProgress
+{
+    float remaining = audioPlayer.currentTime/audioPlayer.duration;
+    
+    // upate the UIProgress
+    
+    audioProgress.progress= remaining;
+}
+
+- (void) audioRecorderDidFinishRecording:(AVAudioRecorder *)avrecorder successfully:(BOOL)flag{
+    
+}
+
+- (void) audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag{
+    
+    // Change State
+    audioState =  [self updateAudioState:audio];
+}
 
 @end
 

@@ -22,7 +22,16 @@
 #import "SimpleCell.h"
 #import "DelButton.h"
 
-@interface PracticeContentViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UITextViewDelegate, UITextFieldDelegate>
+typedef NS_ENUM(NSUInteger, AudioState) {
+    noaudio,
+    audio,
+    recording,
+    pausedRecording,
+    playing,
+    pausedPlaying
+};
+
+@interface PracticeContentViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UITextViewDelegate, UITextFieldDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate>
 {
     // Global Data Storage
     DataStore *dataStore;    //shared instance of my DataStore object
@@ -95,6 +104,32 @@
     NSMutableArray *keyArray;
     Boolean bDrone;
     
+    
+    // Snippet Audio
+    
+    // Audio
+
+    IBOutlet UIButton *btnRecPause;
+    IBOutlet UIButton *btnPlayStop;
+    IBOutlet UIButton *btnDeleteAudio;
+    IBOutlet UILabel *audioMessage;
+    IBOutlet UIProgressView *audioProgress;
+    
+    UIImage *stop;
+    UIImage *play;
+    UIImage *pause;
+    UIImage *record;
+    UIImage *recordLit;
+    UIImage *pauseLit;
+    
+    NSTimer *audioTimer;
+    AVAudioRecorder *audioRecorder;
+    AVAudioPlayer *audioPlayer;
+    NSURL *audioFileURL;
+    AudioState audioState;
+    
+    
+    
 }
 
 
@@ -131,5 +166,10 @@
 
 // Drone Functions
 -(IBAction)drone;
+
+// Audio Snippet Functions
+
+-(void)setUpAudio;
+
 
 @end
