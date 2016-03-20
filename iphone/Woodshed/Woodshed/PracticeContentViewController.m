@@ -688,6 +688,9 @@
     //Store current session in sessions, & clear for next round..
     [dataStore.sessions addObject:[dataStore.currentSession mutableCopy]];
     [dataStore saveSessions];
+    
+    [self saveAudioSnippet];
+    
     [dataStore loadTopicFilter];
     
     
@@ -698,6 +701,11 @@
     
     [dataStore resetCurrentSession];
     [self resetPractice];
+}
+
+
+-(void)saveAudioSnippet{
+    NSLog(@"SNIPPPPET");
 }
 
 -(void)resetPractice{

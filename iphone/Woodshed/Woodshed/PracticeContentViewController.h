@@ -170,6 +170,6 @@ typedef NS_ENUM(NSUInteger, AudioState) {
 // Audio Snippet Functions
 
 -(void)setUpAudio;
-
+-(void)saveAudioSnippet;
 
 @end

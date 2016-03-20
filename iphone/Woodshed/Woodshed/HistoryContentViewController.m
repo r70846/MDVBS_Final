@@ -80,6 +80,7 @@
     //NSLog(@"History will appear..");
     [self copySessionData];
     [historyTableView reloadData];
+    detailTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
 -(void)loadSessions{
@@ -180,6 +181,7 @@
             NSString *val = (NSString*)[valueArray objectAtIndex:indexPath.row];
             
             [cell refreshCellWithInfo:tag valtext:val];
+            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         }
         cell.delButton.tag=indexPath.row;
         cell.delButton.type = @"DetailCell";
