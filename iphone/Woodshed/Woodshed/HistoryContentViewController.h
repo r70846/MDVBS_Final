@@ -17,6 +17,7 @@
 #import "DataStore.h"
 #import "HistoryCell.h"
 #import "TagCell.h"
+#import "SimpleCell.h"
 #import "DelButton.h"
 
 @interface HistoryContentViewController : UIViewController <UIActionSheetDelegate, UITextViewDelegate, UITextFieldDelegate>
@@ -54,7 +55,7 @@
     
     NSMutableArray *tagArray;
     NSMutableArray *valueArray;
-    
+    NSMutableArray *notesArray;
 }
 
 //Respond to click event
