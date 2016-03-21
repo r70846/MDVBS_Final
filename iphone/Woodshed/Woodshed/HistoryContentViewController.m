@@ -120,68 +120,6 @@
     }
 }
 
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    NSUInteger iCnt;
-    if (tableView==historyTableView)
-    {
-        iCnt = 1;
-    }
-    else if (tableView==detailTableView && [notesArray count] > 0)
-    {
-        iCnt = 2;
-    }
-    else if (tableView==detailTableView)
-    {
-        iCnt = 1;
-    }
-    else
-    {
-        iCnt = 0;
-    }
-    return iCnt;
-}
-
-
-
--(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-if (tableView==detailTableView)
-    {
-    NSMutableArray *headers =[[NSMutableArray alloc] init];
-    [headers addObject:@"Tags & Values"];
-    [headers addObject:@"Notes"];
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 34)];
-    /* Create custom view to display section header... */
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20, 10, tableView.frame.size.width, 15)];
-    [label setFont:[UIFont boldSystemFontOfSize:15]];
-    NSString *string =[headers objectAtIndex:section];
-    [label setText:string];
-    [view addSubview:label];
-    //[view setBackgroundColor:[UIColor colorWithRed:0.831 green:0.831 blue:0.831 alpha:1]]; // #d4d4d4 grey
-    [view setBackgroundColor:[UIColor colorWithRed:0.984 green:0.957 blue:0.875 alpha:1]]; // #fbf4df gold
-        //your background color...
-        return view;
-    }else{
-        UIView *view = nil;
-        return view;
-    }
-}
-
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    CGFloat height;
-    if (tableView==detailTableView){
-        height = 24;
-        height = 34;
-    }else{
-        height = 0;
-    }
-    return height;
-}
-
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     
@@ -190,15 +128,10 @@ if (tableView==detailTableView)
     {
         iCnt = [sessions count];
     }
-    else if (tableView==detailTableView && section == 0)
+    else if (tableView==detailTableView)
     {
-            iCnt = [tagArray count];
+        iCnt = [tagArray count];
     }
-    else if (tableView==detailTableView && section == 1)
-    {
-            iCnt = [notesArray count];
-    }
-    
     else
     {
         iCnt = 0;
@@ -234,7 +167,7 @@ if (tableView==detailTableView)
         cell.delButton.hidden = !dataStore.directDelete;
         return cell;
     }
-    else if (tableView==detailTableView && indexPath.section == 0)
+    else if (tableView==detailTableView)
     {
         TagCell *cell;
         //Get the cell..
@@ -254,25 +187,7 @@ if (tableView==detailTableView)
         cell.delButton.type = @"DetailCell";
         cell.delButton.hidden = true;
         return cell;
-    }
-    else if (tableView==detailTableView && indexPath.section == 1)
-    {
-        SimpleCell *cell;
-        
-        //Get the cell..
-        cell = [tableView dequeueReusableCellWithIdentifier:@"NoteCell"];
-        if(cell != nil)
-        {
-            NSString *note = (NSString*)[notesArray objectAtIndex:indexPath.row];
-            cell.displayText.text = note;
-            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        }
-        cell.delButton.tag=indexPath.row;
-        cell.delButton.type = @"NoteCell";
-        cell.delButton.hidden = true;
-        return cell;
-    }
-    else{
+    }else{
         return nil;
     }
 }
@@ -293,27 +208,18 @@ if (tableView==detailTableView)
         //Clear my arrays
         [tagArray removeAllObjects];
         [valueArray removeAllObjects];
-        [notesArray removeAllObjects];
         
         //Pull data from session dict object
         NSArray *keys = [detailSession allKeys];
         //NSArray *values = [detailSession allValues];
-        //int i; for notes as tags only
-        
+        int i;
         for(NSString *key in keys){
             
             if ([[key lowercaseString] isEqualToString:@"topic"]){
             }else if ([[key lowercaseString] isEqualToString:@"date"]){
             }else if ([[key lowercaseString] isEqualToString:@"time"]){
             }else if ([[key lowercaseString] isEqualToString:@"notes"]){
-            }else if ([[key lowercaseString] isEqualToString:@"audio"]){
-               /* //PFFile *file = [detailSession objectForKey:@"audio"];
-                NSData* oData = (NSData*)[detailSession objectForKey:@"audio"];
-                [oData writeToFile:dataStore.audioFileURL.path atomically:YES];
-                */
-                
-                
-            //}else if ([[key lowercaseString] isEqualToString:@"snippet"]){
+                NSLog(@"notes detected...");
             }else if ([key rangeOfString:@"<<INTERNAL>>"].location == NSNotFound){
                 [tagArray addObject:[key lowercaseString]];
                 [valueArray addObject:[[detailSession objectForKey:key] lowercaseString]];
@@ -324,15 +230,15 @@ if (tableView==detailTableView)
             }
         }
         
-        notesArray = (NSMutableArray*)[detailSession objectForKey:@"notes"];
+        NSMutableArray *notes = (NSMutableArray*)[detailSession objectForKey:@"notes"];
         
-                /*
         NSLog(@"About to load notes...");
+        
         for(i = 0; i < [notes count]; i++){
             [tagArray addObject:@"note"];
             [valueArray addObject:[notes objectAtIndex:i]];
         }
-        */
+        
         
         [detailTableView reloadData];
         
@@ -407,18 +313,6 @@ if (tableView==detailTableView)
         [filterActionSheet showInView:self.view];
     }
 }
-
-
-- (IBAction)playStopAudio:(UIButton *)button {
-    /*
-    // Prepare & play audio
-    audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:dataStore.audioFileURL error:nil];
-    [audioPlayer setDelegate:self];
-    [audioPlayer prepareToPlay];
-    [audioPlayer play];
-     */
-}
-
 
 #pragma mark - Sort & Filter Functions
 

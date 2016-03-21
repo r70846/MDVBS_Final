@@ -685,17 +685,11 @@
     //Save final duration as text for user display
     [dataStore.currentSession setValue:sDuration forKey:@"duration"];
     
-    PFFile *file = [self saveAudioSnippet];
-    
-    if(file != nil){
-        [dataStore.currentSession setValue:file forKey:@"audio"];
-    }
-    
     //Store current session in sessions, & clear for next round..
     [dataStore.sessions addObject:[dataStore.currentSession mutableCopy]];
     [dataStore saveSessions];
     
-
+    [self saveAudioSnippet];
     
     [dataStore loadTopicFilter];
     
@@ -710,34 +704,8 @@
 }
 
 
--(PFFile*)saveAudioSnippet{
-
-    NSData* oData;
-    PFFile *file = nil;
-    NSError *error;
-    NSString *path = dataStore.audioFileURL.path;
-    NSFileManager *defaultManager;
-    if([defaultManager fileExistsAtPath:path])
-    {
-        //Read content of file as data object
-        oData = [NSData dataWithContentsOfFile:path];
-        file = [PFFile fileWithName:@"snippet.m4a" data:oData];
-        [file saveInBackground];
-        
-        //PFObject *audio = [PFObject objectWithClassName:@"Audio"];
-        //audio[@"snippet"] = file;
-        //[audio saveInBackground];
-        
-        [defaultManager removeItemAtPath:path error:&error];
-        if(!error){
-            audioState = [self updateAudioState:noaudio];
-        }else{
-            NSLog(@"%@", error.description);
-        }
-    }
-
-    
-    return file;
+-(void)saveAudioSnippet{
+    NSLog(@"SNIPPPPET");
 }
 
 -(void)resetPractice{
@@ -781,7 +749,6 @@
         }else if ([[key lowercaseString] isEqualToString:@"time"]){
         }else if ([[key lowercaseString] isEqualToString:@"duration"]){
         }else if ([[key lowercaseString] isEqualToString:@"notes"]){
-        }else if ([[key lowercaseString] isEqualToString:@"audio"]){
         }else if ([key rangeOfString:@"<<INTERNAL>>"].location == NSNotFound){
             keyString = [key lowercaseString];
             valueString = [[dataStore.currentSession objectForKey:key] lowercaseString];
@@ -1216,7 +1183,7 @@
                                [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject],
                                @"snippet.m4a",
                                nil];
-    dataStore.audioFileURL = [NSURL fileURLWithPathComponents:pathComponents];
+    audioFileURL = [NSURL fileURLWithPathComponents:pathComponents];
     
     // Audio session setup
     AVAudioSession *session = [AVAudioSession sharedInstance];
@@ -1230,7 +1197,7 @@
     [recordSetting setValue:[NSNumber numberWithInt: 2] forKey:AVNumberOfChannelsKey];
     
     // Prepare audio recorder
-    audioRecorder = [[AVAudioRecorder alloc] initWithURL:dataStore.audioFileURL settings:recordSetting error:NULL];
+    audioRecorder = [[AVAudioRecorder alloc] initWithURL:audioFileURL settings:recordSetting error:NULL];
     audioRecorder.delegate = self;
     audioRecorder.meteringEnabled = YES;
     [audioRecorder prepareToRecord];
@@ -1365,7 +1332,7 @@
 - (IBAction)deleteAudio:(id)sender{
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSError *error;
-    [fileManager removeItemAtPath:dataStore.audioFileURL.path error:&error];
+    [fileManager removeItemAtPath:audioFileURL.path error:&error];
     if(!error){
         audioState = [self updateAudioState:noaudio];
     }else{
