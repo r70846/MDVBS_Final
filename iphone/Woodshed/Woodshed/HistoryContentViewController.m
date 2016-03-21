@@ -51,6 +51,8 @@
     //Setup Interface Items
     [self setUpSortSheet];
     [self setUpFilterSheet];
+    sortDisplay.text = @"";
+    filterDisplay.text = @"";
 }
 
 -(void)copySessionData{
@@ -380,13 +382,16 @@
             
             if([[sortArray objectAtIndex:buttonIndex] isEqualToString:@"Sort by Date"]){
                 sessions = (NSMutableArray*)[sessions sortedArrayUsingFunction:dateSort context:nil];
+                sortDisplay.text = @"date";
             }else if([[sortArray objectAtIndex:buttonIndex] isEqualToString:@"Sort by Topic"]){
                 sessions = [self sortSessionsByTopic:sessions];
+                sortDisplay.text = @"topic";
             }
         }else{
             //Cancel button
             sessions = dataStore.sessions;
             [historyTableView reloadData];
+            sortDisplay.text = @"";
         }
         [historyTableView reloadData];
     }else if (actionSheet.tag == 200) {
@@ -403,10 +408,12 @@
             }
             sessions = filteredSessions;
             [historyTableView reloadData];
+            filterDisplay.text = topic;
         }else{
             //Cancel button
             sessions = dataStore.sessions;
             [historyTableView reloadData];
+            filterDisplay.text = @"";
         }
         
     }

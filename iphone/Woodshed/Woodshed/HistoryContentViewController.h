@@ -32,6 +32,10 @@
     IBOutlet UILabel *topicDisplayLabel;
     IBOutlet UILabel *dateTimeDisplayLabel;
     
+    // Sort and filter
+    IBOutlet UITextField *sortDisplay;
+    IBOutlet UITextField *filterDisplay;
+    
     // Data Editing
     IBOutlet UIButton *historyEditButton;
     
