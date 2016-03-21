@@ -69,7 +69,7 @@
 @property (nonatomic, strong)NSString *jsonTagsPath;
 @property (nonatomic, strong)NSString *jsonSessionsPath;
 @property (nonatomic, strong)NSString *csvPath;
-
+@property (nonatomic, strong)NSURL *audioFileURL;
 
 -(void)resetCurrentSession;
 

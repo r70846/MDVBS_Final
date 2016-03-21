@@ -125,7 +125,6 @@ typedef NS_ENUM(NSUInteger, AudioState) {
     NSTimer *audioTimer;
     AVAudioRecorder *audioRecorder;
     AVAudioPlayer *audioPlayer;
-    NSURL *audioFileURL;
     AudioState audioState;
     
     
@@ -168,8 +167,7 @@ typedef NS_ENUM(NSUInteger, AudioState) {
 -(IBAction)drone;
 
 // Audio Snippet Functions
-
 -(void)setUpAudio;
--(void)saveAudioSnippet;
+-(PFFile*)saveAudioSnippet;
 
 @end

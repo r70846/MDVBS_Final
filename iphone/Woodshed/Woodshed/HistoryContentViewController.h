@@ -17,9 +17,11 @@
 #import "DataStore.h"
 #import "HistoryCell.h"
 #import "TagCell.h"
+#import "SimpleCell.h"
 #import "DelButton.h"
 
 @interface HistoryContentViewController : UIViewController <UIActionSheetDelegate, UITextViewDelegate, UITextFieldDelegate>
+
 
 {
     // Global Data Storage
@@ -50,11 +52,15 @@
     
     NSMutableArray *tagArray;
     NSMutableArray *valueArray;
+    NSMutableArray *notesArray;
     
+    //AVAudioPlayer *audioPlayer;
+    IBOutlet UIButton *btnPlayStop;
 }
 
 //Respond to click event
 -(IBAction)onClick:(UIButton *)button;
 -(IBAction)editMode:(UIButton *)button;
+- (IBAction)playStopAudio:(UIButton *)button;
 
 @end
