@@ -314,6 +314,7 @@
     [tagData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
             dataStore.userKeys[@"tags"] = tagData.objectId;
+            dataStore.userKeys[@"template"] = @"none";
             dataStore.tagData = (NSMutableDictionary*)tagData[@"tagData"];
             [dataStore addTagsFromTemplate];
             dataStore.tagArray = (NSMutableArray*)[dataStore.tagData allKeys];
