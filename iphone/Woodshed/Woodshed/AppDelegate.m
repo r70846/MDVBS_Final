@@ -23,10 +23,6 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
-    
-    // Parse Code //////////////////
-    
     // Override point for customization after application launch.
     [Parse enableLocalDatastore];
     
@@ -40,90 +36,8 @@
     user.ACL = [PFACL ACLWithUser:user];
     [PFACL setDefaultACL:[PFACL ACL] withAccessForCurrentUser:YES];
     
-    // Defaults Code //////////////////
-    
-    //Setup shared instance of data storage in RAM
-    dataStore = [DataStore sharedInstance];
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if(defaults != nil)
-    {
-        dataStore.user = [defaults objectForKey:@"user"];
-        dataStore.password = [defaults objectForKey:@"password"];
-        dataStore.tagTemplate = [defaults objectForKey:@"tagTemplate"];
-        NSString *stay = (NSString*)[defaults objectForKey:@"stay"];
-        if([stay isEqualToString:@"1"]){
-            dataStore.stay = true;
-        }else{
-            dataStore.stay = false;
-        }
-        NSString *success = (NSString*)[defaults objectForKey:@"success"];
-        if([success isEqualToString:@"1"]){
-            dataStore.success = true;
-        }else{
-            dataStore.success = false;
-        }
-        NSString *tweet = (NSString*)[defaults objectForKey:@"tweet"];
-        if([tweet isEqualToString:@"1"]){
-            dataStore.tweet = true;
-        }else{
-            dataStore.tweet = false;
-        }
-        NSLog(@"Tweet Setting is :%@", tweet);
-    }
-
-
-    // Launch Code //////////////////
-    
-    self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    
-    UIViewController *viewController;
- 
-    // Logout Parse
-    //[PFUser logOut];
-    
-    if(dataStore.stay && dataStore.success && true){
-        viewController = [storyboard instantiateViewControllerWithIdentifier:@"TabBarController"];
-        [PFUser logInWithUsernameInBackground:dataStore.user password:dataStore.password
-                                        block:^(PFUser *user, NSError *error) {
-                                            if (user) {
-                                                NSLog(@"Login success %@", dataStore.user);
-                                            } else {
-                                                // Show error
-                                                NSString *strError = [error userInfo][@"error"];
-                                                NSLog(@"Login error from app delegate: %@", strError);
-                                            }
-                                        }];
-    }else{
-        viewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginController"];
-    }
-    
-    self.window.rootViewController = viewController;
-    [self.window makeKeyAndVisible];
-    
-    sleep(2);
-    
     return YES;
 }
-
--(BOOL)isStayLogged{
-    //Built in dictionary
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    BOOL bStay = false;
-    NSString *sStay;
-    if(defaults != nil)
-    {
-        //Get values
-        sStay = (NSString*)[defaults objectForKey:@"stay"];
-        if([sStay isEqualToString:@"1"]){
-            bStay = true;
-        }
-        
-    }
-    return bStay;
-}
-
 
 
 - (void)applicationWillResignActive:(UIApplication *)application {

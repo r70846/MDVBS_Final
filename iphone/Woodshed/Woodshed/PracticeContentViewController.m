@@ -40,9 +40,6 @@
     [self.view setBackgroundColor:[UIColor colorWithRed:1 green:0.89 blue:0.631 alpha:1]]; ; /*#ffe3a1*/
     [self.view setBackgroundColor:[UIColor colorWithRed:0.561 green:0.635 blue:0.655 alpha:1]];  /*#8fa2a7*/
     
-    //create a week reference to self to avoid ARC retain cycle
-    //[self.tabBarController setDelegate:[[self.tabBarController viewControllers] objectAtIndex:0]];
-    
     [[UITabBar appearance] setTintColor:[UIColor darkGrayColor]];
     //[[UITabBar appearance] setBarTintColor:[UIColor yellowColor]];
 
@@ -685,11 +682,19 @@
     //Save final duration as text for user display
     [dataStore.currentSession setValue:sDuration forKey:@"duration"];
     
+    PFFile *file = [self saveAudioSnippet];
+    
+    if(file != nil){
+        [dataStore.currentSession setValue:file forKey:@"audio"];
+        NSLog(@"FIle is nil and it shuldn;t be");
+    }
+    
+    
     //Store current session in sessions, & clear for next round..
     [dataStore.sessions addObject:[dataStore.currentSession mutableCopy]];
     [dataStore saveSessions];
     
-    [self saveAudioSnippet];
+
     
     [dataStore loadTopicFilter];
     
@@ -704,9 +709,37 @@
 }
 
 
--(void)saveAudioSnippet{
-    NSLog(@"SNIPPPPET");
+-(PFFile*)saveAudioSnippet{
+    
+    NSData* oData;
+    PFFile *file = nil;
+    NSString *path = audioFileURL.path;
+    NSFileManager *defaultManager;
+    if([defaultManager fileExistsAtPath:path])
+    {
+        //Read content of file as data object
+        oData = [NSData dataWithContentsOfFile:path];
+        file = [PFFile fileWithName:@"snippet.m4a" data:oData];
+        [file saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            [defaultManager removeItemAtPath:path error:&error];
+            if(!error){
+                audioState = [self updateAudioState:noaudio];
+                NSLog(@"This says it saved");
+                
+            }else{
+                NSLog(@"%@", error.description);
+            }
+        } progressBlock:^(int percentDone) {
+            // Update your progress spinner here. percentDone will be between 0 and 100.
+        }];
+        
+        //PFObject *audio = [PFObject objectWithClassName:@"Audio"];
+        //audio[@"snippet"] = file;
+        //[audio saveInBackground];
+    }
+    return file;
 }
+
 
 -(void)resetPractice{
     //Reload tables

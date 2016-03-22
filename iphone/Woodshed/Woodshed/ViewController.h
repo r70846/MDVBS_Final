@@ -13,47 +13,24 @@
 //
 ///////////////////////////////////////////////////
 
+
 #import <UIKit/UIKit.h>
 #import "DataStore.h"
-#import "Reachability.h"
-#import <Parse/Parse.h>
 
 @interface ViewController : UIViewController
 {
+    // Global Data Storage
+    DataStore *dataStore;    //shared instance of my DataStore object
     
-    //DATA STORAGE
-    
-    IBOutlet UISwitch *togStayLogged;
-    IBOutlet UITextField *txtUserName;
-    IBOutlet UITextField *txtPassword;
-    IBOutlet UIButton *btnLogin;
-    IBOutlet UIButton *btnSignUp;
-    
-    NSString *mUser;
-    NSString *mPassword;
+    IBOutlet UIScrollView  *scrollView;
 }
 
-//Use properties instead of variables to reference from 'self' or wSelf
+//Property to hold user topic choice
+@property int iDisplayMode;
 
-//shared instance of my data store object as 'weak' property
 
-@property DataStore *dataStore;
+-(void)setScrollView;
 
-@property IBOutlet UILabel *netWorkSign;
 
--(IBAction)onClick:(UIButton *)button;
--(IBAction)setChecked;
-
--(void)signUp;
--(void)logIn;
-
--(BOOL)validInput:(NSString*)sUser sPassword:(NSString*)sPassword;
-
--(void)processInput:(BOOL)bLogin sUser:(NSString*)sUser sPassword:(NSString*)sPassword;
-
--(void)saveCredentials:(NSString*)sUser sPassword:(NSString*)sPassword;
-
--(IBAction)logout:(UIStoryboardSegue *)segue;
 
 @end
-
