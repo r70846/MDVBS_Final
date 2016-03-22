@@ -148,12 +148,15 @@
                 [self saveCredentials:mUser sPassword:mPassword];
             }
             
+            [self newUser];
+            
             // sign up success - launch tab view
-            [self performSegueWithIdentifier:@"segueToTabController" sender:self];
+            //[self performSegueWithIdentifier:@"segueToTabController" sender:self];
         } else {
             // Show error
-            NSString *strError = [error userInfo][@"error"];
-            NSLog(@"%@", strError);
+            messageLabel.text = error.description;
+            //NSString *strError = [error userInfo][@"error"];
+            NSLog(@"%@", error.description);
         }
     }];
 }
@@ -174,8 +177,11 @@
                                                 [self saveCredentials:mUser sPassword:mPassword];
                                             }
                                             NSLog(@"logged in made it here...");
-                                            [self performSegueWithIdentifier:@"segueToTabController" sender:self];
+                                            [self returnUser];
+                                            //[self performSegueWithIdentifier:@"segueToTabController" sender:self];
                                         } else {
+                                            
+                                            messageLabel.text = @"Credentials Not Found";
                                             // Show error
                                             NSString *strError = [error userInfo][@"error"];
                                             NSLog(@"%@", strError);
@@ -185,9 +191,183 @@
 }
 
 
+-(IBAction)onChange{
+    messageLabel.text = @"";
+}
+
 -(IBAction)logout:(UIStoryboardSegue *)segue
 {
     
 }
 
+/////////////////  LOAD USER DATA ////////////
+/////////////////  NEW USER SETUP
+-(void)returnUser{
+    PFUser *user = [PFUser currentUser];
+    user.ACL = [PFACL ACLWithUser:user];
+    [PFACL setDefaultACL:[PFACL ACL] withAccessForCurrentUser:YES];
+    [self loadUserKeys];
+}
+
+-(void)loadUserKeys{
+
+    PFQuery *query = [PFQuery queryWithClassName:@"KeyData"];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            // The find succeeded.
+            if(objects.count > 0){
+                //PFObject *topicData = [objects objectAtIndex:objects.count];
+                PFObject *keyData = [objects objectAtIndex:0];
+                dataStore.parseObjects[@"keyData"] = keyData;
+                dataStore.userKeys = (NSMutableDictionary*)keyData[@"KeyData"];
+                [self loadTopics];
+            }else{
+                messageLabel.text = @"Record Retrieval Error";
+            }
+            
+        } else {
+            // Log details of the failure
+            NSLog(@"Error: %@ %@", error, [error userInfo]);
+        }
+    }];
+}
+
+-(void)loadTopics{
+    PFQuery *query = [PFQuery queryWithClassName:@"TopicData"];
+    [query getObjectInBackgroundWithId:dataStore.userKeys[@"topics"] block:^(PFObject *topicData, NSError *error) {
+            if (!error) {
+                // The find succeeded.
+                dataStore.parseObjects[@"topicData"] = topicData;
+                dataStore.topicData = (NSMutableDictionary*)topicData[@"topicData"];
+                dataStore.topicArray = (NSMutableArray*)[dataStore.topicData allKeys];
+                [self loadTags];
+            } else {
+                // Log details of the failure
+                NSLog(@"Error loading topics: %@", error.description);
+            }
+    }];
+}
+
+-(void)loadTags{
+    PFQuery *query = [PFQuery queryWithClassName:@"TagData"];
+    [query getObjectInBackgroundWithId:dataStore.userKeys[@"tags"] block:^(PFObject *tagData, NSError *error) {
+        if (!error) {
+            // The find succeeded.
+            dataStore.parseObjects[@"tagData"] = tagData;
+            dataStore.tagData = (NSMutableDictionary*)tagData[@"tagData"];
+            [dataStore addTagsFromTemplate];
+            dataStore.tagArray = (NSMutableArray*)[dataStore.tagData allKeys];
+                [self loadSessions];
+        } else {
+            // Log details of the failure
+            NSLog(@"Error loading tags: %@", error.description);
+        }
+    }];
+}
+
+-(void)loadSessions{
+    
+    PFQuery *query = [PFQuery queryWithClassName:@"SessionData"];
+    [query getObjectInBackgroundWithId:dataStore.userKeys[@"sessions"] block:^(PFObject *sessionData, NSError *error) {
+        if (!error) {
+                // The find succeeded.
+                dataStore.parseObjects[@"sessionData"] = sessionData;
+                dataStore.sessions = (NSMutableArray*)sessionData[@"sessionData"];
+                [self performSegueWithIdentifier:@"segueToTabController" sender:self];
+            } else {
+                // Log details of the failure
+                NSLog(@"Error from topics by ID: %@ %@", error, [error userInfo]);
+        }
+    }];
+}
+/////////////////  NEW USER SETUP
+-(void)newUser{
+    PFUser *user = [PFUser currentUser];
+    user.ACL = [PFACL ACLWithUser:user];
+    [PFACL setDefaultACL:[PFACL ACL] withAccessForCurrentUser:YES];
+    [self saveDefaultTopics];
+}
+
+-(void)saveDefaultTopics
+{
+    PFObject *topicData = [PFObject objectWithClassName:@"TopicData"];
+    topicData[@"topicData"] = [dataStore getDefaultTopics];
+    dataStore.parseObjects[@"topicData"] = topicData;
+    [topicData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (succeeded) {
+            dataStore.topicData = (NSMutableDictionary*)topicData[@"topicData"];
+            dataStore.topicArray = (NSMutableArray*)[dataStore.topicData allKeys];
+            dataStore.userKeys[@"topics"] = topicData.objectId;
+            [self saveDefaultTags];
+        } else {
+            // There was a problem, check error.description
+            NSLog (@"Parse error saving default topics:%@", error.description);
+        }
+    }];
+}
+
+-(void)saveDefaultTags
+{
+    PFObject *tagData = [PFObject objectWithClassName:@"TagData"];
+    tagData[@"tagData"] = [dataStore getDefaultTags];
+    dataStore.parseObjects[@"tagData"] = tagData;
+    [tagData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (succeeded) {
+            dataStore.userKeys[@"tags"] = tagData.objectId;
+            dataStore.tagData = (NSMutableDictionary*)tagData[@"tagData"];
+            [dataStore addTagsFromTemplate];
+            dataStore.tagArray = (NSMutableArray*)[dataStore.tagData allKeys];
+            [self saveEmptySessions];
+        } else {
+            // There was a problem, check error.description
+            NSLog (@"Parse error saving defailt tags:%@", error.description);
+        }
+    }];
+}
+
+-(void)saveEmptySessions{
+    PFObject *sessionData = [PFObject objectWithClassName:@"SessionData"];
+    NSMutableArray *sessions = [[NSMutableArray alloc] init];
+    sessionData[@"sessionData"] = sessions;
+    dataStore.parseObjects[@"sessionData"] = sessionData;
+    [sessionData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (succeeded) {
+            dataStore.userKeys[@"sessions"] = sessionData.objectId;
+            dataStore.sessions = (NSMutableArray*)sessionData[@"sessionData"];
+            [self saveNewUserKeys];
+        } else {
+            // There was a problem, check error.description
+            NSLog (@"Parse error saving empty sessions:%@", error.description);
+        }
+    }];
+}
+
+-(void)saveNewUserKeys{
+    PFObject *keyData = [PFObject objectWithClassName:@"KeyData"];
+    dataStore.userKeys[@"email"] = @"";
+    dataStore.userKeys[@"template"] = @"none";
+    dataStore.userKeys[@"tweet"] = @"0";
+    keyData[@"KeyData"] = dataStore.userKeys;
+    [keyData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (succeeded) {
+            dataStore.userKeys[@"key"] = keyData.objectId;
+            dataStore.parseObjects[@"keyData"] = keyData;
+            [keyData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                if (succeeded) {
+                    [self performSegueWithIdentifier:@"segueToTabController" sender:self];
+                } else {
+                    // There was a problem, check error.description
+                    NSLog (@"Parse error saving empty sessions:%@", error.description);
+                }
+            }];
+        } else {
+            // There was a problem, check error.description
+            NSLog (@"Parse error saving empty sessions:%@", error.description);
+        }
+    }];
+}
+
+
 @end
+
+

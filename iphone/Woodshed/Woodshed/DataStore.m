@@ -27,6 +27,12 @@ static DataStore *_sharedInstance;
         //Keep track of datastructure versioning
         dataVersion = @"beta10";
         
+        //Create Dictionary Object to hold user keys
+        _userKeys = [[NSMutableDictionary alloc]init];
+        
+        //Create Dictionary Object to hold user keys
+        _parseObjects = [[NSMutableDictionary alloc]init];
+        
         //Create Array to hold Sessions Data
         _sessions = [[NSMutableArray alloc] init];
         
@@ -180,7 +186,28 @@ reach.unreachableBlock = ^(Reachability*reach)
 
 
 ////////// TOPICS //////////////////////
-
+-(NSMutableDictionary*)getDefaultTopics{
+    
+    NSMutableDictionary *topicData = [[NSMutableDictionary alloc]init];
+    topicData[@"All of Me"] = @"0";
+    topicData[@"How High the Moon"] = @"0";
+    topicData[@"Autumn Leaves"] = @"0";
+    topicData[@"Bach Minuet in D"] = @"0";
+    topicData[@"Malaguena"] = @"0";
+    topicData[@"Minor 7th Arpeggio"] = @"0";
+    topicData[@"Major 7th Arpeggio"] = @"0";
+    topicData[@"Augmented 7th Arpeggios"] = @"0";
+    topicData[@"Major Scale"] = @"0";
+    topicData[@"Natural Minor Scale"] = @"0";
+    topicData[@"Harmonic Minor Scale"] = @"0";
+    topicData[@"Melodic Minor Scale"] = @"0";
+    topicData[@"Diminished Scale"] = @"0";
+    topicData[@"Whole Tone Scale"] = @"0";
+    topicData[@"Dorian Mode"] = @"0";
+    topicData[@"Phrygian Mode"] = @"0";
+    
+    return topicData;
+}
 
 -(void)loadTopics{
     
@@ -454,20 +481,6 @@ reach.unreachableBlock = ^(Reachability*reach)
     }];
 }
 
--(void)loadSessionsLocal{
-    
-    [_sessions removeAllObjects];
-    
-    //If file exists load data
-    if([[NSFileManager defaultManager] fileExistsAtPath:_jsonSessionsPath])
-    {
-        //Read content of file as data object
-        NSData* oData = [NSData dataWithContentsOfFile:_jsonSessionsPath];
-        
-        //Serialize data object to JSON data (Mutable Array)
-        _sessions = [NSJSONSerialization JSONObjectWithData:oData options:NSJSONReadingMutableContainers | NSJSONReadingMutableLeaves error:nil];
-    }
-}
 
 -(void)loadTagTemplates{
     
@@ -519,8 +532,6 @@ reach.unreachableBlock = ^(Reachability*reach)
         }
     }];
 }
-
-
 
 -(void)loadDefaultTags{
     
@@ -584,6 +595,55 @@ reach.unreachableBlock = ^(Reachability*reach)
     }];
 }
 
+
+-(NSMutableDictionary*)getDefaultTags{
+    
+    NSMutableDictionary *tagData = [[NSMutableDictionary alloc] init];
+    NSMutableArray *valueArray = [[NSMutableArray alloc] init];
+    
+    //Key Center
+    [valueArray removeAllObjects];
+    [valueArray addObject:@"_standard"];
+    [valueArray addObject:@"A Natural"];
+    [valueArray addObject:@"A Sharp"];
+    [valueArray addObject:@"B Flat"];
+    [valueArray addObject:@"C Natural"];
+    [valueArray addObject:@"C Sharp"];
+    [valueArray addObject:@"D Flat"];
+    [valueArray addObject:@"D Natural"];
+    [valueArray addObject:@"D Sharp"];
+    [valueArray addObject:@"E Flat"];
+    [valueArray addObject:@"E Natural"];
+    [valueArray addObject:@"F Natural"];
+    [valueArray addObject:@"F Sharp"];
+    [valueArray addObject:@"G Flat"];
+    [valueArray addObject:@"G Natural"];
+    [valueArray addObject:@"G Sharp"];
+    [valueArray addObject:@"A Flat"];
+    tagData[@"Key Center"] = [valueArray mutableCopy];
+    
+    //Tempo
+    [valueArray removeAllObjects];
+    [valueArray addObject:@"_standard"];
+    [valueArray addObject:@"Grave"];
+    [valueArray addObject:@"Largo"];
+    [valueArray addObject:@"Larghetto"];
+    [valueArray addObject:@"Lentando"];
+    [valueArray addObject:@"Lento"];
+    [valueArray addObject:@"Tardo"];
+    [valueArray addObject:@"Adagio"];
+    [valueArray addObject:@"Adagietto"];
+    [valueArray addObject:@"Andante"];
+    [valueArray addObject:@"andantino"];
+    [valueArray addObject:@"Moderato"];
+    [valueArray addObject:@"Allegretto"];
+    [valueArray addObject:@"Largamente"];
+    [valueArray addObject:@"Allegro"];
+    tagData[@"Tempo"] = [valueArray mutableCopy];
+    
+    return tagData;
+}
+
 -(void)addTagsFromTemplate{
     
     //Create temp array to load dictionary
@@ -592,8 +652,8 @@ reach.unreachableBlock = ^(Reachability*reach)
     
     //Bowed Strings
     if([_tagData objectForKey:@"Bowing Pattern"]== nil){
-        if ([_tagTemplate isEqualToString:@"[ All Tags ]"] ||
-            [_tagTemplate isEqualToString:@"Bowed String Tags"]){
+        if ([_userKeys[@"template"] isEqualToString:@"[ All Tags ]"] ||
+            [_userKeys[@"template"] isEqualToString:@"Bowed String Tags"]){
         
             //Bowing Pattern
             [valueArray removeAllObjects];
@@ -609,9 +669,9 @@ reach.unreachableBlock = ^(Reachability*reach)
     }
     //Woodwinds
     if([_tagData objectForKey:@"Tonguing Technique"] == nil){
-        if ([_tagTemplate isEqualToString:@"[ All Tags ]"] ||
-            [_tagTemplate isEqualToString:@"Woodwind Tags"] ||
-            [_tagTemplate isEqualToString:@"Brass Tags"]){
+        if ([_userKeys[@"template"] isEqualToString:@"[ All Tags ]"] ||
+            [_userKeys[@"template"] isEqualToString:@"Woodwind Tags"] ||
+            [_userKeys[@"template"] isEqualToString:@"Brass Tags"]){
         
             //Tonguing Technique
             [valueArray removeAllObjects];
@@ -624,8 +684,8 @@ reach.unreachableBlock = ^(Reachability*reach)
     }
     //Brass
     if([_tagData objectForKey:@"Lip Slurs"] == nil){
-        if ([_tagTemplate isEqualToString:@"[ All Tags ]"] ||
-            [_tagTemplate isEqualToString:@"Brass Tags"]){
+        if ([_userKeys[@"template"] isEqualToString:@"[ All Tags ]"] ||
+            [_userKeys[@"template"] isEqualToString:@"Brass Tags"]){
         
             //Lip Slurs
             [valueArray removeAllObjects];
@@ -638,8 +698,8 @@ reach.unreachableBlock = ^(Reachability*reach)
     }
     //Drums
     if([_tagData objectForKey:@"Drum Stick Grip"] == nil){
-        if ([_tagTemplate isEqualToString:@"[ All Tags ]"] ||
-            [_tagTemplate isEqualToString:@"Drum Tags"]){
+        if ([_userKeys[@"template"] isEqualToString:@"[ All Tags ]"] ||
+            [_userKeys[@"template"] isEqualToString:@"Drum Tags"]){
         
             //Drum Stick Grip
             [valueArray removeAllObjects];
@@ -654,8 +714,8 @@ reach.unreachableBlock = ^(Reachability*reach)
     }
     //Guitar
     if([_tagData objectForKey:@"Drum Stick Grip"] == nil){
-        if ([_tagTemplate isEqualToString:@"[ All Tags ]"] ||
-            [_tagTemplate isEqualToString:@"Guitar Tags"]){
+        if ([_userKeys[@"template"] isEqualToString:@"[ All Tags ]"] ||
+            [_userKeys[@"template"] isEqualToString:@"Guitar Tags"]){
         
             //Picking Technique
             [valueArray removeAllObjects];
@@ -667,7 +727,7 @@ reach.unreachableBlock = ^(Reachability*reach)
         _tagData[@"Picking Technique"] = [valueArray mutableCopy];
         }
     }
-    //NSLog(@"%@", _tagData);
+
 }
 
 -(void)saveTags{

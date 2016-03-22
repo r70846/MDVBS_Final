@@ -32,9 +32,9 @@
     // [Optional] Track statistics around application opens.
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
     
-    PFUser *user = [PFUser currentUser];
-    user.ACL = [PFACL ACLWithUser:user];
-    [PFACL setDefaultACL:[PFACL ACL] withAccessForCurrentUser:YES];
+    //PFUser *user = [PFUser currentUser];
+    //user.ACL = [PFACL ACLWithUser:user];
+    //[PFACL setDefaultACL:[PFACL ACL] withAccessForCurrentUser:YES];
     
     return YES;
 }

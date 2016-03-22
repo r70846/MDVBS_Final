@@ -23,12 +23,15 @@
 {
     
     
-    IBOutlet UIActivityIndicatorView *activityIndicator;
+
     IBOutlet UISwitch *togStayLogged;
     IBOutlet UITextField *txtUserName;
     IBOutlet UITextField *txtPassword;
     IBOutlet UIButton *btnLogin;
     IBOutlet UIButton *btnSignUp;
+    IBOutlet UILabel *messageLabel;
+    
+    IBOutlet UIActivityIndicatorView *activityIndicator;
     
     NSString *mUser;
     NSString *mPassword;
@@ -44,6 +47,8 @@
 
 -(IBAction)onClick:(UIButton *)button;
 -(IBAction)setChecked;
+-(IBAction)onChange;
+
 
 -(void)signUp;
 -(void)logIn;

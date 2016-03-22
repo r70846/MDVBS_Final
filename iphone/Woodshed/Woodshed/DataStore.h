@@ -39,6 +39,10 @@
 @property (nonatomic, strong)NSString *user;
 @property (nonatomic, strong)NSString *password;
 
+// User data
+@property (nonatomic, strong)NSMutableDictionary *userKeys;
+@property (nonatomic, strong)NSMutableDictionary *parseObjects;
+
 //Topics, Tags, values, data storage...
 @property (nonatomic, strong)NSMutableArray *topicArray;
 @property (nonatomic, strong)NSMutableDictionary *topicData;
@@ -75,10 +79,16 @@
 
 -(void)loadTagTemplates;
 
+
+-(NSMutableDictionary*)getDefaultTopics;
+-(NSMutableDictionary*)getDefaultTags;
+-(NSMutableDictionary*)filterTags;
+-(void)addTagsFromTemplate;
+
 -(void)loadParseData;
 -(void)saveTags;
 -(void)loadTags;
--(void)addTagsFromTemplate;
+
 -(void)saveTopics;
 -(void)loadTopics;
 

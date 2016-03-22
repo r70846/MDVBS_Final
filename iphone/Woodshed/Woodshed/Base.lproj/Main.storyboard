@@ -1442,6 +1442,9 @@
                                         <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
                                             <rect key="frame" x="243" y="430" width="300" height="30"/>
                                         </variation>
+                                        <connections>
+                                            <action selector="onChange" destination="EIq-ec-v70" eventType="editingChanged" id="2qz-1n-8kG"/>
+                                        </connections>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="User Name" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tRG-2J-Fea">
                                         <rect key="frame" x="14" y="76" width="295" height="30"/>
@@ -1450,6 +1453,9 @@
                                         <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
                                             <rect key="frame" x="242" y="375" width="300" height="30"/>
                                         </variation>
+                                        <connections>
+                                            <action selector="onChange" destination="EIq-ec-v70" eventType="editingChanged" id="mS1-lc-iv5"/>
+                                        </connections>
                                     </textField>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="EJV-CT-2R6">
                                         <rect key="frame" x="22" y="23" width="51" height="31"/>
@@ -1486,13 +1492,19 @@
                                             <rect key="frame" x="330" y="312" width="223" height="30"/>
                                         </variation>
                                     </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="87W-Ja-cbf">
+                                        <rect key="frame" x="59" y="163" width="201" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <color key="textColor" red="0.50196081400000003" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" white="0.86429195800000003" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Network Unavailable" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iZo-FP-Xqx">
                                 <rect key="frame" x="46" y="25" width="293" height="21"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
-                                <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" red="0.50196081400000003" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Loading Records" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yIB-Db-0fS">
@@ -1512,6 +1524,7 @@
                         <outlet property="activityIndicator" destination="jnr-r3-5Hc" id="gf1-KI-9EU"/>
                         <outlet property="btnLogin" destination="O4O-lp-tSd" id="tdD-hv-I9e"/>
                         <outlet property="btnSignUp" destination="vzj-3f-6Gy" id="xzG-cj-4sO"/>
+                        <outlet property="messageLabel" destination="87W-Ja-cbf" id="8zG-tD-dbX"/>
                         <outlet property="netWorkSign" destination="iZo-FP-Xqx" id="0ip-VQ-3FR"/>
                         <outlet property="togStayLogged" destination="EJV-CT-2R6" id="MFS-8X-VMw"/>
                         <outlet property="txtPassword" destination="b8D-tG-1p8" id="9d4-g6-trW"/>

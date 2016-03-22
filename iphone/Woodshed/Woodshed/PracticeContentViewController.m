@@ -26,38 +26,23 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
-    //PFUser *user = [PFUser currentUser];
-    //user.ACL = [PFACL ACLWithUser:user];
-    //[PFACL setDefaultACL:[PFACL ACL] withAccessForCurrentUser:YES];
 
-    
-    [self setUpAudio];
-    
-
-    
     //Appearance
     [self.view setBackgroundColor:[UIColor colorWithRed:1 green:0.89 blue:0.631 alpha:1]]; ; /*#ffe3a1*/
     [self.view setBackgroundColor:[UIColor colorWithRed:0.561 green:0.635 blue:0.655 alpha:1]];  /*#8fa2a7*/
     
     [[UITabBar appearance] setTintColor:[UIColor darkGrayColor]];
-    //[[UITabBar appearance] setBarTintColor:[UIColor yellowColor]];
 
     //Setup shared instance of data storage in RAM
     dataStore = [DataStore sharedInstance];
     
+    
+    [self setUpAudio];
+    
+    
     //Setup tag templatea
     [dataStore loadTagTemplates];
     [self setUpTemplateSheet];
-    
-    //PFUser *user = [PFUser currentUser];
-    //user.ACL = [PFACL ACLWithUser:user];
-    //[PFACL setDefaultACL:[PFACL ACL] withAccessForCurrentUser:YES];
-    
-    [dataStore loadParseData];
-    [self loadTopics];
-    [self loadTags];
-    [self loadSessions];
     
     //Settings
     dataStore.directDelete = FALSE;
@@ -68,9 +53,6 @@
     tagEditButton.hidden = dataStore.directDelete;
     valueEditButton.hidden = dataStore.directDelete;
     
-    //Pull tag array from dataStore dictionary
-    //valueArray must be loaded dynamically with each tag choice
-    dataStore.tagArray = (NSMutableArray*)[[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
     valueArray = [[NSMutableArray alloc] init];
     
     // Vars for tracking state
@@ -110,122 +92,6 @@
     [valueTableView reloadData];
 }
 
--(void)loadTopics{
-    
-    PFQuery *query = [PFQuery queryWithClassName:@"TopicData"];
-    
-    NSLog(@"topicsID: %@", dataStore.topicsID);
-    
-    if(dataStore.topicsID){
-        [query getObjectInBackgroundWithId:dataStore.topicsID block:^(PFObject *topicData, NSError *error) {
-            // Do something with the returned PFObject in the gameScore variable.
-            if (!error) {
-                // The find succeeded.
-                dataStore.topicData = (NSMutableDictionary*)topicData[@"topicData"];
-                dataStore.topicArray = (NSMutableArray*)[dataStore.topicData allKeys];
-                [topicTableView reloadData];
-                NSLog(@"retrieved in practive view by ID");
-            } else {
-                // Log details of the failure
-                NSLog(@"Error from topics by ID: %@ %@", error, [error userInfo]);
-            }
-        }];
-        
-    }else{
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (!error) {
-            // The find succeeded.
-            // Do something with the found objects
-            //for (PFObject *object in objects) {NSLog(@"%@", object.objectId);}
-            
-            //PFObject *topicData = [objects objectAtIndex:objects.count];
-            PFObject *topicData = [objects objectAtIndex:0];
-            dataStore.topicData = (NSMutableDictionary*)topicData[@"topicData"];
-            dataStore.topicArray = (NSMutableArray*)[dataStore.topicData allKeys];
-            dataStore.topicsID = topicData.objectId;
-             NSLog(@"retrieved in practive view without ID");
-            [topicTableView reloadData];
-        } else {
-            // Log details of the failure
-            NSLog(@"Error: %@ %@", error, [error userInfo]);
-        }
-    }];
-    }
-}
--(void)loadTags{
-    
-    PFQuery *query = [PFQuery queryWithClassName:@"TagData"];
-    
-    NSLog(@"tagsID: %@", dataStore.tagsID);
-    
-    if(dataStore.tagsID){
-        [query getObjectInBackgroundWithId:dataStore.tagsID block:^(PFObject *tagData, NSError *error) {
-            // Do something with the returned PFObject in the gameScore variable.
-            if (!error) {
-                // The find succeeded.
-                dataStore.tagData = (NSMutableDictionary*)tagData[@"tagData"];
-                [dataStore addTagsFromTemplate];
-                dataStore.tagArray = (NSMutableArray*)[dataStore.tagData allKeys];
-                [tagTableView reloadData];
-                NSLog(@"retrieved in practive view by ID");
-            } else {
-                // Log details of the failure
-                NSLog(@"Error from topics by ID: %@ %@", error, [error userInfo]);
-            }
-        }];
-        
-    }else{
-        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-            if (!error) {
-                // The find succeeded.
-                PFObject *tagData = [objects objectAtIndex:0];
-                dataStore.tagData = (NSMutableDictionary*)tagData[@"tagData"];
-                [dataStore addTagsFromTemplate];
-                dataStore.tagArray = (NSMutableArray*)[dataStore.tagData allKeys];
-                dataStore.tagsID = tagData.objectId;
-                NSLog(@"retrieved in practive view without ID");
-                [tagTableView reloadData];
-            } else {
-                // Log details of the failure
-                NSLog(@"Error: %@ %@", error, [error userInfo]);
-            }
-        }];
-    }
-}
-
--(void)loadSessions{
-    
-    PFQuery *query = [PFQuery queryWithClassName:@"SessionData"];
-    
-    if(dataStore.sessionsID){
-        [query getObjectInBackgroundWithId:dataStore.sessionsID block:^(PFObject *sessionData, NSError *error) {
-            if (!error) {
-                // The find succeeded.
-                dataStore.sessions = (NSMutableArray*)sessionData[@"sessionData"];
-                [dataStore loadTopicFilter];
-                NSLog(@"retrieved in practive view by ID");
-            } else {
-                // Log details of the failure
-                NSLog(@"Error from topics by ID: %@ %@", error, [error userInfo]);
-            }
-        }];
-        
-    }else{
-        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-            if (!error) {
-                // The find succeeded.
-                // Do something with the found objects
-                PFObject *sessionData = [objects objectAtIndex:0];
-                dataStore.sessions = (NSMutableArray*)sessionData[@"sessionData"];
-                dataStore.sessionsID = sessionData.objectId;
-                NSLog(@"retrieved sessions in practive view without ID");
-            } else {
-                // Log details of the failure
-                NSLog(@"Error: %@ %@", error, [error userInfo]);
-            }
-        }];
-    }
-}
 
 #pragma mark - Data Cells Display 
     
@@ -455,7 +321,7 @@
             //[dataStore.topicArray addObject:newItem];
             //[dataStore saveTopicArray];
             dataStore.topicData[newItem] = @"0";
-            [dataStore saveTopics];
+            [self saveTopics];
             [topicTableView reloadData];
         }else if([source isEqualToString:@"Cancel"]){
             //Do nothing
@@ -465,14 +331,14 @@
             [tmpArray addObject:@"_user"];
             dataStore.tagData[newItem] = [tmpArray mutableCopy];
             dataStore.tagArray = (NSMutableArray*)[[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
-            [dataStore saveTags];
+            [self saveTags];
             [tagTableView reloadData];
         }else if([source isEqualToString:@"Value"]){
             [valueArray addObject:newItem];
             [valueArray replaceObjectAtIndex:0 withObject:@"_user"];
             dataStore.tagData[currentTag] = [valueArray mutableCopy];
             dataStore.tagArray = (NSMutableArray*)[[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
-            [dataStore saveTags];
+            [self saveTags];
             [valueTableView reloadData];
         }else if([source isEqualToString:@"Note"]){
             [dataStore.currentSession[@"notes"] addObject:newItem];
@@ -510,7 +376,7 @@
         //[dataStore.topicArray removeObjectAtIndex:index];
         //[dataStore saveTopicArray];
         [dataStore.topicData removeObjectForKey:[dataStore.topicArray objectAtIndex:index]];
-        [dataStore saveTopics];
+        [self saveTopics];
         [topicTableView reloadData];
     }else if([button.type isEqualToString:@"ValueCell"]){
         [valueArray removeObjectAtIndex:index];
@@ -527,20 +393,20 @@
         //[dataStore saveTopicArray];
         [dataStore.topicData removeObjectForKey:[dataStore.topicArray objectAtIndex:index]];
         NSLog(@"about to trigger topics save from practice...");
-        [dataStore saveTopics];
+        [self saveTopics];
         [topicTableView reloadData];
     }else if (tableView==tagTableView && editingStyle == UITableViewCellEditingStyleDelete){
         //remove from my local array
         [dataStore.tagData removeObjectForKey:[dataStore.tagArray objectAtIndex:index]];
         dataStore.tagArray = (NSMutableArray*)[[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
-        [dataStore saveTags];
+        [self saveTags];
         [tagTableView reloadData];
     }else if (tableView==valueTableView && editingStyle == UITableViewCellEditingStyleDelete){
         //remove from my local array
         [valueArray removeObjectAtIndex:index];
         [valueArray replaceObjectAtIndex:0 withObject:@"_user"];
         dataStore.tagData[currentTag] = [valueArray mutableCopy];
-        [dataStore saveTags];
+        [self saveTags];
         [valueTableView reloadData];
     }
 }
@@ -1066,21 +932,88 @@
             }else{
                 templateTextDisplay.text = choice;
             }
-            dataStore.tagTemplate = choice;
-            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-            
-            if(defaults != nil)
-            {
-                [defaults setObject:choice forKey:@"tagTemplate"];
-            }
+            dataStore.userKeys[@"template"] = choice;
             [self loadTags];
-            dataStore.tagArray = (NSMutableArray*)[[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
-            [tagTableView reloadData];
         }
     }
 }
 
 
+-(void)loadTags{
+    PFQuery *query = [PFQuery queryWithClassName:@"TagData"];
+    [query getObjectInBackgroundWithId:dataStore.userKeys[@"tags"] block:^(PFObject *tagData, NSError *error) {
+        if (!error) {
+            // The find succeeded.
+            dataStore.tagData = (NSMutableDictionary*)tagData[@"tagData"];
+            [dataStore addTagsFromTemplate];
+            dataStore.tagArray = (NSMutableArray*)[dataStore.tagData allKeys];
+            [tagTableView reloadData];
+        } else {
+            // Log details of the failure
+            NSLog(@"Error loading tags: %@", error.description);
+        }
+    }];
+}
+
+
+-(void)saveOther{
+    PFQuery *query = [PFQuery queryWithClassName:@"TopicData"];
+    
+    // Retrieve the object by id
+    [query getObjectInBackgroundWithId:dataStore.userKeys[@"topics"]
+                                 block:^(PFObject *topicData, NSError *error) {
+                                     topicData[@"topicData"] = dataStore.topicData;
+                                     [topicData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                                         if (succeeded) {
+                                             dataStore.topicArray = (NSMutableArray*)[dataStore.topicData allKeys];
+                                             [topicTableView reloadData];
+                                         } else {
+                                             // There was a problem, check error.description
+                                             NSLog (@"Parse error saving revised topics:%@", error.description);
+                                         }
+                                     }];
+                                 }];
+    
+}
+
+
+-(void)saveUserKeys{
+    PFObject *keyData = [PFObject objectWithClassName:@"KeyData"];
+        keyData[@"KeyData"] = dataStore.userKeys;
+        [keyData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (succeeded) {
+                //Nothing...
+            } else {
+                // There was a problem, check error.description
+                NSLog (@"Parse error saving revised user keys:%@", error.description);
+            }
+    }];
+}
+
+/*
+-(void)hold{
+PFObject *keyData = [PFObject objectWithClassName:@"KeyData"];
+[keyData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+    if (succeeded) {
+        userKeys[@"key"] = keyData.objectId;
+        [keyData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (succeeded) {
+                dataStore.userKeys = userKeys;
+                [self loadTopics ];
+            } else {
+                // There was a problem, check error.description
+                NSLog (@"Parse error saving empty sessions:%@", error.description);
+            }
+        }];
+    } else {
+        // There was a problem, check error.description
+        NSLog (@"Parse error saving empty sessions:%@", error.description);
+    }
+}];
+}
+}
+ 
+ */
 
 // Drone tool
 -(void)setUpDrone
@@ -1392,6 +1325,49 @@
     // Change State
     audioState =  [self updateAudioState:audio];
 }
+
+//////////////////////
+
+-(void)saveTopics{
+    PFQuery *query = [PFQuery queryWithClassName:@"TopicData"];
+        
+    // Retrieve the object by id
+    [query getObjectInBackgroundWithId:dataStore.userKeys[@"topics"]
+                                 block:^(PFObject *topicData, NSError *error) {
+                                     topicData[@"topicData"] = dataStore.topicData;
+                                     [topicData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                                         if (succeeded) {
+                                              dataStore.topicArray = (NSMutableArray*)[dataStore.topicData allKeys];
+                                             [topicTableView reloadData];
+                                         } else {
+                                                 // There was a problem, check error.description
+                                                 NSLog (@"Parse error saving revised topics:%@", error.description);
+                                         }
+                                     }];
+                                 }];
+
+}
+
+-(void)saveTags{
+    PFQuery *query = [PFQuery queryWithClassName:@"TagData"];
+    [query getObjectInBackgroundWithId:dataStore.userKeys[@"tags"] block:^(PFObject *tagData, NSError *error) {
+                                     tagData[@"tagData"] = [dataStore filterTags];
+                                     [tagData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                                         if (succeeded) {
+                                             //[dataStore addTagsFromTemplate];
+                                             dataStore.tagArray = (NSMutableArray*)[dataStore.tagData allKeys];
+                                             [tagTableView reloadData];
+                                             
+                                         } else {
+                                             // There was a problem, check error.description
+                                             NSLog (@"Parse error saving revised tags:%@", error.description);
+                                         }
+                                     }];
+                                 }];
+    
+}
+
+
 
 @end
 
