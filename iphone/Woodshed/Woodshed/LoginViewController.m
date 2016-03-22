@@ -253,7 +253,7 @@
     [query getObjectInBackgroundWithId:dataStore.userKeys[@"tags"] block:^(PFObject *tagData, NSError *error) {
         if (!error) {
             // The find succeeded.
-            dataStore.parseObjects[@"tagData"] = tagData;
+            //dataStore.parseObjects[@"tagData"] = tagData;
             dataStore.tagData = (NSMutableDictionary*)tagData[@"tagData"];
             [dataStore addTagsFromTemplate];
             dataStore.tagArray = (NSMutableArray*)[dataStore.tagData allKeys];
@@ -271,7 +271,7 @@
     [query getObjectInBackgroundWithId:dataStore.userKeys[@"sessions"] block:^(PFObject *sessionData, NSError *error) {
         if (!error) {
                 // The find succeeded.
-                dataStore.parseObjects[@"sessionData"] = sessionData;
+                //dataStore.parseObjects[@"sessionData"] = sessionData;
                 dataStore.sessions = (NSMutableArray*)sessionData[@"sessionData"];
                 [self performSegueWithIdentifier:@"segueToTabController" sender:self];
             } else {
@@ -310,7 +310,7 @@
 {
     PFObject *tagData = [PFObject objectWithClassName:@"TagData"];
     tagData[@"tagData"] = [dataStore getDefaultTags];
-    dataStore.parseObjects[@"tagData"] = tagData;
+    //dataStore.parseObjects[@"tagData"] = tagData;
     [tagData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
             dataStore.userKeys[@"tags"] = tagData.objectId;
@@ -330,7 +330,7 @@
     PFObject *sessionData = [PFObject objectWithClassName:@"SessionData"];
     NSMutableArray *sessions = [[NSMutableArray alloc] init];
     sessionData[@"sessionData"] = sessions;
-    dataStore.parseObjects[@"sessionData"] = sessionData;
+    //dataStore.parseObjects[@"sessionData"] = sessionData;
     [sessionData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
             dataStore.userKeys[@"sessions"] = sessionData.objectId;
@@ -352,7 +352,7 @@
     [keyData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
             dataStore.userKeys[@"key"] = keyData.objectId;
-            dataStore.parseObjects[@"keyData"] = keyData;
+            //dataStore.parseObjects[@"keyData"] = keyData;
             [keyData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 if (succeeded) {
                     [self performSegueWithIdentifier:@"segueToTabController" sender:self];

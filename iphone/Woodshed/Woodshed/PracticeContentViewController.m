@@ -77,7 +77,7 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     
-    if([dataStore.tagTemplate isEqualToString:[dataStore.templateArray objectAtIndex:0]]){
+    if([dataStore.userKeys[@"template"] isEqualToString:[dataStore.templateArray objectAtIndex:0]]){
         templateTextDisplay.text = @"[ Tag Templates ]";
     }else{
         templateTextDisplay.text = dataStore.tagTemplate;
@@ -942,50 +942,23 @@
 
 
 -(void)loadTags{
-    [dataStore.parseObjects[@"tagData"] fetch];
-            dataStore.tagData = (NSMutableDictionary*)dataStore.parseObjects[@"tagData"][@"tagData"];
+    PFQuery *query = [PFQuery queryWithClassName:@"TagData"];
+    [query getObjectInBackgroundWithId:dataStore.userKeys[@"tags"] block:^(PFObject *tagData, NSError *error) {
+        if (!error) {
+            // The find succeeded.
+            dataStore.tagData = tagData[@"tagData"];
+            
+            NSLog(@"template: %@, tags from server: %@", dataStore.userKeys.description, dataStore.tagData.description);
             [dataStore addTagsFromTemplate];
             dataStore.tagArray = (NSMutableArray*)[dataStore.tagData allKeys];
             [tagTableView reloadData];
-}
-
--(void)saveUserKeys{
-    [dataStore.parseObjects[@"keyData"] fetch];
-     dataStore.parseObjects[@"keyData"][@"KeyData"] = dataStore.userKeys;
-    [dataStore.parseObjects[@"keyData"] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        if (succeeded) {
-            //Nothing...
         } else {
-            // There was a problem, check error.description
-            NSLog (@"Parse error saving revised user keys:%@", error.description);
+            // Log details of the failure
+            NSLog(@"Error loading tags: %@", error.description);
         }
     }];
 }
 
-/*
--(void)hold{
-PFObject *keyData = [PFObject objectWithClassName:@"KeyData"];
-[keyData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-    if (succeeded) {
-        userKeys[@"key"] = keyData.objectId;
-        [keyData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            if (succeeded) {
-                dataStore.userKeys = userKeys;
-                [self loadTopics ];
-            } else {
-                // There was a problem, check error.description
-                NSLog (@"Parse error saving empty sessions:%@", error.description);
-            }
-        }];
-    } else {
-        // There was a problem, check error.description
-        NSLog (@"Parse error saving empty sessions:%@", error.description);
-    }
-}];
-}
-}
- 
- */
 
 // Drone tool
 -(void)setUpDrone
@@ -1301,33 +1274,56 @@ PFObject *keyData = [PFObject objectWithClassName:@"KeyData"];
 //////////////////////
 
 -(void)saveTopics{
-    //[dataStore.parseObjects[@"topicData"] fetch];
-    dataStore.parseObjects[@"topicData"][@"topicData"] = dataStore.topicData;
-    [dataStore.parseObjects[@"topicData"] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-    if (succeeded) {
-        dataStore.topicArray = (NSMutableArray*)[dataStore.topicData allKeys];
-        [topicTableView reloadData];
-    } else {
-        // There was a problem, check error.description
-        NSLog (@"Parse error saving revised topics:%@", error.description);
-        }
-    }];
+    PFQuery *query = [PFQuery queryWithClassName:@"TopicData"];
+    
+    // Retrieve the object by id
+    [query getObjectInBackgroundWithId:dataStore.userKeys[@"topics"]
+                                 block:^(PFObject *topicData, NSError *error) {
+                                     topicData[@"topicData"] = dataStore.topicData;
+                                     [topicData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                                         if (succeeded) {
+                                             dataStore.topicArray = (NSMutableArray*)[dataStore.topicData allKeys];
+                                             [topicTableView reloadData];
+                                         } else {
+                                             // There was a problem, check error.description
+                                             NSLog (@"Parse error saving revised topics:%@", error.description);
+                                         }
+                                     }];
+                                 }];
+    
 }
 
 -(void)saveTags{
-    //[dataStore.parseObjects[@"tagData"] fetch];
-    dataStore.parseObjects[@"tagData"][@"tagData"] = [dataStore filterTags];
-        [dataStore.parseObjects[@"tagData"] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+    PFQuery *query = [PFQuery queryWithClassName:@"TagData"];
+    [query getObjectInBackgroundWithId:dataStore.userKeys[@"tags"] block:^(PFObject *tagData, NSError *error) {
+        tagData[@"tagData"] = [dataStore filterTags];
+        [tagData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if (succeeded) {
                 //[dataStore addTagsFromTemplate];
                 dataStore.tagArray = (NSMutableArray*)[dataStore.tagData allKeys];
                 [tagTableView reloadData];
-                                             
+                
             } else {
                 // There was a problem, check error.description
                 NSLog (@"Parse error saving revised tags:%@", error.description);
             }
         }];
+    }];
+    
+}
+
+
+-(void)saveUserKeys{
+    PFObject *keyData = [PFObject objectWithClassName:@"KeyData"];
+    keyData[@"KeyData"] = dataStore.userKeys;
+    [keyData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (succeeded) {
+            //Nothing...
+        } else {
+            // There was a problem, check error.description
+            NSLog (@"Parse error saving revised user keys:%@", error.description);
+        }
+    }];
 }
 
 
