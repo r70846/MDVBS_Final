@@ -34,8 +34,6 @@
     //Setup shared instance of data storage in RAM
     dataStore = [DataStore sharedInstance];
     
-    [self loadSessions];
-    
     //Show or hide edit mode
     historyEditButton.hidden = dataStore.directDelete;
     
@@ -77,6 +75,7 @@
                 dataStore.topicFilter[sTopic] = [NSString stringWithFormat:@"%i",count];
             }
     }
+    [self setUpFilterSheet];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -462,7 +461,7 @@
     }
     
     //Add cancel button on the end
-    sortActionSheet.cancelButtonIndex = [sortActionSheet addButtonWithTitle:@"Cancel"];
+    //sortActionSheet.cancelButtonIndex = [sortActionSheet addButtonWithTitle:@"Cancel"];
     
     //To handle keyboard
     //[topicDisplay setDelegate:self];
@@ -500,11 +499,19 @@
                 }
             }
             sessions = filteredSessions;
+            if([sortDisplay.text isEqualToString:@"date"]){
+                sessions = (NSMutableArray*)[sessions sortedArrayUsingFunction:dateSort context:nil];
+            }
             [historyTableView reloadData];
             filterDisplay.text = topic;
         }else{
             //Cancel button
             sessions = dataStore.sessions;
+            if([sortDisplay.text isEqualToString:@"date"]){
+                sessions = (NSMutableArray*)[sessions sortedArrayUsingFunction:dateSort context:nil];
+            }else if([sortDisplay.text isEqualToString:@"topic"]){
+                sessions = [self sortSessionsByTopic:sessions];
+            }
             [historyTableView reloadData];
             filterDisplay.text = @"";
         }

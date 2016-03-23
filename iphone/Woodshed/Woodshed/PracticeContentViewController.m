@@ -80,7 +80,7 @@
     if([dataStore.userKeys[@"template"] isEqualToString:[dataStore.templateArray objectAtIndex:0]]){
         templateTextDisplay.text = @"[ Tag Templates ]";
     }else{
-        templateTextDisplay.text = dataStore.tagTemplate;
+        templateTextDisplay.text = dataStore.userKeys[@"template"];
     }
     if([templateTextDisplay.text isEqualToString:@""]){
         templateTextDisplay.text = @"[ Tag Templates ]";
@@ -557,57 +557,34 @@
         NSLog(@"FIle is nil and it shuldn;t be");
     }
     
+    //Build string before reseting session
+    if(dataStore.tweet){
+        NSString *tweet = [self composeTweet];
+        [self postTweet:tweet];
+    }
     
     //Store current session in sessions, & clear for next round..
     [dataStore.sessions addObject:[dataStore.currentSession mutableCopy]];
-    [dataStore saveSessions];
-    
-
-    
-    [dataStore loadTopicFilter];
-    
-    
-    //Build string before reseting session
-    if(dataStore.tweet){
-        [self postTweet:[self composeTweet]];
-    }
-    
-    [dataStore resetCurrentSession];
-    [self resetPractice];
+    [self saveSessions];
 }
 
-
--(PFFile*)saveAudioSnippet{
-    
-    NSData* oData;
-    PFFile *file = nil;
-    NSString *path = audioFileURL.path;
-    NSFileManager *defaultManager;
-    if([defaultManager fileExistsAtPath:path])
-    {
-        //Read content of file as data object
-        oData = [NSData dataWithContentsOfFile:path];
-        file = [PFFile fileWithName:@"snippet.m4a" data:oData];
-        [file saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            [defaultManager removeItemAtPath:path error:&error];
-            if(!error){
-                audioState = [self updateAudioState:noaudio];
-                NSLog(@"This says it saved");
-                
-            }else{
-                NSLog(@"%@", error.description);
+-(void)saveSessions{
+    PFQuery *query = [PFQuery queryWithClassName:@"SessionData"];
+    [query getObjectInBackgroundWithId:dataStore.userKeys[@"sessions"] block:^(PFObject *sessionData, NSError *error) {
+        sessionData[@"sessionData"] = dataStore.sessions;
+        [sessionData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (succeeded) {
+                [dataStore loadTopicFilter];
+                [dataStore resetCurrentSession];
+                [self resetPractice];
+                [self.tabBarController setSelectedIndex:1];
+            } else {
+                // There was a problem, check error.description
+                NSLog (@"Parse error saving revised user keys:%@", error.description);
             }
-        } progressBlock:^(int percentDone) {
-            // Update your progress spinner here. percentDone will be between 0 and 100.
         }];
-        
-        //PFObject *audio = [PFObject objectWithClassName:@"Audio"];
-        //audio[@"snippet"] = file;
-        //[audio saveInBackground];
-    }
-    return file;
+    }];
 }
-
 
 -(void)resetPractice{
     //Reload tables
@@ -618,7 +595,6 @@
     PracticeViewController *practiceViewController = (PracticeViewController*) self.parentViewController;
     practiceViewController.iDisplayMode = 0;
     [practiceViewController setScrollView];
-    [self.tabBarController setSelectedIndex:1];
 }
 //////  Tweet Functins
 
@@ -935,6 +911,7 @@
                 templateTextDisplay.text = choice;
             }
             dataStore.userKeys[@"template"] = choice;
+            [self saveUserKeys];
             [self loadTags];
         }
     }
@@ -1314,18 +1291,52 @@
 
 
 -(void)saveUserKeys{
-    PFObject *keyData = [PFObject objectWithClassName:@"KeyData"];
-    keyData[@"KeyData"] = dataStore.userKeys;
-    [keyData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        if (succeeded) {
-            //Nothing...
-        } else {
-            // There was a problem, check error.description
-            NSLog (@"Parse error saving revised user keys:%@", error.description);
-        }
+    PFQuery *query = [PFQuery queryWithClassName:@"KeyData"];
+    [query getObjectInBackgroundWithId:dataStore.userKeys[@"key"] block:^(PFObject *keyData, NSError *error) {
+        keyData[@"keyData"] = dataStore.userKeys;
+        [keyData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (succeeded) {
+                //Nothing
+            } else {
+                // There was a problem, check error.description
+                NSLog (@"Parse error saving revised user keys:%@", error.description);
+            }
+        }];
     }];
+
 }
 
+
+-(PFFile*)saveAudioSnippet{
+    
+    NSData* oData;
+    PFFile *file = nil;
+    NSString *path = audioFileURL.path;
+    NSFileManager *defaultManager;
+    if([defaultManager fileExistsAtPath:path])
+    {
+        //Read content of file as data object
+        oData = [NSData dataWithContentsOfFile:path];
+        file = [PFFile fileWithName:@"snippet.m4a" data:oData];
+        [file saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            [defaultManager removeItemAtPath:path error:&error];
+            if(!error){
+                audioState = [self updateAudioState:noaudio];
+                NSLog(@"This says it saved");
+                
+            }else{
+                NSLog(@"%@", error.description);
+            }
+        } progressBlock:^(int percentDone) {
+            // Update your progress spinner here. percentDone will be between 0 and 100.
+        }];
+        
+        //PFObject *audio = [PFObject objectWithClassName:@"Audio"];
+        //audio[@"snippet"] = file;
+        //[audio saveInBackground];
+    }
+    return file;
+}
 
 @end
 
