@@ -550,14 +550,14 @@
     //Save final duration as text for user display
     [dataStore.currentSession setValue:sDuration forKey:@"duration"];
     
-    /*
+   /*
     PFFile *file = [self saveAudioSnippet];
     
     if(file != nil){
         [dataStore.currentSession setValue:file forKey:@"audio"];
         NSLog(@"FIle is nil and it shuldn;t be");
     }
-    */
+ */
     
     //Build string before reseting session
     if(dataStore.tweet){
@@ -565,13 +565,16 @@
         [self postTweet:tweet];
     }
     
-    //Store current session in sessions, & clear for next round..
-    [dataStore.sessions addObject:[dataStore.currentSession mutableCopy]];
-    [self saveSessions];
+    if([self isAudio]){
+        [self saveAudioFile];
+    }else{
+        [self saveSession];
+    }
 }
 
--(void)saveSessions{
-    [self saveAudioFile];
+-(void)saveSession{
+    [dataStore.sessions addObject:[dataStore.currentSession mutableCopy]];
+    //[self saveAudioFile];
     PFQuery *query = [PFQuery queryWithClassName:@"SessionData"];
     [query getObjectInBackgroundWithId:dataStore.userKeys[@"sessions"] block:^(PFObject *sessionData, NSError *error) {
         sessionData[@"sessionData"] = dataStore.sessions;
@@ -580,6 +583,7 @@
                 [dataStore loadTopicFilter];
                 [dataStore resetCurrentSession];
                 [self resetPractice];
+                [self deleteAudio:nil];
                 [self.tabBarController setSelectedIndex:1];
             } else {
                 // There was a problem, check error.description
@@ -1334,52 +1338,33 @@
     }
 }
 
--(void)saveAudioFile{
-    
+
+-(BOOL)isAudio{
     NSData* oData;
-    PFFile *file = nil;
+    BOOL bResult;
     NSString *path = audioFileURL.path;
-    NSFileManager *defaultManager;
-
-        //Read content of file as data object
-        oData = [NSData dataWithContentsOfFile:path];
-        file = [PFFile fileWithName:@"snippet.m4a" data:oData];
-        [file saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            if(!error){
-                audioState = [self updateAudioState:noaudio];
-                NSLog(@"This says it saved");
-                
-            }else{
-                NSLog(@"%@", error.description);
-            }
-        } progressBlock:^(int percentDone) {
-            // Update your progress spinner here. percentDone will be between 0 and 100.
-        }];
-        
-        PFObject *audio = [PFObject objectWithClassName:@"Audio"];
-        audio[@"snippet"] = file;
-        [audio saveInBackground];
-
-
+    oData = [NSData dataWithContentsOfFile:path];
+    if(oData != nil){
+       bResult = true;
+    }else{
+       bResult = false;
+    }
+    return bResult;
 }
 
--(PFFile*)saveAudioSnippet{
-    
+
+-(void)saveAudioFile{
     NSData* oData;
     PFFile *file = nil;
     NSString *path = audioFileURL.path;
-    NSFileManager *defaultManager;
-    if([defaultManager fileExistsAtPath:path])
-    {
-        //Read content of file as data object
         oData = [NSData dataWithContentsOfFile:path];
+        //Read content of file as data object
         file = [PFFile fileWithName:@"snippet.m4a" data:oData];
         [file saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            [defaultManager removeItemAtPath:path error:&error];
             if(!error){
-                audioState = [self updateAudioState:noaudio];
-                NSLog(@"This says it saved");
-                
+                //Save final duration as text for user display
+                [dataStore.currentSession setValue:file forKey:@"audio"];
+                [self saveSession];
             }else{
                 NSLog(@"%@", error.description);
             }
@@ -1390,8 +1375,26 @@
         //PFObject *audio = [PFObject objectWithClassName:@"Audio"];
         //audio[@"snippet"] = file;
         //[audio saveInBackground];
-    }
-    return file;
+}
+
+-(void)saveAudioSnippet{
+    
+    NSData* oData;
+    PFFile *file = nil;
+    NSString *path = audioFileURL.path;
+    oData = [NSData dataWithContentsOfFile:path];
+    file = [PFFile fileWithName:@"snippet.m4a" data:oData];
+    [file saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if(!error){
+                audioState = [self updateAudioState:noaudio];
+                NSLog(@"This says it saved");
+                
+            }else{
+                NSLog(@"%@", error.description);
+            }
+        } progressBlock:^(int percentDone) {
+            // Update your progress spinner here. percentDone will be between 0 and 100.
+        }];
 }
 
 @end

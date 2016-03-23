@@ -168,8 +168,8 @@ typedef NS_ENUM(NSUInteger, AudioState) {
 -(IBAction)drone;
 
 // Audio Snippet Functions
-
+- (IBAction)deleteAudio:(id)sender;
 -(void)setUpAudio;
--(PFFile*)saveAudioSnippet;
-
+-(void)saveAudioSnippet;
+-(BOOL)isAudio;
 @end
