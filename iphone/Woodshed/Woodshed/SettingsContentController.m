@@ -135,23 +135,23 @@
             NSString *choice = [dataStore.templateArray objectAtIndex:buttonIndex];
             templateTextDisplay.text = choice;
             dataStore.tagTemplate = choice;
-            [dataStore loadTags];
+            //[dataStore loadTags];
         }
     }
 }
 
 -(IBAction)clearSavedData{
-    [dataStore.sessions removeAllObjects];
-    [dataStore clearSessions];
-    [dataStore loadEmptySessions];
-    [dataStore resetCurrentSession];
+    //[dataStore.sessions removeAllObjects];
+    //[dataStore clearSessions];
+    //[dataStore loadEmptySessions];
+    //[dataStore resetCurrentSession];
     //[self clearCustomData];
 }
 
 
 -(void)clearCustomData{
-    [dataStore clearTopics];
-    [dataStore loadTopics];
+    //[dataStore clearTopics];
+    //[dataStore loadTopics];
 }
 
 -(IBAction)logOut{

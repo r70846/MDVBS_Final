@@ -34,6 +34,9 @@
     //Setup shared instance of data storage in RAM
     dataStore = [DataStore sharedInstance];
     
+    // Prepare Audio UI
+    [self setUpAudio];
+    
     //Show or hide edit mode
     historyEditButton.hidden = dataStore.directDelete;
     
@@ -301,6 +304,9 @@
         //NSArray *values = [detailSession allValues];
         //int i; for notes as tags only
         
+        //Assume no audio
+        audioState =  [self updateAudioState:noaudio];
+        
         for(NSString *key in keys){
             
             if ([[key lowercaseString] isEqualToString:@"topic"]){
@@ -308,13 +314,12 @@
             }else if ([[key lowercaseString] isEqualToString:@"time"]){
             }else if ([[key lowercaseString] isEqualToString:@"notes"]){
             }else if ([[key lowercaseString] isEqualToString:@"audio"]){
-                /* //PFFile *file = [detailSession objectForKey:@"audio"];
-                 NSData* oData = (NSData*)[detailSession objectForKey:@"audio"];
-                 [oData writeToFile:dataStore.audioFileURL.path atomically:YES];
-                 */
-                
-                
-                //}else if ([[key lowercaseString] isEqualToString:@"snippet"]){
+                audioState =  [self updateAudioState:audio];
+                PFFile *file = [detailSession objectForKey:@"audio"];
+                NSData* oData = [file getData];
+                [oData writeToFile:dataStore.playbackPath atomically:YES];
+                audioFileURL = [[NSURL alloc] initFileURLWithPath:dataStore.playbackPath];
+
             }else if ([key rangeOfString:@"<<INTERNAL>>"].location == NSNotFound){
                 [tagArray addObject:[key lowercaseString]];
                 [valueArray addObject:[[detailSession objectForKey:key] lowercaseString]];
@@ -348,6 +353,114 @@
     }
     
 }
+
+-(IBAction)playStopAudio:(UIButton *)button
+{
+    if (audioState == noaudio){
+    } else if(audioState == audio){ //Play
+    // Prepare & play audio
+    audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:audioFileURL error:nil];
+    [audioPlayer setDelegate:self];
+    [audioPlayer prepareToPlay];
+    [audioPlayer play];
+    audioState =  [self updateAudioState:playing];
+    self->audioTimer = [NSTimer scheduledTimerWithTimeInterval:0.25
+                                                        target:self
+                                                      selector:@selector(updateProgress)
+                                                      userInfo:nil
+                                                       repeats:YES];
+    } else if(audioState == pausedPlaying){
+        
+        // Stop playback
+        [audioPlayer stop];
+        audioState =  [self updateAudioState:audio];
+    } else if(audioState == playing && audioPlayer.playing){
+        // Stop playback
+        [audioPlayer stop];
+        audioState =  [self updateAudioState:audio];
+    }
+}
+
+
+-(IBAction)pauseResumeAudio:(UIButton *)button
+{
+    if(audioState == playing && audioPlayer.playing){
+        //Pause playback
+        [audioPlayer pause];
+        audioState =  [self updateAudioState:pausedPlaying];
+        
+    } else if(audioState == pausedPlaying){
+        //Pause playback
+        [audioPlayer play];;
+        audioState =  [self updateAudioState:playing];
+    }
+}
+
+- (void) audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag{
+    
+    // Change State
+    audioState =  [self updateAudioState:audio];
+}
+
+
+- (void)updateProgress
+{
+    float remaining = audioPlayer.currentTime/audioPlayer.duration;
+    
+    // upate the UIProgress
+    
+    audioProgress.progress= remaining;
+}
+
+
+-(void)setUpAudio{
+    [self showAudio:false];
+    stop = [UIImage imageNamed:@"icon-stopw-48.png"];
+    play = [UIImage imageNamed:@"icon-playw-48.png"];
+    pause = [UIImage imageNamed:@"icon-pausew-48.png"];
+    pauselit = [UIImage imageNamed:@"icon-pause-lit-48.png"];
+}
+
+-(void)showAudio:(BOOL)status{
+    if(status){
+        btnPlayStop.hidden = false;
+        btnPause.hidden = false;
+        audioProgress.hidden = false;
+    }else{
+        btnPlayStop.hidden = true;
+        btnPause.hidden = true;
+        audioProgress.hidden = true;
+    }
+}
+
+-(AudioState)updateAudioState:(AudioState)state{
+
+    switch (state)
+    {
+        case noaudio:
+            [btnPlayStop setImage:play forState: UIControlStateNormal];
+            [btnPause setImage:pause forState: UIControlStateNormal];
+            [self showAudio:false];
+            break;
+        case audio:
+            [self showAudio:true];
+            [btnPlayStop setImage:play forState: UIControlStateNormal];
+            [btnPause setImage:pause forState: UIControlStateNormal];
+            break;
+        case playing:
+            [self showAudio:true];
+            [btnPlayStop setImage:stop forState: UIControlStateNormal];
+            [btnPause setImage:pause forState: UIControlStateNormal];
+            break;
+        case pausedPlaying:
+            [self showAudio:true];
+            [btnPlayStop setImage:stop forState: UIControlStateNormal];
+            [btnPause setImage:pauselit forState: UIControlStateNormal];
+            break;
+    }
+    return state;
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -376,7 +489,7 @@
         //NSLog(@"Actual Index: %@", [lookupTable objectForKey:[sessions objectAtIndex:index]]);
         int actualIndex = [[lookupTable objectForKey:[sessions objectAtIndex:index]] intValue];
         [dataStore.sessions removeObjectAtIndex:actualIndex];
-        [dataStore saveSessions];
+        [self saveSessions];
         [self copySessionData];
         [historyTableView reloadData];
     }
@@ -386,7 +499,7 @@
     if([button.type isEqualToString:@"HistoryCell"]){
         int actualIndex = [[lookupTable objectForKey:[sessions objectAtIndex:index]] intValue];
         [dataStore.sessions removeObjectAtIndex:actualIndex];
-        [dataStore saveSessions];
+        [self saveSessions];
         [self copySessionData];
         [historyTableView reloadData];
     }
@@ -544,5 +657,20 @@ NSComparisonResult dateSort(NSDictionary *item1, NSDictionary *item2, void *cont
     return [d1 compare:d2];
 }
 
+-(void)saveSessions{
+    PFQuery *query = [PFQuery queryWithClassName:@"SessionData"];
+    [query getObjectInBackgroundWithId:dataStore.userKeys[@"sessions"] block:^(PFObject *sessionData, NSError *error) {
+        sessionData[@"sessionData"] = dataStore.sessions;
+        [sessionData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (succeeded) {
+                [self copySessionData];
+                [historyTableView reloadData];
+            } else {
+                // There was a problem, check error.description
+                NSLog (@"Parse error saving revised user keys:%@", error.description);
+            }
+        }];
+    }];
+}
 
 @end

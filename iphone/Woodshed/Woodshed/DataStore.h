@@ -73,30 +73,15 @@
 @property (nonatomic, strong)NSString *jsonTagsPath;
 @property (nonatomic, strong)NSString *jsonSessionsPath;
 @property (nonatomic, strong)NSString *csvPath;
-
+@property (nonatomic, strong)NSString *playbackPath;
 
 -(void)resetCurrentSession;
-
 -(void)loadTagTemplates;
-
-
 -(NSMutableDictionary*)getDefaultTopics;
 -(NSMutableDictionary*)getDefaultTags;
 -(NSMutableDictionary*)filterTags;
 -(void)addTagsFromTemplate;
-
--(void)loadParseData;
--(void)saveTags;
--(void)loadTags;
-
--(void)saveTopics;
--(void)loadTopics;
-
--(void)clearTopics;
-
--(void)saveSessions;
--(void)loadSessions;
--(void)loadEmptySessions;
 -(void)clearSessions;
 -(void)loadTopicFilter;
+
 @end

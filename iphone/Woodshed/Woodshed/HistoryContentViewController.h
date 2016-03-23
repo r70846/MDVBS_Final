@@ -14,13 +14,22 @@
 ///////////////////////////////////////////////////
 
 #import <UIKit/UIKit.h>
+#import <AudioToolbox/AudioToolbox.h>
+#import <AVFoundation/AVFoundation.h>
 #import "DataStore.h"
 #import "HistoryCell.h"
 #import "TagCell.h"
 #import "SimpleCell.h"
 #import "DelButton.h"
 
-@interface HistoryContentViewController : UIViewController <UIActionSheetDelegate, UITextViewDelegate, UITextFieldDelegate>
+typedef NS_ENUM(NSUInteger, AudioState) {
+    noaudio,
+    audio,
+    playing,
+    pausedPlaying
+};
+
+@interface HistoryContentViewController : UIViewController <UIActionSheetDelegate, UITextViewDelegate, UITextFieldDelegate,AVAudioPlayerDelegate>
 
 {
     // Global Data Storage
@@ -56,10 +65,26 @@
     NSMutableArray *tagArray;
     NSMutableArray *valueArray;
     NSMutableArray *notesArray;
+    
+    // Audio Playback
+    NSTimer *audioTimer;
+    AVAudioPlayer *audioPlayer;
+    IBOutlet UIButton *btnPlayStop;
+    IBOutlet UIButton *btnPause;
+    IBOutlet UIProgressView *audioProgress;
+    NSURL *audioFileURL;
+    UIImage *stop;
+    UIImage *play;
+    UIImage *pause;
+    UIImage *pauselit;
+    AudioState audioState;
 }
 
 //Respond to click event
 -(IBAction)onClick:(UIButton *)button;
 -(IBAction)editMode:(UIButton *)button;
 
+
+-(void)saveSessions;
+-(IBAction)playStopAudio:(UIButton *)button;
 @end

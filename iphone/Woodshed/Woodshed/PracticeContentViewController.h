@@ -170,6 +170,6 @@ typedef NS_ENUM(NSUInteger, AudioState) {
 // Audio Snippet Functions
 - (IBAction)deleteAudio:(id)sender;
 -(void)setUpAudio;
--(void)saveAudioSnippet;
 -(BOOL)isAudio;
+
 @end

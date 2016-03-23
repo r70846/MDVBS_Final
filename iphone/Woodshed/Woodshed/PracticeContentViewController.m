@@ -36,9 +36,7 @@
     //Setup shared instance of data storage in RAM
     dataStore = [DataStore sharedInstance];
     
-    
     [self setUpAudio];
-    
     
     //Setup tag templatea
     [dataStore loadTagTemplates];
@@ -76,6 +74,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated{
+    
     
     if([dataStore.userKeys[@"template"] isEqualToString:[dataStore.templateArray objectAtIndex:0]]){
         templateTextDisplay.text = @"[ Tag Templates ]";
@@ -513,6 +512,13 @@
     //Launch repeating timer to run "Tick"
     durationTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(oneRound) userInfo:nil repeats:YES];
     
+    
+    [self deleteAudio:nil];
+    [self setUpAudio];
+    
+    // Initialize state variables
+    audioState =  [self updateAudioState:noaudio];
+    
     //State Change
     bPractice = TRUE;
     
@@ -565,7 +571,7 @@
         [self postTweet:tweet];
     }
     
-    if([self isAudio]){
+    if([self isAudio] && audioState != noaudio){
         [self saveAudioFile];
     }else{
         [self saveSession];
@@ -583,7 +589,7 @@
                 [dataStore loadTopicFilter];
                 [dataStore resetCurrentSession];
                 [self resetPractice];
-                [self deleteAudio:nil];
+                //[self deleteAudio:nil];
                 [self.tabBarController setSelectedIndex:1];
             } else {
                 // There was a problem, check error.description
@@ -1069,8 +1075,8 @@
     stop = [UIImage imageNamed:@"icon-stop-48.png"];
     play = [UIImage imageNamed:@"icon-play-48.png"];
     pause = [UIImage imageNamed:@"icon-pause-48.png"];
-    record = [UIImage imageNamed:@"icon-rec-48.png"];
-    recordLit = [UIImage imageNamed:@"icon-rec-lit-48.png"];
+    record = [UIImage imageNamed:@"icon-rec-red-48.png"];
+    recordLit = [UIImage imageNamed:@"icon-rec-red-48.png"];
     pauseLit = [UIImage imageNamed:@"icon-pause-lit-48.png"];
     
     // Create audio file and reference
@@ -1179,14 +1185,14 @@
     switch (state)
     {
         case noaudio:
-            [btnRecPause setImage:record forState: UIControlStateNormal];
+            [btnRecPause setImage:recordLit forState: UIControlStateNormal];
             [btnPlayStop setImage:stop forState: UIControlStateNormal];
             btnDeleteAudio.hidden = true;
             audioProgress.hidden = true;
             audioMessage.text = placeHolder;
             break;
         case audio:
-            [btnRecPause setImage:record forState: UIControlStateNormal];
+            [btnRecPause setImage:recordLit forState: UIControlStateNormal];
             [btnPlayStop setImage:play forState: UIControlStateNormal];
             btnDeleteAudio.hidden = false;
             audioProgress.hidden = true;
@@ -1228,13 +1234,13 @@
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSError *error;
     [fileManager removeItemAtPath:audioFileURL.path error:&error];
+    //[fileManager removeItemAtPath:dataStore.playbackPath error:&error];
     if(!error){
         audioState = [self updateAudioState:noaudio];
     }else{
         NSLog(@"%@", error.description);
     }
 }
-
 
 - (void)updateProgress
 {
@@ -1313,32 +1319,6 @@
 
 }
 
--(void)saveAudio{
-    
-    NSData* oData;
-    NSString *path = audioFileURL.path;
-    NSFileManager *defaultManager;
-    NSLog (@"Audio Function");
-    if([defaultManager fileExistsAtPath:path])
-    {
-        NSLog (@"file exists");
-        //Read content of file as data object
-        oData = [NSData dataWithContentsOfFile:path];
-        PFObject *audio = [PFObject objectWithClassName:@"Audio"];
-        audio[@"snippet"] = oData;
-        [audio saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            if (succeeded) {
-                NSLog (@"Audio Saved");
-            } else {
-                // There was a problem, check error.description
-                NSLog (@"Parse error saving revised user keys:%@", error.description);
-            }
-        }];
-        
-    }
-}
-
-
 -(BOOL)isAudio{
     NSData* oData;
     BOOL bResult;
@@ -1375,26 +1355,6 @@
         //PFObject *audio = [PFObject objectWithClassName:@"Audio"];
         //audio[@"snippet"] = file;
         //[audio saveInBackground];
-}
-
--(void)saveAudioSnippet{
-    
-    NSData* oData;
-    PFFile *file = nil;
-    NSString *path = audioFileURL.path;
-    oData = [NSData dataWithContentsOfFile:path];
-    file = [PFFile fileWithName:@"snippet.m4a" data:oData];
-    [file saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            if(!error){
-                audioState = [self updateAudioState:noaudio];
-                NSLog(@"This says it saved");
-                
-            }else{
-                NSLog(@"%@", error.description);
-            }
-        } progressBlock:^(int percentDone) {
-            // Update your progress spinner here. percentDone will be between 0 and 100.
-        }];
 }
 
 @end
