@@ -29,13 +29,15 @@
     [self.view setBackgroundColor:[UIColor colorWithRed:0.561 green:0.635 blue:0.655 alpha:1]];  /*#8fa2a7*/
     
     //Run this first load only, not on each new diplay
-    _iDisplayMode = 0;
+    if([self autoLog]){
+        _iDisplayMode = 600;
+    }else{
+        _iDisplayMode = 0;
+    }
+
     
     //Setup shared instance of data storage in RAM
     dataStore = [DataStore sharedInstance];
-    
-    dataStore.isOnline = false;
-    [self startNetworkCheck];
     
     scrollView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
 }
@@ -65,49 +67,62 @@
     [scrollView setContentOffset:CGPointMake(0, _iDisplayMode) animated:NO];
 }
 
--(void)startNetworkCheck{
-    /// START MILLION ////////////////////////////////////////////////////////////////////
-    
-    // Allocate a reachability object
-    reach = [Reachability reachabilityWithHostname:@"www.google.com"];
-    
-    //create a week reference to self to avoid ARC retain cycle
-    __weak typeof(self) wSelf = self;
-    
-    // Set the blocks
-    reach.reachableBlock = ^(Reachability*reach)
-    {
-        // keep in mind this is called on a background thread
-        // and if you are updating the UI it needs to happen
-        // on the main thread, like this:
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSLog(@"REACHABLE!");
-            wSelf.dataStore.isOnline = true;
-            if(wSelf.netWorkSign){
-                [wSelf.netWorkSign setHidden:YES];
-                //After control returns, check login
-                //[wSelf autoLog];
-            }
-        });
-    };
-    
-    reach.unreachableBlock = ^(Reachability*reach)
-    {
-        NSLog(@"UNREACHABLE!");
-        wSelf.dataStore.isOnline = false;
-        if(wSelf.netWorkSign){
-            [wSelf.netWorkSign setHidden:NO];
-        }
-    };
-    
-    // Start the notifier, which will cause the reachability object to retain itself!
-    [reach startNotifier];
-}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (BOOL)autoLog{
+    BOOL bResult = false;
+    NSLog(@"auto logging");
+    if([self getChecked]){
+        NSString *sUser = [self getUser];
+        NSString *sPassword = [self getPassword];
+        if([self validInput:sUser sPassword:sPassword]){
+            bResult = true;
+        }
+    }
+    return bResult;
+}
+
+-(BOOL)getChecked{
+    //Built in dictionary
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    BOOL bStay = false;
+    NSString *sStay;
+    if(defaults != nil)
+    {
+        //Get values
+        sStay = (NSString*)[defaults objectForKey:@"stay"];
+        if([sStay isEqualToString:@"1"]){
+            bStay = true;
+        }
+    }
+    dataStore.stay = bStay;
+    return bStay;
+}
+
+-(NSString*)getUser{
+    //Built in dictionary
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *user = [defaults objectForKey:@"user"];
+    return user;
+}
+
+-(NSString*)getPassword{
+    //Built in dictionary
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *password = [defaults objectForKey:@"password"];
+    return password;
+}
+
+-(BOOL)validInput:(NSString*)sUser sPassword:(NSString*)sPassword{
+    Boolean bValid = false;
+    if (sUser.length > 0 && sPassword.length > 0){
+        bValid = true;
+    }
+    return bValid;
 }
 
 /*

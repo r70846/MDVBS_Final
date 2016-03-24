@@ -28,10 +28,52 @@
     // Only needed on waiting screen...,
     [activityIndicator startAnimating];
     
+    dataStore.isOnline = false;
+    [self startNetworkCheck];
+    
     [self autoLog];
 }
 
 
+-(void)startNetworkCheck{
+    /// START MILLION ////////////////////////////////////////////////////////////////////
+    
+    // Allocate a reachability object
+    reach = [Reachability reachabilityWithHostname:@"www.google.com"];
+    
+    //create a week reference to self to avoid ARC retain cycle
+    __weak typeof(self) wSelf = self;
+    
+    // Set the blocks
+    reach.reachableBlock = ^(Reachability*reach)
+    {
+        // keep in mind this is called on a background thread
+        // and if you are updating the UI it needs to happen
+        // on the main thread, like this:
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"REACHABLE!");
+            wSelf.dataStore.isOnline = true;
+            if(wSelf.netWorkSign){
+                [wSelf.netWorkSign setHidden:YES];
+                //After control returns, check login
+                [wSelf autoLog];
+            }
+        });
+    };
+    
+    reach.unreachableBlock = ^(Reachability*reach)
+    {
+        NSLog(@"UNREACHABLE!");
+        wSelf.dataStore.isOnline = false;
+        if(wSelf.netWorkSign){
+            [wSelf.netWorkSign setHidden:NO];
+        }
+    };
+    
+    // Start the notifier, which will cause the reachability object to retain itself!
+    [reach startNotifier];
+}
 
 - (void)viewWillAppear:(BOOL)animated {
     if([self getChecked]){
@@ -56,11 +98,8 @@
         mPassword = [self getPassword];
         txtUserName.text = mUser;
         txtPassword.text = mPassword;
-        NSLog(@"login data:%@, %@, %d",  mUser, mPassword, [self validInput:mUser sPassword:mPassword]);
         if([self validInput:mUser sPassword:mPassword]){
-            NSLog(@"WTF1");
             if(dataStore.isOnline){
-            NSLog(@"WTF2");
                 [self logIn];
             }
         }
@@ -170,10 +209,10 @@
             }
         }else{
             messageLabel.text = @"user name & password required";
-
+            
         }
     }else{
-            messageLabel.text = @"network connection required";
+        messageLabel.text = @"network connection required";
     }
 }
 
@@ -243,7 +282,7 @@
                                             NSString *sError = [error userInfo][@"error"];
                                             NSLog(@"%@", sError);
                                             messageLabel.text = sError;
-                                            
+                                            [self backToTop];
                                         }
                                     }];
 }
@@ -251,6 +290,14 @@
 
 -(IBAction)onChange{
     messageLabel.text = @"";
+}
+
+
+-(void)backToTop{
+    //Scroll to tag screen
+    ViewController *viewViewController = (ViewController*) self.parentViewController;
+    viewViewController.iDisplayMode = 0;
+    [viewViewController setScrollView];
 }
 
 -(IBAction)logout:(UIStoryboardSegue *)segue
@@ -268,7 +315,7 @@
 }
 
 -(void)loadUserKeys{
-
+    
     PFQuery *query = [PFQuery queryWithClassName:@"KeyData"];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
@@ -293,16 +340,16 @@
 -(void)loadTopics{
     PFQuery *query = [PFQuery queryWithClassName:@"TopicData"];
     [query getObjectInBackgroundWithId:dataStore.userKeys[@"topics"] block:^(PFObject *topicData, NSError *error) {
-            if (!error) {
-                // The find succeeded.
-                dataStore.parseObjects[@"topicData"] = topicData;
-                dataStore.topicData = (NSMutableDictionary*)topicData[@"topicData"];
-                dataStore.topicArray = (NSMutableArray*)[dataStore.topicData allKeys];
-                [self loadTags];
-            } else {
-                // Log details of the failure
-                NSLog(@"Error loading topics: %@", error.description);
-            }
+        if (!error) {
+            // The find succeeded.
+            dataStore.parseObjects[@"topicData"] = topicData;
+            dataStore.topicData = (NSMutableDictionary*)topicData[@"topicData"];
+            dataStore.topicArray = (NSMutableArray*)[dataStore.topicData allKeys];
+            [self loadTags];
+        } else {
+            // Log details of the failure
+            NSLog(@"Error loading topics: %@", error.description);
+        }
     }];
 }
 
@@ -315,7 +362,7 @@
             dataStore.tagData = (NSMutableDictionary*)tagData[@"tagData"];
             [dataStore addTagsFromTemplate];
             dataStore.tagArray = (NSMutableArray*)[dataStore.tagData allKeys];
-                [self loadSessions];
+            [self loadSessions];
         } else {
             // Log details of the failure
             NSLog(@"Error loading tags: %@", error.description);
@@ -328,13 +375,13 @@
     PFQuery *query = [PFQuery queryWithClassName:@"SessionData"];
     [query getObjectInBackgroundWithId:dataStore.userKeys[@"sessions"] block:^(PFObject *sessionData, NSError *error) {
         if (!error) {
-                // The find succeeded.
-                //dataStore.parseObjects[@"sessionData"] = sessionData;
-                dataStore.sessions = (NSMutableArray*)sessionData[@"sessionData"];
-                [self performSegueWithIdentifier:@"segueToTabController" sender:self];
-            } else {
-                // Log details of the failure
-                NSLog(@"Error from topics by ID: %@ %@", error, [error userInfo]);
+            // The find succeeded.
+            //dataStore.parseObjects[@"sessionData"] = sessionData;
+            dataStore.sessions = (NSMutableArray*)sessionData[@"sessionData"];
+            [self performSegueWithIdentifier:@"segueToTabController" sender:self];
+        } else {
+            // Log details of the failure
+            NSLog(@"Error from topics by ID: %@ %@", error, [error userInfo]);
         }
     }];
 }
@@ -428,5 +475,3 @@
 
 
 @end
-
-

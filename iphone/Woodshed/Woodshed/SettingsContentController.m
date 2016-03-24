@@ -165,8 +165,6 @@
     
     dataStore.user = @"";
     dataStore.password = @"";
-    dataStore.topicsID = nil;
-    dataStore.sessionsID = nil;
     
     // Clear local storage
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
