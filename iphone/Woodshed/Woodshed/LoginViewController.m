@@ -27,21 +27,119 @@
     
     // Only needed on waiting screen...,
     [activityIndicator startAnimating];
+    
+    dataStore.isOnline = false;
+    [self startNetworkCheck];
+    
+    [self autoLog];
+}
+
+
+-(void)startNetworkCheck{
+    /// START MILLION ////////////////////////////////////////////////////////////////////
+    
+    // Allocate a reachability object
+    reach = [Reachability reachabilityWithHostname:@"www.google.com"];
+    
+    //create a week reference to self to avoid ARC retain cycle
+    __weak typeof(self) wSelf = self;
+    
+    // Set the blocks
+    reach.reachableBlock = ^(Reachability*reach)
+    {
+        // keep in mind this is called on a background thread
+        // and if you are updating the UI it needs to happen
+        // on the main thread, like this:
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"REACHABLE!");
+            wSelf.dataStore.isOnline = true;
+            if(wSelf.netWorkSign){
+                [wSelf.netWorkSign setHidden:YES];
+                //After control returns, check login
+                [wSelf autoLog];
+            }
+        });
+    };
+    
+    reach.unreachableBlock = ^(Reachability*reach)
+    {
+        NSLog(@"UNREACHABLE!");
+        wSelf.dataStore.isOnline = false;
+        if(wSelf.netWorkSign){
+            [wSelf.netWorkSign setHidden:NO];
+        }
+    };
+    
+    // Start the notifier, which will cause the reachability object to retain itself!
+    [reach startNotifier];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    if(dataStore.stay){
+    if([self getChecked]){
         [togStayLogged setOn:YES animated:NO];
     }else{
         [togStayLogged  setOn:NO animated:NO];
     }
     
     //Initialize Variables
-    mUser = @"";
-    mPassword = @"";
+    if(! dataStore.stay){
+        mUser = @"";
+        mPassword = @"";
+    }
     
     [super viewWillAppear:animated];
 }
+
+- (void)autoLog{
+    NSLog(@"auto logging");
+    if([self getChecked]){
+        mUser = [self getUser];
+        mPassword = [self getPassword];
+        txtUserName.text = mUser;
+        txtPassword.text = mPassword;
+        NSLog(@"login data:%@, %@, %d",  mUser, mPassword, [self validInput:mUser sPassword:mPassword]);
+        if([self validInput:mUser sPassword:mPassword]){
+            NSLog(@"WTF1");
+            if(dataStore.isOnline){
+            NSLog(@"WTF2");
+                [self logIn];
+            }
+        }
+    }
+}
+
+-(BOOL)getChecked{
+    //Built in dictionary
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    BOOL bStay = false;
+    NSString *sStay;
+    if(defaults != nil)
+    {
+        //Get values
+        sStay = (NSString*)[defaults objectForKey:@"stay"];
+        if([sStay isEqualToString:@"1"]){
+            bStay = true;
+        }
+    }
+    dataStore.stay = bStay;
+    return bStay;
+}
+
+-(NSString*)getUser{
+    //Built in dictionary
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *user = [defaults objectForKey:@"user"];
+    return user;
+}
+
+-(NSString*)getPassword{
+    //Built in dictionary
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *password = [defaults objectForKey:@"password"];
+    return password;
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -69,6 +167,8 @@
     }
     
 }
+
+
 
 -(void)saveCredentials:(NSString*)sUser sPassword:(NSString*)sPassword{
     //Built in dictionary
@@ -101,16 +201,21 @@
     
     mUser = txtUserName.text;
     mPassword = txtPassword.text;
-    
-    if([self validInput:mUser sPassword:mPassword]){
-        if(tag == 0){
-            //NSLog(@"Sign Up");
-            [self processInput:false sUser:mUser sPassword:mPassword];
-            
+    if(dataStore.isOnline){
+        if([self validInput:mUser sPassword:mPassword]){
+            if(tag == 0){
+                //NSLog(@"Sign Up");
+                [self processInput:false sUser:mUser sPassword:mPassword];
+            }else{
+                // NSLog(@"Log In");
+                [self processInput:true sUser:mUser sPassword:mPassword];
+            }
         }else{
-            // NSLog(@"Log In");
-            [self processInput:true sUser:mUser sPassword:mPassword];
+            messageLabel.text = @"user name & password required";
+
         }
+    }else{
+            messageLabel.text = @"network connection required";
     }
 }
 
@@ -127,10 +232,7 @@
     }
 }
 
-
-
 -(void)signUp {
-    
     
     PFUser *user = [PFUser user];
     user.username = mUser;
@@ -154,9 +256,9 @@
             //[self performSegueWithIdentifier:@"segueToTabController" sender:self];
         } else {
             // Show error
-            messageLabel.text = error.description;
-            //NSString *strError = [error userInfo][@"error"];
-            NSLog(@"%@", error.description);
+            NSString *sError = [error userInfo][@"error"];
+            NSLog(@"%@", sError);
+            messageLabel.text = sError;
         }
     }];
 }
@@ -180,11 +282,9 @@
                                             [self returnUser];
                                             //[self performSegueWithIdentifier:@"segueToTabController" sender:self];
                                         } else {
-                                            
-                                            messageLabel.text = @"Credentials Not Found";
-                                            // Show error
-                                            NSString *strError = [error userInfo][@"error"];
-                                            NSLog(@"%@", strError);
+                                            NSString *sError = [error userInfo][@"error"];
+                                            NSLog(@"%@", sError);
+                                            messageLabel.text = sError;
                                             
                                         }
                                     }];

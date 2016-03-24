@@ -22,7 +22,7 @@
 {
     
     NSString *dataVersion;
-    Reachability* reach;
+
     
 }
 
@@ -35,6 +35,7 @@
 @property (nonatomic)BOOL tweet;
 @property (nonatomic)BOOL stay;
 @property (nonatomic)BOOL success;
+
 
 @property (nonatomic, strong)NSString *user;
 @property (nonatomic, strong)NSString *password;
