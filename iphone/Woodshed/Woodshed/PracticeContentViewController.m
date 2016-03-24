@@ -83,6 +83,8 @@
     }
     if([templateTextDisplay.text isEqualToString:@""]){
         templateTextDisplay.text = @"[ Tag Templates ]";
+    }else if([templateTextDisplay.text isEqualToString:@"[ none ]"]){
+        templateTextDisplay.text = @"[ Tag Templates ]";
     }
     
     //Reload data tables
@@ -247,6 +249,8 @@
         
         //Display values in value table
         valueArray = (NSMutableArray*)[dataStore.tagData[currentTag] mutableCopy];
+        valueArray = (NSMutableArray*)[valueArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+        
         [valueTableView reloadData];
         
         //Scroll to next screen
@@ -445,13 +449,34 @@
         practiceViewController.iDisplayMode = 0;
         [practiceViewController setScrollView];
     }
-    else if(tag == 2) //Cancel from value, Back value to tag stage
+    else if(tag == 2) // Cancel from value, Back value to tag stage
     {
         [tagTableView reloadData];
         practiceViewController.iDisplayMode = 600;
         [practiceViewController setScrollView];
     }
-    else if(tag == 3) // Begin practice stage
+    else if(tag == 3) // Abort practice, Back value to top
+    {
+        if(bNome){
+            [self runMetronome];
+        }
+        
+        //kill timer
+        [durationTimer invalidate];
+        
+        //State Change
+        bPractice = FALSE;
+
+        [dataStore resetCurrentSession];
+        //Reload tables
+        [topicTableView reloadData];
+        [tagTableView reloadData];
+        
+        [tagTableView reloadData];
+        practiceViewController.iDisplayMode = 0;
+        [practiceViewController setScrollView];
+    }
+    else if(tag == 4) // Begin practice stage
     {
         [self sessionBegin];
         
@@ -459,7 +484,7 @@
         practiceViewController.iDisplayMode = 1800;
         [practiceViewController setScrollView];
     }
-    else if(tag == 4) //Complete practice, back to top
+    else if(tag == 5) //Complete practice, back to top
     {
         if(bNome){
             [self runMetronome];
@@ -937,10 +962,11 @@
         if (!error) {
             // The find succeeded.
             dataStore.tagData = tagData[@"tagData"];
-            
-            NSLog(@"template: %@, tags from server: %@", dataStore.userKeys.description, dataStore.tagData.description);
             [dataStore addTagsFromTemplate];
+            
             dataStore.tagArray = (NSMutableArray*)[dataStore.tagData allKeys];
+            dataStore.tagArray = (NSMutableArray*)[dataStore.tagArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+            
             [tagTableView reloadData];
         } else {
             // Log details of the failure
@@ -1272,7 +1298,10 @@
                                      topicData[@"topicData"] = dataStore.topicData;
                                      [topicData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                                          if (succeeded) {
+                                             
                                              dataStore.topicArray = (NSMutableArray*)[dataStore.topicData allKeys];
+                                             dataStore.topicArray = (NSMutableArray*)[dataStore.topicArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+
                                              [topicTableView reloadData];
                                          } else {
                                              // There was a problem, check error.description
@@ -1289,8 +1318,10 @@
         tagData[@"tagData"] = [dataStore filterTags];
         [tagData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if (succeeded) {
-                //[dataStore addTagsFromTemplate];
+                
                 dataStore.tagArray = (NSMutableArray*)[dataStore.tagData allKeys];
+                dataStore.tagArray = (NSMutableArray*)[dataStore.tagArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+                
                 [tagTableView reloadData];
                 
             } else {

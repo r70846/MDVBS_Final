@@ -344,7 +344,10 @@
             // The find succeeded.
             dataStore.parseObjects[@"topicData"] = topicData;
             dataStore.topicData = (NSMutableDictionary*)topicData[@"topicData"];
+            
             dataStore.topicArray = (NSMutableArray*)[dataStore.topicData allKeys];
+            dataStore.topicArray = (NSMutableArray*)[dataStore.topicArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+            
             [self loadTags];
         } else {
             // Log details of the failure
@@ -361,7 +364,10 @@
             //dataStore.parseObjects[@"tagData"] = tagData;
             dataStore.tagData = (NSMutableDictionary*)tagData[@"tagData"];
             [dataStore addTagsFromTemplate];
+            
             dataStore.tagArray = (NSMutableArray*)[dataStore.tagData allKeys];
+            dataStore.tagArray = (NSMutableArray*)[dataStore.tagArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+            
             [self loadSessions];
         } else {
             // Log details of the failure
@@ -401,7 +407,10 @@
     [topicData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
             dataStore.topicData = (NSMutableDictionary*)topicData[@"topicData"];
+            
             dataStore.topicArray = (NSMutableArray*)[dataStore.topicData allKeys];
+            dataStore.topicArray = (NSMutableArray*)[dataStore.topicArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+            
             dataStore.userKeys[@"topics"] = topicData.objectId;
             [self saveDefaultTags];
         } else {
@@ -422,7 +431,10 @@
             dataStore.userKeys[@"template"] = @"none";
             dataStore.tagData = (NSMutableDictionary*)tagData[@"tagData"];
             [dataStore addTagsFromTemplate];
+            
             dataStore.tagArray = (NSMutableArray*)[dataStore.tagData allKeys];
+            dataStore.tagArray = (NSMutableArray*)[dataStore.tagArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+            
             [self saveEmptySessions];
         } else {
             // There was a problem, check error.description

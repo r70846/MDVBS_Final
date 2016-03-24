@@ -180,7 +180,7 @@ static DataStore *_sharedInstance;
 -(void)loadTagTemplates{
     
     [_templateArray removeAllObjects];
-    [_templateArray addObject:@"[ None ]"];
+    [_templateArray addObject:@"[ none ]"];
     [_templateArray addObject:@"Bowed String Tags"];
     [_templateArray addObject:@"Woodwind Tags"];
     [_templateArray addObject:@"Brass Tags"];
@@ -222,20 +222,36 @@ static DataStore *_sharedInstance;
     //Tempo
     [valueArray removeAllObjects];
     [valueArray addObject:@"_standard"];
-    [valueArray addObject:@"Grave"];
-    [valueArray addObject:@"Largo"];
-    [valueArray addObject:@"Larghetto"];
-    [valueArray addObject:@"Lentando"];
-    [valueArray addObject:@"Lento"];
-    [valueArray addObject:@"Tardo"];
-    [valueArray addObject:@"Adagio"];
-    [valueArray addObject:@"Adagietto"];
-    [valueArray addObject:@"Andante"];
-    [valueArray addObject:@"andantino"];
-    [valueArray addObject:@"Moderato"];
-    [valueArray addObject:@"Allegretto"];
-    [valueArray addObject:@"Largamente"];
-    [valueArray addObject:@"Allegro"];
+    [valueArray addObject:@"040 Beats Per Minute"];
+    [valueArray addObject:@"050 Beats Per Minute"];
+    [valueArray addObject:@"060 Beats Per Minute"];
+    [valueArray addObject:@"070 Beats Per Minute"];
+    [valueArray addObject:@"080 Beats Per Minute"];
+    [valueArray addObject:@"090 Beats Per Minute"];
+    [valueArray addObject:@"100 Beats Per Minute"];
+    [valueArray addObject:@"110 Beats Per Minute"];
+    [valueArray addObject:@"120 Beats Per Minute"];
+    [valueArray addObject:@"130 Beats Per Minute"];
+    [valueArray addObject:@"140 Beats Per Minute"];
+    [valueArray addObject:@"150 Beats Per Minute"];
+    [valueArray addObject:@"160 Beats Per Minute"];
+    [valueArray addObject:@"170 Beats Per Minute"];
+    [valueArray addObject:@"180 Beats Per Minute"];
+    [valueArray addObject:@"190 Beats Per Minute"];
+    [valueArray addObject:@"200 Beats Per Minute"];
+    [valueArray addObject:@"210 Beats Per Minute"];
+    [valueArray addObject:@"220 Beats Per Minute"];
+    [valueArray addObject:@"230 Beats Per Minute"];
+    [valueArray addObject:@"240 Beats Per Minute"];
+    [valueArray addObject:@"250 Beats Per Minute"];
+    [valueArray addObject:@"260 Beats Per Minute"];
+    [valueArray addObject:@"270 Beats Per Minute"];
+    [valueArray addObject:@"280 Beats Per Minute"];
+    [valueArray addObject:@"290 Beats Per Minute"];
+    [valueArray addObject:@"300 Beats Per Minute"];
+    [valueArray addObject:@"310 Beats Per Minute"];
+    [valueArray addObject:@"320 Beats Per Minute"];
+    [valueArray addObject:@"330 Beats Per Minute"];
     tagData[@"Tempo"] = [valueArray mutableCopy];
     
     return tagData;
@@ -330,6 +346,9 @@ static DataStore *_sharedInstance;
 
 -(NSMutableDictionary*)filterTags{
     _tagArray = (NSMutableArray*)[_tagData allKeys];
+    
+    
+    
     NSMutableDictionary *userTagData = [[NSMutableDictionary alloc]init];
     
     for(NSString *tag in _tagArray){
