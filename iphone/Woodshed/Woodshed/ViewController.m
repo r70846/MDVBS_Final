@@ -34,6 +34,9 @@
     //Setup shared instance of data storage in RAM
     dataStore = [DataStore sharedInstance];
     
+    dataStore.isOnline = false;
+    [self startNetworkCheck];
+    
     scrollView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
 }
 
@@ -62,6 +65,45 @@
     [scrollView setContentOffset:CGPointMake(0, _iDisplayMode) animated:NO];
 }
 
+-(void)startNetworkCheck{
+    /// START MILLION ////////////////////////////////////////////////////////////////////
+    
+    // Allocate a reachability object
+    reach = [Reachability reachabilityWithHostname:@"www.google.com"];
+    
+    //create a week reference to self to avoid ARC retain cycle
+    __weak typeof(self) wSelf = self;
+    
+    // Set the blocks
+    reach.reachableBlock = ^(Reachability*reach)
+    {
+        // keep in mind this is called on a background thread
+        // and if you are updating the UI it needs to happen
+        // on the main thread, like this:
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"REACHABLE!");
+            wSelf.dataStore.isOnline = true;
+            if(wSelf.netWorkSign){
+                [wSelf.netWorkSign setHidden:YES];
+                //After control returns, check login
+                //[wSelf autoLog];
+            }
+        });
+    };
+    
+    reach.unreachableBlock = ^(Reachability*reach)
+    {
+        NSLog(@"UNREACHABLE!");
+        wSelf.dataStore.isOnline = false;
+        if(wSelf.netWorkSign){
+            [wSelf.netWorkSign setHidden:NO];
+        }
+    };
+    
+    // Start the notifier, which will cause the reachability object to retain itself!
+    [reach startNotifier];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

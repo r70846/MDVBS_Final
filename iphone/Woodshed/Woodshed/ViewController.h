@@ -16,6 +16,7 @@
 
 #import <UIKit/UIKit.h>
 #import "DataStore.h"
+#import "Reachability.h"
 
 @interface ViewController : UIViewController
 {
@@ -23,11 +24,15 @@
     DataStore *dataStore;    //shared instance of my DataStore object
     
     IBOutlet UIScrollView  *scrollView;
+
+    // Track online status
+    Reachability* reach;
 }
 
 //Property to hold user topic choice
 @property int iDisplayMode;
-
+@property DataStore *dataStore;
+@property IBOutlet UILabel *netWorkSign;
 
 -(void)setScrollView;
 

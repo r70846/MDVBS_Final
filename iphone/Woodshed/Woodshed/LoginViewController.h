@@ -17,7 +17,6 @@
 #import "DataStore.h"
 #import "Reachability.h"
 #import <Parse/Parse.h>
-#import "Reachability.h"
 
 @interface LoginViewController : UIViewController
 {
@@ -36,8 +35,6 @@
     NSString *mUser;
     NSString *mPassword;
     
-    // Track online status
-    Reachability* reach;
 }
 
 //Use properties instead of variables to reference from 'self' or wSelf
