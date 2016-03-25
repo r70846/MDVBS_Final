@@ -40,6 +40,16 @@
     dataStore = [DataStore sharedInstance];
     
     scrollView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    
+    //Launch repeating timer to run "Tick"
+    timeOut = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(timeUp) userInfo:nil repeats:NO];
+    
+}
+
+
+- (void)timeUp{
+    _iDisplayMode = 0;
+    [self setScrollView];
 }
 
 - (void)viewDidAppear:(BOOL)animated{

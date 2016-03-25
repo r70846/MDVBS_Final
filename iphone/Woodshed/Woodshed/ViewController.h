@@ -23,6 +23,9 @@
     DataStore *dataStore;    //shared instance of my DataStore object
     
     IBOutlet UIScrollView  *scrollView;
+    
+    NSTimer *timeOut;
+    
 }
 
 //Property to hold user topic choice

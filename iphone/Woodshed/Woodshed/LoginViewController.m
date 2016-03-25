@@ -32,6 +32,7 @@
     [self startNetworkCheck];
     
     [self autoLog];
+    
 }
 
 
