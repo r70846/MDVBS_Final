@@ -249,7 +249,10 @@
         
         //Display values in value table
         valueArray = (NSMutableArray*)[dataStore.tagData[currentTag] mutableCopy];
-        valueArray = (NSMutableArray*)[valueArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+        
+        //NSMutableArray *tmpArray = (NSMutableArray*)[dataStore.tagData[currentTag] mutableCopy];
+        //valueArray = (NSMutableArray*)dataStore.tagData[currentTag];
+        //valueArray = (NSMutableArray*)[tmpArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
         
         [valueTableView reloadData];
         
@@ -337,8 +340,13 @@
             [self saveTags];
             [tagTableView reloadData];
         }else if([source isEqualToString:@"Value"]){
+            NSLog(@"Current Tag: %@", currentTag);
+            //valueArray = (NSMutableArray*)[dataStore.tagData[currentTag] mutableCopy];
+            //valueArray = (NSMutableArray*)[valueArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
             [valueArray addObject:newItem];
             [valueArray replaceObjectAtIndex:0 withObject:@"_user"];
+            valueArray = (NSMutableArray*)[valueArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+            
             dataStore.tagData[currentTag] = [valueArray mutableCopy];
             dataStore.tagArray = (NSMutableArray*)[[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
             [self saveTags];
@@ -494,6 +502,21 @@
 }
 
 -(void)sessionBegin{
+    
+    /*
+    if ([[dataStore.currentSession allKeys] containsObject:@"Tempo"]){
+        BPM = [dataStore.currentSession[@"Tempo"] intValue];
+        if(BPM > 339){BPM = 339;}
+        if(BPM < 40){BPM = 40;}
+        int iOnes = BPM % 10;
+        int iTens = BPM - iOnes;
+        
+        stepperOne.value = iOnes;
+        stepperTen.value = iTens;
+        nomeDisplay.text = [NSString stringWithFormat:@"%03lu",(unsigned long)BPM];
+    }
+    */
+    
     
     //Initialize Repetition Counter
     iTotalCount = 0;
