@@ -612,7 +612,8 @@ NSComparisonResult newSort(NSString *item1, NSString *item2, void *context){
  */
     
     //Build string before reseting session
-    if(dataStore.tweet){
+    if([dataStore.userKeys[@"tweet"] isEqualToString:@"1"])
+    {
         NSString *tweet = [self composeTweet];
         [self postTweet:tweet];
     }

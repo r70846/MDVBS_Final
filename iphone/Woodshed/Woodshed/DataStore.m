@@ -179,7 +179,7 @@ static DataStore *_sharedInstance;
 
 -(void)loadTagTemplates{
     
-    [_templateArray removeAllObjects];
+    //[_templateArray removeAllObjects];
     [_templateArray addObject:@"[ none ]"];
     [_templateArray addObject:@"Bowed String Tags"];
     [_templateArray addObject:@"Woodwind Tags"];

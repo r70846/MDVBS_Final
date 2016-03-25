@@ -234,13 +234,13 @@
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="russg@fullsail.edu" borderStyle="roundedRect" placeholder="default email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="No6-fl-SVV">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="default email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="No6-fl-SVV">
                                         <rect key="frame" x="20" y="50" width="285" height="30"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                         <connections>
-                                            <action selector="onChange" destination="c7P-1f-qLN" eventType="valueChanged" id="XvD-zX-oAj"/>
+                                            <action selector="onChange" destination="c7P-1f-qLN" eventType="valueChanged" id="5AY-KW-BX2"/>
                                         </connections>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KJ2-Xr-xFU">
@@ -334,7 +334,7 @@
                     <toolbarItems/>
                     <connections>
                         <outlet property="exportButton" destination="KJ2-Xr-xFU" id="6bR-zU-yMB"/>
-                        <outlet property="exportEmail" destination="No6-fl-SVV" id="Wta-dr-KjD"/>
+                        <outlet property="exportEmail" destination="No6-fl-SVV" id="zqx-0M-LJG"/>
                         <outlet property="messageLabel" destination="iG3-Xq-gYb" id="CtC-lc-VUL"/>
                         <outlet property="togTweetComplete" destination="376-CS-ELk" id="q5I-I9-3bY"/>
                     </connections>

@@ -16,6 +16,8 @@
 #import <UIKit/UIKit.h>
 #import "DataStore.h"
 #import <MessageUI/MessageUI.h>
+#import <Social/Social.h>
+#import <Accounts/Accounts.h>
 
 @interface SettingsContentController : UIViewController <UIActionSheetDelegate, UITextViewDelegate, UITextFieldDelegate, MFMailComposeViewControllerDelegate>
 {
@@ -43,6 +45,9 @@
     
     //Keep track of where I'm coming from - (Tab Bar |or| Email View)
     Boolean bEmailView;
+    
+    //Retain current account
+    ACAccount *currentAccount;
     
 }
 

@@ -39,31 +39,20 @@
     //retract keyboard
     [exportEmail setDelegate:self];
     
-    /*
-    //Fill in defaul email for export
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if(defaults != nil)
-    {
-        //Get value
-        defaultEmail = [defaults objectForKey:@"email"];
-        if(defaultEmail != nil){
-            exportEmail.text = defaultEmail;
-        }
-        else
-        {
-            [defaults setObject:@"" forKey:@"email"];
-            //saves the data
-            [defaults synchronize];
-        }
-    }
-    */
     
-    ///////////////////////////////
+    //Fill in defaul email for export
+    exportEmail.text = dataStore.userKeys[@"email"];
     
     //Setup tag templatea
     [self setUpTemplateSheet];
     templateTextDisplay.text = dataStore.tagTemplate;
     
+}
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField{
+    
+    [textField resignFirstResponder];
+    return YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -186,45 +175,25 @@
 
 
 -(IBAction)setTweetState{
-    //Built in dictionary
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    
-    if(defaults != nil)
-    {
+
         if ([togTweetComplete isOn]) {
-            [defaults setObject:@"1" forKey:@"tweet"];
-            dataStore.tweet = true;
+            dataStore.userKeys[@"tweet"] = @"1";
+            [self accountPermission];
+            
         }else{
-            [defaults setObject:@"0" forKey:@"tweet"];
-            dataStore.tweet = false;
+            dataStore.userKeys[@"tweet"] = @"0";
         }
-        
-        //saves the data
-        [defaults synchronize];
-        
-    }
-    
+
+    [self saveUserKeys];
 }
 
 ////////////////////////////////////////////////////////
 
 -(IBAction)onChange
 {
-    NSLog(@"%@", exportEmail.text);
-    //Built in dictionary
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if(defaults != nil)
-    {
         //Get changed email from text filed
-        defaultEmail = exportEmail.text;
-        
-        if(defaultEmail != NULL){
-            [defaults setObject:defaultEmail forKey:@"email"];
-            
-            //saves the data
-            [defaults synchronize];
-        }
-    }
+    dataStore.userKeys[@"email"] = exportEmail.text;
+    [self saveUserKeys];
 }
 
 
@@ -233,10 +202,18 @@
     
     if([dataStore.sessions count] > 0)  // If we have data to export...
     {
+        
+        dataStore.userKeys[@"email"] = exportEmail.text;
+        [self saveUserKeys];
+        
         NSString *sSubject = @"Practice History";
         NSString *sMessage = @"Practice History";
+        NSString *sAddress = dataStore.userKeys[@"email"];
+        
+        NSLog(@"%@", sAddress);
+        
         //NSArray *sRecipents = [NSArray arrayWithObject:defaultEmail];
-        NSArray *sRecipents = [NSArray arrayWithObject:@"russg@fullsail.edu"];
+        NSArray *sRecipents = @[sAddress];
         
         MFMailComposeViewController *emailView = [[MFMailComposeViewController alloc] init];
         emailView.mailComposeDelegate = self;
@@ -313,6 +290,57 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+
+-(void)accountPermission{
+    
+    //Display alert view
+    //[alert show];
+    
+    //Makes ure we start over with an empty array
+    //[twitterPosts removeAllObjects ];
+    
+    //Load/reload table with no data
+    //[mainTableView reloadData];
+    
+    ACAccountStore *accountStore = [[ACAccountStore alloc] init];
+    
+    if(accountStore != nil)
+    {
+        
+        NSLog(@"Account Store is good");
+        ACAccountType *accountType = [accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierTwitter];
+        if(accountType != nil)
+        {
+            NSLog(@"Account Type is good");
+            [accountStore requestAccessToAccountsWithType:accountType options:nil completion:^(BOOL granted, NSError *error) {
+                if(granted)
+                {
+                }
+                else
+                {
+                    //The user says no
+                }
+            }];
+        }
+    }
+}
+
+-(void)saveUserKeys{
+    PFQuery *query = [PFQuery queryWithClassName:@"KeyData"];
+    [query getObjectInBackgroundWithId:dataStore.userKeys[@"key"] block:^(PFObject *keyData, NSError *error) {
+        keyData[@"keyData"] = dataStore.userKeys;
+        [keyData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (succeeded) {
+                //Nothing
+            } else {
+                // There was a problem, check error.description
+                NSLog (@"Parse error saving revised user keys:%@", error.description);
+            }
+        }];
+    }];
+    
 }
 
 /*

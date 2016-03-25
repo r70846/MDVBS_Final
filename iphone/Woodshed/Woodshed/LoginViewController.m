@@ -463,7 +463,7 @@
 -(void)saveNewUserKeys{
     PFObject *keyData = [PFObject objectWithClassName:@"KeyData"];
     dataStore.userKeys[@"email"] = @"";
-    dataStore.userKeys[@"template"] = @"none";
+    dataStore.userKeys[@"template"] = @"[ Tag Templates ]";
     dataStore.userKeys[@"tweet"] = @"0";
     keyData[@"KeyData"] = dataStore.userKeys;
     [keyData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
