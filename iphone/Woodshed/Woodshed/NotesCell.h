@@ -10,7 +10,7 @@
 
 @interface NotesCell : UITableViewCell
 {
-    
+
 }
 
 @property (nonatomic, strong)IBOutlet UITextView *displayText;

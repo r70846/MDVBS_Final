@@ -28,14 +28,62 @@
     [self.view setBackgroundColor:[UIColor colorWithRed:1 green:0.89 blue:0.631 alpha:1]]; ; /*#ffe3a1*/
     [self.view setBackgroundColor:[UIColor colorWithRed:0.561 green:0.635 blue:0.655 alpha:1]];  /*#8fa2a7*/
     
+    //Setup shared instance of data storage in RAM
+    dataStore = [DataStore sharedInstance];
+    
     NSString *newItem = [NSString stringWithFormat:@"New %@", _source];
     labelSource.text = newItem;
+    
+    if([_source isEqualToString:@"Note"]){
         
+        //Pull data from session dict object
+        notesArray = (NSMutableArray*)[dataStore.currentSession objectForKey:@"notes"];
+        
+    }else{
+        //notesTableView.hidden = true;
+        tableHolder.hidden = true;
+    }
+    
+    
+    
+    //retract keyboard
+    [txtInput setDelegate:self];
+    
     [txtInput becomeFirstResponder];
 }
 
+-(BOOL)textFieldShouldReturn:(UITextField *)textField{
+    
+    [textField resignFirstResponder];
+    return YES;
+}
 
 
+//Number of rows in table will equal the number of tweet objects in my data array
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [notesArray count];
+}
+
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NotesCell *cell;
+    
+    //Get the cell..
+    cell = [tableView dequeueReusableCellWithIdentifier:@"NoteCell"];
+    if(cell != nil)
+    {
+        NSString *note = (NSString*)[notesArray objectAtIndex:indexPath.row];
+ 
+        cell.displayText.text = note;
+        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    }
+    //cell.delButton.tag=indexPath.row;
+    //cell.delButton.type = @"NoteCell";
+    //cell.delButton.hidden = true;
+    return cell;
+}
 
 -(IBAction)onClick:(UIButton *)button
 {

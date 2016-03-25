@@ -14,11 +14,21 @@
 ///////////////////////////////////////////////////
 
 #import <UIKit/UIKit.h>
+#import "NotesCell.h"
+#import "DataStore.h"
 
-@interface NewViewController : UIViewController
+@interface NewViewController : UIViewController <UIActionSheetDelegate, UITextViewDelegate, UITextFieldDelegate>
+
 {
+    // Global Data Storage
+    DataStore *dataStore;    //shared instance of my DataStore object
+    
     IBOutlet UITextField *txtInput;
     IBOutlet UILabel *labelSource;
+    IBOutlet  UITableView *notesTableView;
+    IBOutlet UIView *tableHolder;
+    
+    NSMutableArray *notesArray;
 }
 
 //Property to hold user input
@@ -27,8 +37,10 @@
 //Property to hold source screen
 @property NSString *source;
 
-
 //Respond to click event
 -(IBAction)onClick:(UIButton *)button;
+
+
+
 
 @end
