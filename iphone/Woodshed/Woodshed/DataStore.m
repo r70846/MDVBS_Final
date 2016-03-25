@@ -179,17 +179,16 @@ static DataStore *_sharedInstance;
 
 -(void)loadTagTemplates{
     
-    //[_templateArray removeAllObjects];
-    [_templateArray addObject:@"[ none ]"];
-    [_templateArray addObject:@"Bowed String Tags"];
-    [_templateArray addObject:@"Woodwind Tags"];
-    [_templateArray addObject:@"Brass Tags"];
-    [_templateArray addObject:@"Drum Tags"];
-    [_templateArray addObject:@"Guitar Tags"];
-    _templateArray = (NSMutableArray*)[_templateArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    NSMutableArray *tmpArray = [[NSMutableArray alloc] init];
+    [tmpArray addObject:@"[ none ]"];
+    [tmpArray addObject:@"Bowed String Tags"];
+    [tmpArray addObject:@"Woodwind Tags"];
+    [tmpArray addObject:@"Brass Tags"];
+    [tmpArray addObject:@"Drum Tags"];
+    [tmpArray addObject:@"Guitar Tags"];
+    tmpArray = (NSMutableArray*)[tmpArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     
-    
-    //_tagTemplate = [_templateArray objectAtIndex:0];
+    _templateArray = [tmpArray mutableCopy ];
 }
 
 ////////// TAGS //////////////////////
@@ -219,45 +218,26 @@ static DataStore *_sharedInstance;
     [valueArray addObject:@"G Natural"];
     [valueArray addObject:@"G Sharp"];
     [valueArray addObject:@"A Flat"];
-    NSMutableArray *tmpArray = (NSMutableArray*)[valueArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-    tagData[@"Key Center"] = [tmpArray mutableCopy];
+    tagData[@"Key Center"] = [valueArray mutableCopy];
     
     //Tempo
     [valueArray removeAllObjects];
     [valueArray addObject:@"_standard"];
-    [valueArray addObject:@"040 Beats Per Minute"];
-    [valueArray addObject:@"050 Beats Per Minute"];
-    [valueArray addObject:@"060 Beats Per Minute"];
-    [valueArray addObject:@"070 Beats Per Minute"];
-    [valueArray addObject:@"080 Beats Per Minute"];
-    [valueArray addObject:@"090 Beats Per Minute"];
-    [valueArray addObject:@"100 Beats Per Minute"];
-    [valueArray addObject:@"110 Beats Per Minute"];
-    [valueArray addObject:@"120 Beats Per Minute"];
-    [valueArray addObject:@"130 Beats Per Minute"];
-    [valueArray addObject:@"140 Beats Per Minute"];
-    [valueArray addObject:@"150 Beats Per Minute"];
-    [valueArray addObject:@"160 Beats Per Minute"];
-    [valueArray addObject:@"170 Beats Per Minute"];
-    [valueArray addObject:@"180 Beats Per Minute"];
-    [valueArray addObject:@"190 Beats Per Minute"];
-    [valueArray addObject:@"200 Beats Per Minute"];
-    [valueArray addObject:@"210 Beats Per Minute"];
-    [valueArray addObject:@"220 Beats Per Minute"];
-    [valueArray addObject:@"230 Beats Per Minute"];
-    [valueArray addObject:@"240 Beats Per Minute"];
-    [valueArray addObject:@"250 Beats Per Minute"];
-    [valueArray addObject:@"260 Beats Per Minute"];
-    [valueArray addObject:@"270 Beats Per Minute"];
-    [valueArray addObject:@"280 Beats Per Minute"];
-    [valueArray addObject:@"290 Beats Per Minute"];
-    [valueArray addObject:@"300 Beats Per Minute"];
-    [valueArray addObject:@"310 Beats Per Minute"];
-    [valueArray addObject:@"320 Beats Per Minute"];
-    [valueArray addObject:@"330 Beats Per Minute"];
-    tmpArray = (NSMutableArray*)[valueArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-    tagData[@"Tempo"] = [tmpArray mutableCopy];
-
+    [valueArray addObject:@"Grave"];
+    [valueArray addObject:@"Largo"];
+    [valueArray addObject:@"Larghetto"];
+    [valueArray addObject:@"Lentando"];
+    [valueArray addObject:@"Lento"];
+    [valueArray addObject:@"Tardo"];
+    [valueArray addObject:@"Adagio"];
+    [valueArray addObject:@"Adagietto"];
+    [valueArray addObject:@"Andante"];
+    [valueArray addObject:@"andantino"];
+    [valueArray addObject:@"Moderato"];
+    [valueArray addObject:@"Allegretto"];
+    [valueArray addObject:@"Largamente"];
+    [valueArray addObject:@"Allegro"];
+    tagData[@"Tempo"] = [valueArray mutableCopy];
     
     return tagData;
 }
@@ -272,7 +252,7 @@ static DataStore *_sharedInstance;
     if([_tagData objectForKey:@"Bowing Pattern"]== nil){
         if ([_userKeys[@"template"] isEqualToString:@"[ All Tags ]"] ||
             [_userKeys[@"template"] isEqualToString:@"Bowed String Tags"]){
-        
+            
             //Bowing Pattern
             [valueArray removeAllObjects];
             [valueArray addObject:@"_template"];
@@ -282,9 +262,7 @@ static DataStore *_sharedInstance;
             [valueArray addObject:@"Chain Bowing"];
             [valueArray addObject:@"Long Bow"];
             [valueArray addObject:@"Three Notes Per Bow"];
-            NSMutableArray *tmpArray = (NSMutableArray*)[valueArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-            _tagData[@"Bowing Pattern"] = [tmpArray mutableCopy];
-
+            _tagData[@"Bowing Pattern"] = [valueArray mutableCopy];
         }
     }
     //Woodwinds
@@ -292,39 +270,35 @@ static DataStore *_sharedInstance;
         if ([_userKeys[@"template"] isEqualToString:@"[ All Tags ]"] ||
             [_userKeys[@"template"] isEqualToString:@"Woodwind Tags"] ||
             [_userKeys[@"template"] isEqualToString:@"Brass Tags"]){
-        
+            
             //Tonguing Technique
             [valueArray removeAllObjects];
             [valueArray addObject:@"_template"];
             [valueArray addObject:@"Single Tongue"];
             [valueArray addObject:@"Double Tongue"];
             [valueArray addObject:@"Triple Tongue"];
-            NSMutableArray *tmpArray = (NSMutableArray*)[valueArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-            _tagData[@"Tonguing Technique"] = [tmpArray mutableCopy];
-
+            _tagData[@"Tonguing Technique"] = [valueArray mutableCopy];
         }
     }
     //Brass
     if([_tagData objectForKey:@"Lip Slurs"] == nil){
         if ([_userKeys[@"template"] isEqualToString:@"[ All Tags ]"] ||
             [_userKeys[@"template"] isEqualToString:@"Brass Tags"]){
-        
+            
             //Lip Slurs
             [valueArray removeAllObjects];
             [valueArray addObject:@"_template"];
             [valueArray addObject:@"Two Note Slurs"];
             [valueArray addObject:@"Three Note Slurs"];
             [valueArray addObject:@"Four Note Slurs"];
-            NSMutableArray *tmpArray = (NSMutableArray*)[valueArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-            _tagData[@"Lip Slurs"] = [tmpArray mutableCopy];
-
+            _tagData[@"Lip Slurs"] = [valueArray mutableCopy];
         }
     }
     //Drums
     if([_tagData objectForKey:@"Drum Stick Grip"] == nil){
         if ([_userKeys[@"template"] isEqualToString:@"[ All Tags ]"] ||
             [_userKeys[@"template"] isEqualToString:@"Drum Tags"]){
-        
+            
             //Drum Stick Grip
             [valueArray removeAllObjects];
             [valueArray addObject:@"_template"];
@@ -333,15 +307,14 @@ static DataStore *_sharedInstance;
             [valueArray addObject:@"German Grip"];
             [valueArray addObject:@"French Grip"];
             [valueArray addObject:@"American Grip"];
-            NSMutableArray *tmpArray = (NSMutableArray*)[valueArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-            _tagData[@"Drum Stick Grip"] = [tmpArray mutableCopy];
+            _tagData[@"Drum Stick Grip"] = [valueArray mutableCopy];
         }
     }
     //Guitar
     if([_tagData objectForKey:@"Drum Stick Grip"] == nil){
         if ([_userKeys[@"template"] isEqualToString:@"[ All Tags ]"] ||
             [_userKeys[@"template"] isEqualToString:@"Guitar Tags"]){
-        
+            
             //Picking Technique
             [valueArray removeAllObjects];
             [valueArray addObject:@"_template"];
@@ -349,13 +322,11 @@ static DataStore *_sharedInstance;
             [valueArray addObject:@"Alternate Picking"];
             [valueArray addObject:@"Sweep Picking"];
             [valueArray addObject:@"Finger Picking"];
-            NSMutableArray *tmpArray = (NSMutableArray*)[valueArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-        _tagData[@"Picking Technique"] = [tmpArray mutableCopy];
+            _tagData[@"Picking Technique"] = [valueArray mutableCopy];
         }
     }
-
+    
 }
-
 
 -(NSMutableDictionary*)filterTags{
     _tagArray = (NSMutableArray*)[_tagData allKeys];

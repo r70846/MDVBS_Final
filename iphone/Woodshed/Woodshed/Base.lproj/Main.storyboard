@@ -240,7 +240,7 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                         <connections>
-                                            <action selector="onChange" destination="c7P-1f-qLN" eventType="valueChanged" id="5AY-KW-BX2"/>
+                                            <action selector="onChange" destination="c7P-1f-qLN" eventType="editingDidEnd" id="5a5-Yf-drS"/>
                                         </connections>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KJ2-Xr-xFU">

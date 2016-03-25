@@ -248,7 +248,9 @@
         tagDisplayLabel.text = currentTag;
         
         //Display values in value table
-        valueArray = (NSMutableArray*)[dataStore.tagData[currentTag] mutableCopy];
+        NSMutableArray *tmpArray = (NSMutableArray*)[dataStore.tagData[currentTag] mutableCopy];
+        tmpArray = (NSMutableArray*)[tmpArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+        valueArray = [tmpArray mutableCopy ];
         [valueTableView reloadData];
         
         //Scroll to next screen
@@ -601,15 +603,6 @@ NSComparisonResult newSort(NSString *item1, NSString *item2, void *context){
     
     //Save final duration as text for user display
     [dataStore.currentSession setValue:sDuration forKey:@"duration"];
-    
-   /*
-    PFFile *file = [self saveAudioSnippet];
-    
-    if(file != nil){
-        [dataStore.currentSession setValue:file forKey:@"audio"];
-        NSLog(@"FIle is nil and it shuldn;t be");
-    }
- */
     
     //Build string before reseting session
     if([dataStore.userKeys[@"tweet"] isEqualToString:@"1"])

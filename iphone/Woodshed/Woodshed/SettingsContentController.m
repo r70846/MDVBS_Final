@@ -40,8 +40,7 @@
     [exportEmail setDelegate:self];
     
     
-    //Fill in defaul email for export
-    exportEmail.text = dataStore.userKeys[@"email"];
+
     
     //Setup tag templatea
     [self setUpTemplateSheet];
@@ -56,16 +55,18 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    if(dataStore.tweet){
+    
+    //Fill in defaul email for export
+    exportEmail.text = dataStore.userKeys[@"email"];
+    
+    //Set toggle state
+    if([dataStore.userKeys[@"tweet"] isEqualToString:@"1"]){
         [togTweetComplete setOn:YES animated:NO];
     }else{
         [togTweetComplete  setOn:NO animated:NO];
     }
     
     if(bEmailView){  //If we're coming from Email View
-        
-        //Hide branding graphic
-        //brandImage.hidden = true;
         
         //Track status - No longer in Email View
         bEmailView = false;
@@ -130,11 +131,8 @@
 }
 
 -(IBAction)clearSavedData{
-    //[dataStore.sessions removeAllObjects];
-    //[dataStore clearSessions];
-    //[dataStore loadEmptySessions];
-    //[dataStore resetCurrentSession];
-    //[self clearCustomData];
+    [dataStore.sessions removeAllObjects];
+    [dataStore clearSessions];
 }
 
 
@@ -342,6 +340,26 @@
     }];
     
 }
+
+
+-(void)clearSessions{
+    [dataStore.sessions addObject:[dataStore.currentSession mutableCopy]];
+    PFQuery *query = [PFQuery queryWithClassName:@"SessionData"];
+    [query getObjectInBackgroundWithId:dataStore.userKeys[@"sessions"] block:^(PFObject *sessionData, NSError *error) {
+        NSMutableArray *sessions = [[NSMutableArray alloc] init];
+        sessionData[@"sessionData"] = sessions;
+        [sessionData saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (succeeded) {
+                dataStore.sessions = (NSMutableArray*)sessionData[@"sessionData"];
+                [self.tabBarController setSelectedIndex:1];
+            } else {
+                // There was a problem, check error.description
+                NSLog (@"Parse error saving revised user keys:%@", error.description);
+            }
+        }];
+    }];
+}
+
 
 /*
 #pragma mark - Navigation
