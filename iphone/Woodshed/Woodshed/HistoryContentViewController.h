@@ -19,7 +19,7 @@
 #import "DataStore.h"
 #import "HistoryCell.h"
 #import "TagCell.h"
-#import "SimpleCell.h"
+#import "NotesCell.h"
 #import "DelButton.h"
 
 typedef NS_ENUM(NSUInteger, AudioState) {

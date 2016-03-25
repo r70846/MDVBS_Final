@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		601AEBA31C94FEA000804211 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 601AEBA21C94FEA000804211 /* Social.framework */; };
 		6036A9411CA1619800B2C00E /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6036A9401CA1619800B2C00E /* LoginViewController.m */; };
+		6036A9DE1CA4DD9000B2C00E /* NotesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6036A9DD1CA4DD9000B2C00E /* NotesCell.m */; };
 		6059BEEE1C87DD87000B0819 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6059BEED1C87DD87000B0819 /* UIKit.framework */; };
 		6059BEF21C8BE1DB000B0819 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6059BEF11C8BE1DB000B0819 /* AVFoundation.framework */; };
 		6059BEF41C8BE1E2000B0819 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6059BEF31C8BE1E2000B0819 /* AudioToolbox.framework */; };
@@ -90,6 +91,8 @@
 		601AEBA21C94FEA000804211 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		6036A93F1CA1619800B2C00E /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		6036A9401CA1619800B2C00E /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		6036A9DC1CA4DD9000B2C00E /* NotesCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotesCell.h; sourceTree = "<group>"; };
+		6036A9DD1CA4DD9000B2C00E /* NotesCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotesCell.m; sourceTree = "<group>"; };
 		6059BEED1C87DD87000B0819 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		6059BEF11C8BE1DB000B0819 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		6059BEF31C8BE1E2000B0819 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -295,6 +298,8 @@
 				6059BF231C93B316000B0819 /* HistoryCell.m */,
 				6036A93F1CA1619800B2C00E /* LoginViewController.h */,
 				6036A9401CA1619800B2C00E /* LoginViewController.m */,
+				6036A9DC1CA4DD9000B2C00E /* NotesCell.h */,
+				6036A9DD1CA4DD9000B2C00E /* NotesCell.m */,
 			);
 			path = Woodshed;
 			sourceTree = "<group>";
@@ -450,6 +455,7 @@
 				6059BF1E1C9381C3000B0819 /* DelButton.m in Sources */,
 				608C022C1C79093A00159E53 /* HistoryViewController.m in Sources */,
 				608C02041C79077200159E53 /* main.m in Sources */,
+				6036A9DE1CA4DD9000B2C00E /* NotesCell.m in Sources */,
 				6059BF241C93B316000B0819 /* HistoryCell.m in Sources */,
 				608C02321C790C8F00159E53 /* SettingsContentController.m in Sources */,
 				6059BF211C93B0D2000B0819 /* SimpleCell.m in Sources */,

@@ -261,7 +261,7 @@
     }
     else if (tableView==detailTableView && indexPath.section == 1)
     {
-        SimpleCell *cell;
+        NotesCell *cell;
         
         //Get the cell..
         cell = [tableView dequeueReusableCellWithIdentifier:@"NoteCell"];
@@ -271,9 +271,9 @@
             cell.displayText.text = note;
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         }
-        cell.delButton.tag=indexPath.row;
-        cell.delButton.type = @"NoteCell";
-        cell.delButton.hidden = true;
+        //cell.delButton.tag=indexPath.row;
+        //cell.delButton.type = @"NoteCell";
+        //cell.delButton.hidden = true;
         return cell;
     }
     else{
