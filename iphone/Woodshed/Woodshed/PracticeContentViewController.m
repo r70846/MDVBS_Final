@@ -502,7 +502,7 @@ NSComparisonResult newSort(NSString *item1, NSString *item2, void *context){
 
 -(void)sessionBegin{
     
-    /*
+
     if ([[dataStore.currentSession allKeys] containsObject:@"Tempo"]){
         BPM = [dataStore.currentSession[@"Tempo"] intValue];
         if(BPM > 339){BPM = 339;}
@@ -514,8 +514,7 @@ NSComparisonResult newSort(NSString *item1, NSString *item2, void *context){
         stepperTen.value = iTens;
         nomeDisplay.text = [NSString stringWithFormat:@"%03lu",(unsigned long)BPM];
     }
-    */
-    
+
     
     //Initialize Repetition Counter
     iTotalCount = 0;
