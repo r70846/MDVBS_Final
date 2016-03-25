@@ -249,17 +249,13 @@
         
         //Display values in value table
         valueArray = (NSMutableArray*)[dataStore.tagData[currentTag] mutableCopy];
-        
-        //NSMutableArray *tmpArray = (NSMutableArray*)[dataStore.tagData[currentTag] mutableCopy];
-        //valueArray = (NSMutableArray*)dataStore.tagData[currentTag];
-        //valueArray = (NSMutableArray*)[tmpArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-        
         [valueTableView reloadData];
         
         //Scroll to next screen
         PracticeViewController *practiceViewController = (PracticeViewController*) self.parentViewController;
         practiceViewController.iDisplayMode = 1200;
         [practiceViewController setScrollView];
+        
         
     }
     else if (tableView==valueTableView)
@@ -282,6 +278,11 @@
         [practiceViewController setScrollView];
 
     }
+}
+
+
+NSComparisonResult newSort(NSString *item1, NSString *item2, void *context){
+    return [item1 compare:item2];
 }
 
 #pragma mark - Data Cells Add
@@ -340,14 +341,12 @@
             [self saveTags];
             [tagTableView reloadData];
         }else if([source isEqualToString:@"Value"]){
-            NSLog(@"Current Tag: %@", currentTag);
-            //valueArray = (NSMutableArray*)[dataStore.tagData[currentTag] mutableCopy];
-            //valueArray = (NSMutableArray*)[valueArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-            [valueArray addObject:newItem];
-            [valueArray replaceObjectAtIndex:0 withObject:@"_user"];
-            valueArray = (NSMutableArray*)[valueArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-            
-            dataStore.tagData[currentTag] = [valueArray mutableCopy];
+            NSMutableArray *tmpArray = [valueArray mutableCopy];
+            [tmpArray addObject:newItem];
+            [tmpArray replaceObjectAtIndex:0 withObject:@"_user"];
+            tmpArray = (NSMutableArray*)[tmpArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+            valueArray = [tmpArray mutableCopy ];
+            dataStore.tagData[currentTag] = [tmpArray mutableCopy];
             dataStore.tagArray = (NSMutableArray*)[[NSArray alloc] initWithArray:[dataStore.tagData allKeys]];
             [self saveTags];
             [valueTableView reloadData];

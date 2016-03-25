@@ -186,6 +186,8 @@ static DataStore *_sharedInstance;
     [_templateArray addObject:@"Brass Tags"];
     [_templateArray addObject:@"Drum Tags"];
     [_templateArray addObject:@"Guitar Tags"];
+    _templateArray = (NSMutableArray*)[_templateArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    
     
     //_tagTemplate = [_templateArray objectAtIndex:0];
 }
@@ -217,6 +219,7 @@ static DataStore *_sharedInstance;
     [valueArray addObject:@"G Natural"];
     [valueArray addObject:@"G Sharp"];
     [valueArray addObject:@"A Flat"];
+    valueArray = (NSMutableArray*)[valueArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     tagData[@"Key Center"] = [valueArray mutableCopy];
     
     //Tempo
@@ -252,6 +255,7 @@ static DataStore *_sharedInstance;
     [valueArray addObject:@"310 Beats Per Minute"];
     [valueArray addObject:@"320 Beats Per Minute"];
     [valueArray addObject:@"330 Beats Per Minute"];
+    valueArray = (NSMutableArray*)[valueArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     tagData[@"Tempo"] = [valueArray mutableCopy];
     
     return tagData;
@@ -277,6 +281,7 @@ static DataStore *_sharedInstance;
             [valueArray addObject:@"Chain Bowing"];
             [valueArray addObject:@"Long Bow"];
             [valueArray addObject:@"Three Notes Per Bow"];
+            valueArray = (NSMutableArray*)[valueArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
             _tagData[@"Bowing Pattern"] = [valueArray mutableCopy];
         }
     }
@@ -293,6 +298,7 @@ static DataStore *_sharedInstance;
             [valueArray addObject:@"Double Tongue"];
             [valueArray addObject:@"Triple Tongue"];
             _tagData[@"Tonguing Technique"] = [valueArray mutableCopy];
+            valueArray = (NSMutableArray*)[valueArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
         }
     }
     //Brass
@@ -306,6 +312,7 @@ static DataStore *_sharedInstance;
             [valueArray addObject:@"Two Note Slurs"];
             [valueArray addObject:@"Three Note Slurs"];
             [valueArray addObject:@"Four Note Slurs"];
+            valueArray = (NSMutableArray*)[valueArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
             _tagData[@"Lip Slurs"] = [valueArray mutableCopy];
         }
     }
@@ -322,6 +329,7 @@ static DataStore *_sharedInstance;
             [valueArray addObject:@"German Grip"];
             [valueArray addObject:@"French Grip"];
             [valueArray addObject:@"American Grip"];
+            valueArray = (NSMutableArray*)[valueArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
             _tagData[@"Drum Stick Grip"] = [valueArray mutableCopy];
         }
     }
@@ -337,6 +345,7 @@ static DataStore *_sharedInstance;
             [valueArray addObject:@"Alternate Picking"];
             [valueArray addObject:@"Sweep Picking"];
             [valueArray addObject:@"Finger Picking"];
+            valueArray = (NSMutableArray*)[valueArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
         _tagData[@"Picking Technique"] = [valueArray mutableCopy];
         }
     }
