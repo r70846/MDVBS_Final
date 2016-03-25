@@ -65,7 +65,7 @@
                         <color key="backgroundColor" red="1" green="0.97254902119999997" blue="0.89411765340000005" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="History" image="second" id="QIh-uO-WkE">
+                    <tabBarItem key="tabBarItem" title="History" image="history60-1" id="QIh-uO-WkE">
                         <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-5"/>
                     </tabBarItem>
                     <connections>
@@ -105,7 +105,7 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.97254902119999997" blue="0.89411765340000005" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Utilities" image="settings_24" id="IlA-Le-7Hj">
+                    <tabBarItem key="tabBarItem" title="Utilities" image="gear-1" id="IlA-Le-7Hj">
                         <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-5"/>
                     </tabBarItem>
                     <connections>
@@ -145,7 +145,7 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.97254902119999997" blue="0.89411765340000005" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Practice" image="first" id="mMj-eC-DNy">
+                    <tabBarItem key="tabBarItem" title="Practice" image="note-1" id="mMj-eC-DNy">
                         <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-5"/>
                     </tabBarItem>
                     <connections>
@@ -1566,16 +1566,16 @@
     </scenes>
     <resources>
         <image name="eye-c-w-long" width="380" height="240"/>
-        <image name="first" width="30" height="30"/>
+        <image name="gear-1" width="30" height="30"/>
         <image name="half-moon" width="291" height="144"/>
+        <image name="history60-1" width="30" height="30"/>
         <image name="icon-notes-48" width="48" height="48"/>
         <image name="icon-pausew-48" width="48" height="48"/>
         <image name="icon-playm-48" width="128" height="128"/>
         <image name="icon-playw-48" width="48" height="48"/>
         <image name="icon-rec-48" width="48" height="48"/>
+        <image name="note-1" width="30" height="30"/>
         <image name="pause-w-long" width="380" height="240"/>
-        <image name="second" width="30" height="30"/>
-        <image name="settings_24" width="24" height="24"/>
         <image name="three-quart-moon" width="291" height="216"/>
     </resources>
 </document>
