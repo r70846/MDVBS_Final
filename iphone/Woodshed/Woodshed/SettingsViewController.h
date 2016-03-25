@@ -24,4 +24,10 @@
     IBOutlet UIScrollView  *scrollView;
 }
 
+//Property to hold user topic choice
+@property int iDisplayMode;
+
+
+-(void)setScrollView;
+
 @end

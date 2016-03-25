@@ -31,8 +31,12 @@
     //setup shared instance of data storage in RAM
     dataStore = [DataStore sharedInstance];
     
+    //Run this first load only, not on each new diplay
+    _iDisplayMode = 0;
     
+    [self setScrollView];
 }
+
 
 - (void)viewDidAppear:(BOOL)animated{
     
@@ -41,6 +45,17 @@
     int iHeight = [[UIScreen mainScreen] bounds].size.height;
     scrollView.contentSize=CGSizeMake(iWidth,iHeight);
     scrollView.contentSize=CGSizeMake(iWidth,1000);
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)aScrollView
+{
+    
+    //Keep the scoll where we want it. No user scroll !
+    [aScrollView setContentOffset: CGPointMake(0, _iDisplayMode)];
+}
+
+-(void)setScrollView{
+    [scrollView setContentOffset:CGPointMake(0, _iDisplayMode) animated:NO];
 }
 
 - (void)didReceiveMemoryWarning {
