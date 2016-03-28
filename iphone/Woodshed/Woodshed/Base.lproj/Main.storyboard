@@ -1087,10 +1087,10 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ayw-4y-mQR">
-                                <rect key="frame" x="20" y="280" width="325" height="437"/>
+                                <rect key="frame" x="20" y="275" width="325" height="365"/>
                                 <subviews>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Vda-92-ORy">
-                                        <rect key="frame" x="10" y="10" width="305" height="418"/>
+                                        <rect key="frame" x="10" y="10" width="305" height="345"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <prototypes>
                                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="NoteCell" rowHeight="70" id="PUd-D7-qfm" customClass="NotesCell">
